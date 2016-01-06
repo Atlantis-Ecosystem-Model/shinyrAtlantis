@@ -35,7 +35,7 @@ devtools::install_github(repo = "mareframe/vat")
 Install the package (from local Git). 
 
 ```{r,eval=FALSE}
-devtools::install_git("/home/mdsumner/Atlantis/ShinyAtlantis")
+devtools::install_git("/home/shared/tools/Atlantis/ShinyAtlantis")
 ```
 
 Load packages (can fix by namespace later)
