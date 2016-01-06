@@ -11,7 +11,7 @@
 #' @param map.object 
 #'
 #' @export
-#'
+
 #' @examples
 #' ## See package readme.md
 sh.dist <- function(map.object){
@@ -208,7 +208,7 @@ sh.dist <- function(map.object){
 #'
 #' @examples
 #' ## see package readme.md
-make.map.object <- function(bgm.file){
+make.map.objectDistribution <- function(bgm.file){
   bgm <- readLines(bgm.file) # read in the geometry file
   
   numboxes <- 0
