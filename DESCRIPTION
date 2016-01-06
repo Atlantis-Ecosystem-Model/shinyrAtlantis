@@ -2,15 +2,11 @@ Package: ShinyAtlantis
 Title: Make Atlantis Shiny
 Version: 0.0.0.9000
 Authors@R: c(person("Michael D.", "Sumner", email = "mdsumner@gmail.com", role = c("aut", "cre")), 
-          person("Shane A.", "Richards", email = "Shane.Richards@csiro.au", role = c("aut")), comment = "majority author of the R code")
+          person("Shane A.", "Richards", email = "Shane.Richards@csiro.au", role = c("aut"), 
+          comment = "majority author of the R code"))
 Description: Shiny apps for Atlantis.
-Depends: R (>= 3.2.3),
-         shiny,
-         dplyr,
-         ggplot2,
-         DT,
-         stringr,
-         vat,
-         scales
+Depends:
+    R (>= 3.2.3),
 License: What license is it under?
 LazyData: true
+RoxygenNote: 5.0.0
