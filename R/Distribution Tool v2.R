@@ -4,6 +4,16 @@
 
 
 # shiny Atlantis Setup Tool
+
+
+#' Title
+#'
+#' @param map.object 
+#'
+#' @export
+#'
+#' @examples
+#' ## See package readme.md
 sh.dist <- function(map.object){
   # Global parameters
   num.boxes <- map.object$numboxes
@@ -190,6 +200,14 @@ sh.dist <- function(map.object){
   ) # End of shinyApp
 }
 
+#' Title
+#'
+#' @param bgm.file 
+#'
+#' @export
+#'
+#' @examples
+#' ## see package readme.md
 make.map.object <- function(bgm.file){
   bgm <- readLines(bgm.file) # read in the geometry file
   

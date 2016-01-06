@@ -3,7 +3,17 @@
 
 
 
-# shiny Atlantis Setup Tool
+# 
+
+
+#' shiny Atlantis Setup Tool
+#'
+#' @param obj 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 sh.ast <- function(obj){
   # set up variables needed to plot the map  
   df.map    <- merge(obj$map_base, obj$box.data, by = "boxid")
