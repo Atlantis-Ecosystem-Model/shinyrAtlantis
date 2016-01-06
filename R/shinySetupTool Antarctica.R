@@ -1,14 +1,7 @@
 # Shane A. Richards, 21st Decemeber 2015
 
-rm(list = ls()) # clear memory
 
-library(shiny)
-library(dplyr)
-library(ggplot2)
-library(DT)
-library(stringr)
-library(vat)
-library(scales)
+
 
 # shiny Atlantis Setup Tool
 sh.ast <- function(obj){
@@ -1159,18 +1152,3 @@ make.setup.object <- function(bgm.file, grp.file, prm.file) {
   ))    
 }
 
-# globally available file names
-wd <- "/Users/ric352/Documents/Projects/Fisheries/Atlantis/Setup Tool/"
-setwd(wd)
-def.all.file <- paste(wd, "paramdefns.csv", sep = "")
-def.grp.file <- paste(wd, "grpTemplates.csv", sep = "")
-
-# Anatarctic model files (currently all in the same sub-directory)
-wd <- "/Users/ric352/Documents/Projects/Fisheries/Atlantis/Setup Tool/Antarctic/"
-setwd(wd)
-bgm.file <- paste(wd, "BanzareAtlantis.bgm", sep = "")
-grp.file <- paste(wd, "AntarcticGroups.csv", sep = "")
-prm.file <- paste(wd, "SO90_biol.prm", sep = "")
-# generate the object of data that is read in by the shiny app (takes a few minutes)
-obj.ast.Antarctic <- make.setup.object(bgm.file, grp.file, prm.file)
-sh.ast(obj.ast.Antarctic) # run the shiny App

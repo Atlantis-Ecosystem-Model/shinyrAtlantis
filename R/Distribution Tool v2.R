@@ -2,15 +2,6 @@
 # Shiny application for generating spatial distributions with constant 
 # density (per unit area)
 
-rm(list = ls()) # clear memory
-
-library(shiny)
-library(dplyr)
-library(ggplot2)
-library(DT)
-library(stringr)
-library(vat)
-library(scales)
 
 # shiny Atlantis Setup Tool
 sh.dist <- function(map.object){
@@ -274,25 +265,3 @@ make.map.object <- function(bgm.file){
   return(list(numboxes = numboxes, map.vertices = map.vertices, box.data = box.data))
 }
 
-wd <- "/Users/ric352/Documents/Projects/Fisheries/Atlantis/Setup Tool/Antarctic/"
-setwd(wd)
-bgm.file <- paste(wd, "BanzareAtlantis.bgm", sep = "")
-
-# wd <- "/Users/ric352/Documents/Projects/Fisheries/Atlantis/Setup Tool/GBR/"
-# setwd(wd)
-# bgm.file <- paste(wd, "gbr_test.bgm", sep = "")
-
-# wd <- "/Users/ric352/Documents/Projects/Fisheries/Atlantis/Setup Tool/SEAP/"
-# setwd(wd)
-# bgm.file <- paste(wd, "SEAP_extended_shelf.bgm", sep = "")
-
-# wd <- "/Users/ric352/Documents/Projects/Fisheries/Atlantis/Setup Tool/Guam/"
-# setwd(wd)
-# bgm.file <- paste(wd, "Guam_utm1.bgm", sep = "")
-
-# wd <- "/Users/ric352/Documents/Projects/Fisheries/Atlantis/Setup Tool/JFRE/"
-# setwd(wd)
-# bgm.file <- paste(wd, "JFRE_ll.bgm", sep = "")
-
-map.object <- make.map.object(bgm.file)
-sh.dist(map.object)
