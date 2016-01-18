@@ -21,11 +21,9 @@ Load packages (can fix by namespace later)
 library(dplyr)
 #> 
 #> Attaching package: 'dplyr'
-#> 
 #> The following objects are masked from 'package:stats':
 #> 
 #>     filter, lag
-#> 
 #> The following objects are masked from 'package:base':
 #> 
 #>     intersect, setdiff, setequal, union
@@ -33,7 +31,6 @@ library(shiny)
 library(DT)
 #> 
 #> Attaching package: 'DT'
-#> 
 #> The following objects are masked from 'package:shiny':
 #> 
 #>     dataTableOutput, renderDataTable
@@ -52,12 +49,10 @@ library(vat)
 #> -------------------------------------------------------------------------
 #> 
 #> Attaching package: 'plyr'
-#> 
 #> The following objects are masked from 'package:dplyr':
 #> 
 #>     arrange, count, desc, failwith, id, mutate, rename, summarise,
 #>     summarize
-#> 
 #> Loading required package: tidyr
 #> Loading required package: animation
 #> Loading required package: gridExtra
