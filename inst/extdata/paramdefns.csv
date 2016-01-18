@@ -1,4 +1,4 @@
-Parameter,Units,Required,Default,Definition
+Parameter,Units,Required,Suggested,Definition
 availflag,,Yes,1,"Switch to filter flows based on active groups. The typical setting is 1. 0 = all groups in Groups.csv file are reported even if isTurnedOn = 0, 1 = only active groups (isTurnedOn = 1) are reported."
 BBdamp,,Yes,,Damping coefficient for BB fluxes
 BBthresh,N m-2 s-1,No,,Threshold BB flux level where damping starts mg 

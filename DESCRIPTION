@@ -1,4 +1,4 @@
-Package: ShinyAtlantis
+Package: ShinyrAtlantis
 Title: Make Atlantis Shiny
 Version: 0.0.1.9000
 Authors@R: c(person("Michael D.", "Sumner", email = "mdsumner@gmail.com", role = c("aut", "cre")), 
