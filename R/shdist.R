@@ -1,14 +1,14 @@
-# shdist.R
-# 15/01/2016
-# Shiny application for generating spatial distributions with constant density (per unit area)
-
-rm(list = ls()) # clear memory
-
-library(shiny)
-library(dplyr)
-library(ggplot2)
-library(DT)
-library(stringr)
+# # shdist.R
+# # 15/01/2016
+# # Shiny application for generating spatial distributions with constant density (per unit area)
+# 
+# rm(list = ls()) # clear memory
+# 
+# library(shiny)
+# library(dplyr)
+# library(ggplot2)
+# library(DT)
+# library(stringr)
 
 # +================================================================================+
 # |  sh.dist : shiny application for generating Atlantis horizontal distributions  |
@@ -285,32 +285,32 @@ make.dist.object <- function(bgm.file){
   # return a list of three objects: integer, data frame, data frame
   return(list(numboxes = numboxes, map.vertices = map.vertices, box.data = box.data))
 }
-
-# ====================================================================
-# code to choose the spatial data file (.bgm)
-
-wd <- "/Users/ric352/Documents/Projects/Fisheries/Atlantis/Setup Tool/Antarctic/"
-setwd(wd)
-bgm.file <- paste(wd, "BanzareAtlantis.bgm", sep = "")
-
-# wd <- "/Users/ric352/Documents/Projects/Fisheries/Atlantis/Setup Tool/GBR/"
+# 
+# # ====================================================================
+# # code to choose the spatial data file (.bgm)
+# 
+# wd <- "/Users/ric352/Documents/Projects/Fisheries/Atlantis/Setup Tool/Antarctic/"
 # setwd(wd)
-# bgm.file <- paste(wd, "gbr_test.bgm", sep = "")
-
-# wd <- "/Users/ric352/Documents/Projects/Fisheries/Atlantis/Setup Tool/SEAP/"
-# setwd(wd)
-# bgm.file <- paste(wd, "SEAP_extended_shelf.bgm", sep = "")
-
-# wd <- "/Users/ric352/Documents/Projects/Fisheries/Atlantis/Setup Tool/Guam/"
-# setwd(wd)
-# bgm.file <- paste(wd, "Guam_utm1.bgm", sep = "")
-
-# wd <- "/Users/ric352/Documents/Projects/Fisheries/Atlantis/Setup Tool/JFRE/"
-# setwd(wd)
-# bgm.file <- paste(wd, "JFRE_ll.bgm", sep = "")
-
-# ====================================================================
-# code to collect the spatial data and view
-
-map.object <- make.dist.object(bgm.file)
-sh.dist(map.object)
+# bgm.file <- paste(wd, "BanzareAtlantis.bgm", sep = "")
+# 
+# # wd <- "/Users/ric352/Documents/Projects/Fisheries/Atlantis/Setup Tool/GBR/"
+# # setwd(wd)
+# # bgm.file <- paste(wd, "gbr_test.bgm", sep = "")
+# 
+# # wd <- "/Users/ric352/Documents/Projects/Fisheries/Atlantis/Setup Tool/SEAP/"
+# # setwd(wd)
+# # bgm.file <- paste(wd, "SEAP_extended_shelf.bgm", sep = "")
+# 
+# # wd <- "/Users/ric352/Documents/Projects/Fisheries/Atlantis/Setup Tool/Guam/"
+# # setwd(wd)
+# # bgm.file <- paste(wd, "Guam_utm1.bgm", sep = "")
+# 
+# # wd <- "/Users/ric352/Documents/Projects/Fisheries/Atlantis/Setup Tool/JFRE/"
+# # setwd(wd)
+# # bgm.file <- paste(wd, "JFRE_ll.bgm", sep = "")
+# 
+# # ====================================================================
+# # code to collect the spatial data and view
+# 
+# map.object <- make.dist.object(bgm.file)
+# sh.dist(map.object)

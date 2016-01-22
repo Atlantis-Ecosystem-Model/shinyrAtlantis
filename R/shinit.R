@@ -1,14 +1,14 @@
 # shinit.R
 # 15/01/2016
 
-rm(list = ls()) # clear memory
-
-library(shiny)
-library(dplyr)
-library(ggplot2)
-library(DT)
-library(stringr)
-library(ncdf4)
+# rm(list = ls()) # clear memory
+# 
+# library(shiny)
+# library(dplyr)
+# library(ggplot2)
+# library(DT)
+# library(stringr)
+# library(ncdf4)
 
 # +=================================================================+
 # |  sh.init : shiny application for viewing Atlantis initial data  |
@@ -1106,47 +1106,47 @@ make.init.object <- function(bgm.file, nc.file) {
   ))    
 }
 
-# ====================================================================
-# code to choose initialisation files to view
-
-# SEAP
-wdir <- "~/Atlantis/RunFiles/SEAP/" # working directory
-in.dir <- "params/" # input subdirectory
-setwd(wdir) # set working directory
-in.bgm <- "SEAP_extended_shelf" # .bgm file name
-bgm.file <- paste(in.dir, in.bgm, ".bgm", sep = "")
-in.nc  <- "initSEAPaquacult_pH"
-nc.file <- paste(in.dir, in.nc, ".nc", sep = "")
-
-# Guam 
-wdir <- "~/Atlantis/RunFiles/Guam/" # working directory
-in.dir <- "" # input subdirectory
-setwd(wdir) # set working directory
-in.bgm <- "Guam_utm1" # .bgm file name
-bgm.file <- paste(in.dir, in.bgm, ".bgm", sep = "")
-in.nc  <- "biol_103013"
-nc.file <- paste(in.dir, in.nc, ".nc", sep = "")
- 
-# SETas
-wdir <- "~/Atlantis/RunFiles/SETas_model_New_Trunk/" # working directory
-in.dir <- "" # input subdirectory
-setwd(wdir) # set working directory
-in.bgm <- "VMPA_setas" # .bgm file name
-bgm.file <- paste(in.dir, in.bgm, ".bgm", sep = "")
-in.nc  <- "INIT_VMPA_Jan2015"
-nc.file <- paste(in.dir, in.nc, ".nc", sep = "")
-
-# Antarctic
-wdir <- "/Users/ric352/Documents/Projects/Fisheries/Atlantis/Initial nc Tool/" # working directory
-in.dir <- "" # input subdirectory
-setwd(wdir) # set working directory
-in.bgm <- "BanzareAtlantis" # .bgm file name
-bgm.file <- paste(in.dir, in.bgm, ".bgm", sep = "")
-in.nc  <- "test 2"
-nc.file <- paste(in.dir, in.nc, ".nc", sep = "")
-
-# ====================================================================
-# code to collect initialisation data and view
-
-input.object <- make.init.object(bgm.file, nc.file)
-sh.init(input.object)
+# # ====================================================================
+# # code to choose initialisation files to view
+# 
+# # SEAP
+# wdir <- "~/Atlantis/RunFiles/SEAP/" # working directory
+# in.dir <- "params/" # input subdirectory
+# setwd(wdir) # set working directory
+# in.bgm <- "SEAP_extended_shelf" # .bgm file name
+# bgm.file <- paste(in.dir, in.bgm, ".bgm", sep = "")
+# in.nc  <- "initSEAPaquacult_pH"
+# nc.file <- paste(in.dir, in.nc, ".nc", sep = "")
+# 
+# # Guam 
+# wdir <- "~/Atlantis/RunFiles/Guam/" # working directory
+# in.dir <- "" # input subdirectory
+# setwd(wdir) # set working directory
+# in.bgm <- "Guam_utm1" # .bgm file name
+# bgm.file <- paste(in.dir, in.bgm, ".bgm", sep = "")
+# in.nc  <- "biol_103013"
+# nc.file <- paste(in.dir, in.nc, ".nc", sep = "")
+#  
+# # SETas
+# wdir <- "~/Atlantis/RunFiles/SETas_model_New_Trunk/" # working directory
+# in.dir <- "" # input subdirectory
+# setwd(wdir) # set working directory
+# in.bgm <- "VMPA_setas" # .bgm file name
+# bgm.file <- paste(in.dir, in.bgm, ".bgm", sep = "")
+# in.nc  <- "INIT_VMPA_Jan2015"
+# nc.file <- paste(in.dir, in.nc, ".nc", sep = "")
+# 
+# # Antarctic
+# wdir <- "/Users/ric352/Documents/Projects/Fisheries/Atlantis/Initial nc Tool/" # working directory
+# in.dir <- "" # input subdirectory
+# setwd(wdir) # set working directory
+# in.bgm <- "BanzareAtlantis" # .bgm file name
+# bgm.file <- paste(in.dir, in.bgm, ".bgm", sep = "")
+# in.nc  <- "test 2"
+# nc.file <- paste(in.dir, in.nc, ".nc", sep = "")
+# 
+# # ====================================================================
+# # code to collect initialisation data and view
+# 
+# input.object <- make.init.object(bgm.file, nc.file)
+# sh.init(input.object)

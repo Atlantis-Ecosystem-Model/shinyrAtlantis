@@ -1,0 +1,107 @@
+---
+title: "shprm Run"
+author: "Shane Richards, Michael Sumner"
+date: "1/22/2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## shprm.R
+
+```{r,eval=FALSE}
+# shprm.R
+# 15/01/2016
+
+rm(list = ls()) # clear memory
+
+library(shiny)
+library(dplyr)
+library(ggplot2)
+library(DT)
+library(stringr)
+
+# === sh.ast R code needed if supported by a package ===
+
+# globally available file names
+wd <- "/Users/ric352/Documents/Projects/Fisheries/Atlantis/Setup Tool/"
+setwd(wd)
+def.all.file <- paste(wd, "paramdefns.csv", sep = "")
+def.grp.file <- paste(wd, "grpTemplates.csv", sep = "")
+
+# AMS model
+wd <- "/Users/ric352/Documents/Projects/Fisheries/Atlantis/Setup Tool/AMS/"
+setwd(wd)
+bgm.file <- paste(wd, "ams71.bgm", sep = "")
+grp.file <- paste(wd, "AMSGroups_SPF.csv", sep = "")
+prm.file <- paste(wd, "ams71_SPF_biology.prm", sep = "")
+obj.ast.AMS <- make.prm.object(bgm.file, grp.file, prm.file)
+sh.prm(obj.ast.AMS) # run the shiny App
+# 
+# # Baltic model
+# wd <- "/Users/ric352/Documents/Projects/Fisheries/Atlantis/Setup Tool/Baltic/"
+# setwd(wd)
+# bgm.file <- paste(wd, "Baltic_aea_v2.bgm", sep = "")
+# grp.file <- paste(wd, "BalticGroups_Atlantis2015.csv", sep = "")
+# prm.file <- paste(wd, "Baltic_biol_FSnoEvo.prm", sep = "")
+# obj.ast.Baltic <- make.setup.object(bgm.file, grp.file, prm.file)
+# sh.ast(obj.ast.Baltic) # run the shiny App
+# 
+# JFRE model
+# wd <- "/Users/ric352/Documents/Projects/Fisheries/Atlantis/Setup Tool/JFRE"
+# setwd(wd)
+# bgm.file <- paste(wd, "JFRE_ll.bgm", sep = "")
+# grp.file <- paste(wd, "JFREGroups.csv", sep = "")
+# prm.file <- paste(wd, "JFREBiol.prm", sep = "")
+# habitat.types.JFRE <- c("MA", "reef", "flat", "soft", "canyon")
+# obj.ast.JFRE <- make.setup.object(bgm.file, grp.file, prm.file, habitat.types.JFRE)
+# sh.ast(obj.ast.JFRE) # run the shiny App
+# 
+# SEAP model
+# wd <- "/Users/ric352/Documents/Projects/Fisheries/Atlantis/Setup Tool/SEAP/"
+# setwd(wd)
+# bgm.file <- paste(wd, "SEAP_extended_shelf.bgm", sep = "")
+# grp.file <- paste(wd, "SEAP_Groups_Aquacult.csv", sep = "")
+# prm.file <- paste(wd, "SEAP_biol_pH_Aquacult.prm", sep = "")
+# obj.ast.SEAP <- make.setup.object(bgm.file, grp.file, prm.file)
+# sh.ast(obj.ast.SEAP) # run the shiny App
+# 
+# GBR model
+# wd <- "/Users/ric352/Documents/Projects/Fisheries/Atlantis/Setup Tool/GBR/"
+# setwd(wd)
+# bgm.file <- paste(wd, "gbr_test.bgm", sep = "")
+# grp.file <- paste(wd, "GBRGroups.csv", sep = "")
+# prm.file <- paste(wd, "GBR_biol SAR.prm", sep = "")
+# obj.ast.GBR <- make.prm.object(bgm.file, grp.file, prm.file)
+# sh.prm(obj.ast.GBR) # run the shiny App
+# 
+# Guam model
+# wd <- "/Users/ric352/Documents/Projects/Fisheries/Atlantis/Setup Tool/Guam/"
+# setwd(wd)
+# bgm.file <- paste(wd, "Guam_utm1.bgm", sep = "")
+# grp.file <- paste(wd, "GUAM_FGDemCoral.csv", sep = "")
+# prm.file <- paste(wd, "GUAM_biolW_Dem.prm", sep = "")
+# obj.ast.Guam <- make.setup.object(bgm.file, grp.file, prm.file)
+# sh.ast(obj.ast.Guam) # run the shiny App
+# 
+# === vat::create_vadt R code needed if supported by a package ===
+# 
+# wdir <- "~/Atlantis/RunFiles/SEAP/" # working directory
+# setwd(wdir)
+# 
+# outdir    <- "SEAPout/"
+# fgfile    <- "params/SEAP_Groups_Aquacult.csv"
+# biolprm   <- "params/SEAP_biol_pH_Aquacult.prm"
+# ncout     <- "SEAPoutput"
+# startyear <- 2010 
+# toutinc   <- 365
+# diet      <- TRUE
+# 
+# obj.vat <- create_vadt(outdir = outdir, fgfile = fgfile, biolprm = biolprm, 
+#   ncout = ncout, startyear = 2010, toutinc = 365, diet = TRUE)
+# 
+# vadt(obj.vat, NULL)
+
+```
