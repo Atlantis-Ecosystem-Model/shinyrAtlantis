@@ -2,3 +2,5 @@
 .Rhistory
 .RData
 inst/extdata/test.nc
+inst/doc
+*.Rproj
