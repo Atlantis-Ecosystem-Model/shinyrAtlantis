@@ -1,9 +1,110 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+Shiny Atlantis
+--------------
 
-NOTE: this is not functional, I'm partway through porting updates in - just got distracted. MDS 2016-01-29
+Development
+-----------
 
-Short-term note: this is not really a package yet, since it is a merge of an earlier bundle with updates from the primary author. 
+1.  Clone this repo in RStudio, New Project, Version Control, Git, "<https://github.com/mdsumner/shinyrAtlantis.git>"
+2.  Click Tools/Project Options/Build Tools/Generate documentation with roxygen - click all options ON.
+3.  Click Build & Reload in the Build Tab (or hit Ctrl-SHIFT-Enter).
+4.  Make edits, build/reload/test, commit.
+5.  Etc.
 
-More soon
+Usage
+-----
 
-See the readme.Rmd text for an idea. 
+Install these dependencies.
+
+``` r
+install.packages(c("DT", "devtools", "dplyr", "ggplot2", "scales", "shiny", "stringr", "data.table"))
+devtools::install_github(repo = "mareframe/vat")
+```
+
+Install the package (from private Github).
+
+``` r
+devtools::install_git("mdsumner/shinyrAtlantis ")
+```
+
+Load packages (can fix by namespace later)
+
+``` r
+library(dplyr)
+#> 
+#> Attaching package: 'dplyr'
+#> The following objects are masked from 'package:stats':
+#> 
+#>     filter, lag
+#> The following objects are masked from 'package:base':
+#> 
+#>     intersect, setdiff, setequal, union
+library(shiny)
+library(DT)
+#> 
+#> Attaching package: 'DT'
+#> The following objects are masked from 'package:shiny':
+#> 
+#>     dataTableOutput, renderDataTable
+
+library(ggplot2)
+
+library(stringr)
+## library(vat) 
+library(scales)
+
+library(shinyrAtlantis)
+```
+
+Spatial Distributions "sh.dist"
+-------------------------------
+
+Shiny application for generating spatial distributions with constant density (per unit area)
+
+``` r
+library(shiny)
+library(dplyr)
+library(ggplot2)
+library(DT)
+library(stringr)
+
+library(shinyrAtlantis)
+# ====================================================================
+# code to choose the spatial data file (.bgm)
+
+bgm.file <- system.file("extdata", "BanzareAtlantis.bgm", package = "shinyrAtlantis")
+
+# ====================================================================
+# code to collect the spatial data and view
+
+map.object <- make.dist.object(bgm.file)
+sh.dist(map.object)
+```
+
+To launch the above app in one step, run the `spatialDistributions` example.
+
+``` r
+shinyrAtlantis::SpatialDistributionsExample()
+```
+
+Shiny PRM Run `shprm.R`
+-----------------------
+
+``` r
+library(shinyrAtlantis)
+library(shiny)
+library(dplyr)
+library(ggplot2)
+library(DT)
+library(stringr)
+
+
+def.all.file <- system.file("extdata", "paramdefns.csv", package = "shinyrAtlantis")
+def.grp.file <- system.file("extdata", "grpTemplates.csv", package = "shinyrAtlantis")
+bgm.file <- system.file("extdata", "BanzareAtlantis.bgm", package = "shinyrAtlantis")
+grp.file <- system.file("extdata", "AntarcticGroups.csv", package = "shinyrAtlantis")
+prm.file <- system.file("extdata", "SO90_biol.prm", package = "shinyrAtlantis")
+
+obj <- make.prm.object(bgm.file, grp.file, prm.file)
+sh.prm(obj) # run the shiny App
+```
