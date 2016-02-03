@@ -25,6 +25,16 @@ knitr::opts_chunk$set(
 
 ## Shiny Atlantis
 
+## Development
+
+1. Clone this repo in RStudio, New Project, Version Control, Git, "https://github.com/mdsumner/shinyrAtlantis.git"
+2. Click Tools/Project Options/Build Tools/Generate documentation with roxygen - click all options ON. 
+3. Click Build & Reload in the Build Tab (or hit Ctrl-SHIFT-Enter). 
+4. Make edits, build/reload/test, commit. 
+5. Etc. 
+
+## Usage
+
 Install these dependencies. 
 
 ```{r,eval=FALSE}
@@ -54,17 +64,32 @@ library(scales)
 library(ShinyAtlantis)
 ```
 
-## Distribution tool
+## Spatial Distributions "sh.dist"
+
+Shiny application for generating spatial distributions with constant density (per unit area)
+
 
 ```{r,eval=FALSE}
-bgmfile <- system.file("extdata", "BanzareAtlantis.bgm", package= "ShinyAtlantis")
+library(shiny)
+library(dplyr)
+library(ggplot2)
+library(DT)
+library(stringr)
 
-## namespace later
-## there's a make.map.object for setup as well as distribution and they are different
-mapobject <- ShinyAtlantis:::make.map.objectDistribution(bgmfile)
-sh.dist(mapobject)
+library(shinyrAtlantis)
+# ====================================================================
+# code to choose the spatial data file (.bgm)
+
+bgm.file <- system.file("extdata", "BanzareAtlantis.bgm", package = "shinyrAtlantis")
+
+# ====================================================================
+# code to collect the spatial data and view
+
+map.object <- make.dist.object(bgm.file)
+sh.dist(map.object)
 
 ```
+
 
 ## Setup tools
 
