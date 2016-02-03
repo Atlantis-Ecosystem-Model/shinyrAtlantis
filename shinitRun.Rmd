@@ -13,11 +13,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r,eval=FALSE}
 
-# shinit.R
-# 15/01/2016
-
-rm(list = ls()) # clear memory
-
 library(shiny)
 library(dplyr)
 library(ggplot2)

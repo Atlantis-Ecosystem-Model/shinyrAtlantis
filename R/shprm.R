@@ -12,6 +12,13 @@
 # +==================================================================+
 # |  sh.prm : shiny application for viewing Atlantis prm input file  |
 # +==================================================================+
+#' Shiny Parameters
+#'
+#' @param obj object from \code{\link{mark.prm.object}}
+#'
+#' @return
+#' @export
+#'
 sh.prm <- function(obj){
   # obj is a list: numboxes, map_base, box.data, grp.def, grp.att, 
   #   gen.prm, grp.hab, grp.dist
@@ -1161,6 +1168,17 @@ make.prm.refuges <- function(grp.vals, gen.prm, grp.att) {
 # +============================================================+
 # |  make.init.object : collect all parameter data to display  |
 # +============================================================+
+#' Make PRM object
+#'
+#' @param bgm.file  BGM
+#' @param grp.file  groups
+#' @param prm.file  parameters
+#'
+#' @return list . . .
+#' @export
+#'
+#' @examples
+#' See readme
 make.prm.object <- function(bgm.file, grp.file, prm.file) {
   cat("-- Extracting map data\n")
   map.objects <- make.prm.map(bgm.file)

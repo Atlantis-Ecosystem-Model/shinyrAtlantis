@@ -90,20 +90,31 @@ sh.dist(map.object)
 
 ```
 
-
-## Setup tools
+To launch the above app in one step, run the `spatialDistributions` example.  
 
 
 ```{r,eval=FALSE}
-## these are globals (for easy shiny use, need to sort this out)
-def.all.file <- system.file("extdata", "paramdefns.csv", package= "ShinyAtlantis")
-def.grp.file <- system.file("extdata", "grpTemplates.csv", package = "ShinyAtlantis")
+shinyrAtlantis::SpatialDistributionsExample()
+```
 
-# Anatarctic model files 
-grpfile <- system.file("extdata",  "AntarcticGroups.csv", package= "ShinyAtlantis")
-prmfile <- system.file("extdata",  "SO90_biol.prm", package= "ShinyAtlantis")
-# generate the object of data that is read in by the shiny app (takes a few minutes)
-obj.ast.Antarctic <- ShinyAtlantis:::make.setup.object(bgmfile, grpfile, prmfile)
-ShinyAtlantis:::sh.ast(obj.ast.Antarctic) # run the shiny App
+## Shiny PRM Run `shprm.R`
+
+```{r,eval=FALSE}
+library(shinyrAtlantis)
+library(shiny)
+library(dplyr)
+library(ggplot2)
+library(DT)
+library(stringr)
+
+
+def.all.file <- system.file("extdata", "paramdefns.csv", package = "shinyrAtlantis")
+def.grp.file <- system.file("extdata", "grpTemplates.csv", package = "shinyrAtlantis")
+bgm.file <- system.file("extdata", "BanzareAtlantis.bgm", package = "shinyrAtlantis")
+grp.file <- system.file("extdata", "AntarcticGroups.csv", package = "shinyrAtlantis")
+prm.file <- system.file("extdata", "SO90_biol.prm", package = "shinyrAtlantis")
+
+obj <- make.prm.object(bgm.file, grp.file, prm.file)
+sh.prm(obj) # run the shiny App
 
 ```
