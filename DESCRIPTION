@@ -7,7 +7,7 @@ Authors@R: c(person("Michael D.", "Sumner", email = "mdsumner@gmail.com", role =
 Description: Shiny apps for Atlantis.
 Depends:
     R (>= 3.2.3),
-License: Private
+License: GPL-3
 LazyData: true
 RoxygenNote: 5.0.1
 Suggests: knitr,
