@@ -16,7 +16,7 @@
 #'
 #' @param obj object from \code{\link{mark.prm.object}}
 #'
-#' @return
+#' @return object of class 'shiny.appobj' see \code{\link[shiny]{shinyApp}}
 #' @export
 #'
 sh.prm <- function(obj){

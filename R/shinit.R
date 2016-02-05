@@ -10,9 +10,12 @@
 # library(stringr)
 # library(ncdf4)
 
-# +=================================================================+
-# |  sh.init : shiny application for viewing Atlantis initial data  |
-# +=================================================================+
+#' Shiny application for viewing Atlantis initial data 
+#'
+#' @param input.object from \code{\link{make.map.object}}
+#'
+#' @return object of class 'shiny.appobj' see \code{\link[shiny]{shinyApp}}
+#' @export
 sh.init <- function(input.object){
   # set up layer indices when plotting 3D values  
   depth.layers <- matrix(NA, nrow = input.object$numlevels, 
@@ -1065,9 +1068,14 @@ make.init.data <- function(nc.file, numboxes, numlevels) {
   ))
 }
 
-# +==================================================+
-# |  make.init.object : collect all data to display  |
-# +==================================================+
+#' Collect all data to display
+#'
+#' @param bgm.file Box Geometry Model (.bgm) file
+#' @param nc.file NetCDF init file
+#'
+#' @return list ...
+#' @export
+#'
 make.init.object <- function(bgm.file, nc.file) {
   cat("-- Extracting map data\n")
   map.object <- make.init.map(bgm.file)

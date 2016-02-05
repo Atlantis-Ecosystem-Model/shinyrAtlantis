@@ -2,6 +2,8 @@
 
 export(SpatialDistributionsExample)
 export(make.dist.object)
+export(make.init.object)
 export(make.prm.object)
 export(sh.dist)
+export(sh.init)
 export(sh.prm)

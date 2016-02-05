@@ -2,7 +2,7 @@
 #' shiny application for generating Atlantis horizontal distributions
 #'
 #' @param map.object 
-#'
+#' @return object of class 'shiny.appobj' see \code{\link[shiny]{shinyApp}}
 #' @export
 sh.dist <- function(map.object){
   # Global parameters

@@ -9,6 +9,9 @@ sh.dist(map.object)
 \arguments{
 \item{map.object}{}
 }
+\value{
+object of class 'shiny.appobj' see \code{\link[shiny]{shinyApp}}
+}
 \description{
 shiny application for generating Atlantis horizontal distributions
 }

@@ -9,6 +9,9 @@ sh.prm(obj)
 \arguments{
 \item{obj}{object from \code{\link{mark.prm.object}}}
 }
+\value{
+object of class 'shiny.appobj' see \code{\link[shiny]{shinyApp}}
+}
 \description{
 Shiny Parameters
 }
