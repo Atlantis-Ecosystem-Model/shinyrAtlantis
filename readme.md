@@ -23,7 +23,7 @@ git remote add origin git remote add origin https://github.com/[username]/[repon
 git push -u origin master
 ```
 
-1.  Tell the other collaborators. :)
+2.  Tell the other collaborators. :)
 
 Usage
 -----
