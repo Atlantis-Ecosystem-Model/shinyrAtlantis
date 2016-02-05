@@ -11,6 +11,20 @@ Development
 4.  Make edits, build/reload/test, commit.
 5.  Etc.
 
+If you want to re-point the origin of your local repo (i.e. copy it to your own Github account)
+
+1.  Go to Tools/shell... and type in
+
+``` bash
+git remote remove origin
+
+git remote add origin git remote add origin https://github.com/[username]/[reponame].git
+
+git push -u origin master
+```
+
+1.  Tell the other collaborators. :)
+
 Usage
 -----
 
@@ -107,4 +121,25 @@ prm.file <- system.file("extdata", "SO90_biol.prm", package = "shinyrAtlantis")
 
 obj <- make.prm.object(bgm.file, grp.file, prm.file)
 sh.prm(obj) # run the shiny App
+```
+
+Shiny INIT Run `shinit.R`
+-------------------------
+
+``` r
+library(shinyrAtlantis)
+library(shiny)
+library(dplyr)
+library(ggplot2)
+library(DT)
+library(stringr)
+library(ncdf4)
+
+
+bgm.file <-system.file("extdata", "BanzareAtlantis.bgm", package = "shinyrAtlantis")
+
+nc.file <- system.file("extdata", "input.nc", package = "shinyrAtlantis")
+
+input.object <- make.init.object(bgm.file, nc.file)
+a <- sh.init(input.object)
 ```
