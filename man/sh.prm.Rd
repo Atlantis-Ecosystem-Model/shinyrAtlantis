@@ -13,11 +13,10 @@ sh.prm(obj)
 object of class 'shiny.appobj' see \code{\link[shiny]{shinyApp}}
 }
 \description{
-Takes data from a .bgm, a .csv group file, and .prm Atlantis input parameter file,
-and provides
-a visualisation of the data in the form of a shiny application. The two data
-files must first be pre-processed by \code{make.prm.object}, which generates a
-list object that is the parameter to \code{sh.prm}.
+Takes data from a .bgm box geometry file, a .csv group file, and .prm Atlantis input parameter file
+and provides a visualisation of the data in the form of a shiny application.
+The three data files must first be pre-processed by \code{make.prm.object},
+which generates a list object that is the parameter to \code{sh.prm} (see Examples).
 }
 \examples{
 \dontrun{

@@ -13,10 +13,10 @@
 #' @title Shiny application for viewing Atlantis initialisation data
 #'
 #' @description
-#' Takes data from a .bgm and .nc Atlantis input parameter files and provides
+#' Takes data from a .bgm box geometry file and a .nc Atlantis input parameter file and provides
 #' a visualisation of the data in the form of a shiny application. The two data
 #' files must first be pre-processed by \code{make.init.object}, which generates a 
-#' list object that is the parameter to \code{sh.init}.
+#' list object that is the parameter to \code{sh.init} (see Examples).
 #' 
 #' @param input.object R list object generated from \code{make.init.object}
 #'
@@ -1231,11 +1231,11 @@ make.init.data <- function(nc.file, numboxes, numlevels) {
 #' @title Function that generates an object used by sh.init
 #'
 #' @description
-#' Takes data from a .bgm and .nc Atlantis input parameter files and generates a 
-#' list object that is the parameter to \code{sh.init}.
+#' Takes data from a box geometry .bgm and a .nc Atlantis input parameter file and generates a 
+#' list object that is the parameter to \code{sh.init} (see Examples).
 #' 
-#' @param bgm.file Box Geometry Model (.bgm) file used by Atlantis
-#' @param nc.file NetCDF initialisation file used by Atlantis
+#' @param bgm.file Box Geometry Model (.bgm) file used by Atlantis that defines box boundaries
+#' @param nc.file NetCDF (.nc) file used by Atlantis to set initial conditions
 #'
 #' @return R list object
 #' 

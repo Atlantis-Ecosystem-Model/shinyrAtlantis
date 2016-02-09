@@ -12,11 +12,10 @@
 #' @title Shiny application for viewing Atlantis biological parameters 
 #'
 #' @description
-#' Takes data from a .bgm, a .csv group file, and .prm Atlantis input parameter file, 
-#' and provides
-#' a visualisation of the data in the form of a shiny application. The two data
-#' files must first be pre-processed by \code{make.prm.object}, which generates a 
-#' list object that is the parameter to \code{sh.prm}.
+#' Takes data from a .bgm box geometry file, a .csv group file, and .prm Atlantis input parameter file 
+#' and provides a visualisation of the data in the form of a shiny application. 
+#' The three data files must first be pre-processed by \code{make.prm.object}, 
+#' which generates a list object that is the parameter to \code{sh.prm} (see Examples).
 #' 
 #' @param obj R list object generated from \code{make.prm.object}
 #'
@@ -1281,12 +1280,12 @@ make.prm.refuges <- function(grp.vals, gen.prm, grp.att) {
 #' @title Function that generates an object used by sh.prm
 #'
 #' @description
-#' Takes data from a .bgm, a .csv group file, and .prm Atlantis input parameter file, 
-#' and generates a list object that is the parameter to \code{sh.prm}.
+#' Takes data from a .bgm box geometry file, a .csv group file, and .prm Atlantis input parameter file 
+#' and generates a list object that is the parameter to \code{sh.prm} (see Examples).
 #' 
-#' @param bgm.file Box Geometry Model (.bgm) file used by Atlantis
-#' @param grp.file .csv file used by Atlantis that defines group attributes
-#' @param prm.file .prm file used by Atlantis describing biological parameters
+#' @param bgm.file Box geometry (.bgm) file used by Atlantis that defines box boundaries
+#' @param grp.file Text file (.csv) file used by Atlantis containing group attributes
+#' @param prm.file Text file (.prm) file used by Atlantis containing biological parameters
 #'
 #' @return R list object
 #' 
@@ -1297,6 +1296,9 @@ make.prm.refuges <- function(grp.vals, gen.prm, grp.att) {
 #' }
 #' @export
 make.prm.object <- function(bgm.file, grp.file, prm.file) {
+  def.grp.file <- system.file("extdata/grpTemplates.csv", package = "shinyrAtlantis")
+  def.all.file <- system.file("extdata/paramdefns.csv", package = "shinyrAtlantis")
+  
   cat("-- Extracting map data\n")
   map.objects <- make.prm.map(bgm.file)
   numboxes <- map.objects$numboxes

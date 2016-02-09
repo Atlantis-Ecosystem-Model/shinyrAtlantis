@@ -13,14 +13,14 @@ sh.dist(map.object)
 object of class 'shiny.appobj' see \code{\link[shiny]{shinyApp}}
 }
 \description{
-Takes data from a .bgm Atlantis input parameter file and provides
+Takes data from a .bgm box geometry file used by Atlantis to define box boundaries and provides
 a visualisation of the data in the form of a shiny application.
 The .bgm file must first be pre-processed by \code{make.dist.object}, which generates a
 list object that is the parameter to \code{sh.dist}.
 The application allows users to create probability distributions that
 describe how a species is distributed across boxes assuming that the distribution
-is uniform within the range. The output can be cut-and-pasted into an
-Atlantis .prm file.
+is uniform within the spatial range defined by the user. The output produced within the shiny output can then
+be cut-and-pasted into an Atlantis .prm file.
 }
 \examples{
 \dontrun{

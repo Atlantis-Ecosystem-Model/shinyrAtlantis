@@ -13,10 +13,10 @@ sh.init(input.object)
 object of class 'shiny.appobj' see \code{\link[shiny]{shinyApp}}
 }
 \description{
-Takes data from a .bgm and .nc Atlantis input parameter files and provides
+Takes data from a .bgm box geometry file and a .nc Atlantis input parameter file and provides
 a visualisation of the data in the form of a shiny application. The two data
 files must first be pre-processed by \code{make.init.object}, which generates a
-list object that is the parameter to \code{sh.init}.
+list object that is the parameter to \code{sh.init} (see Examples).
 }
 \examples{
 \dontrun{

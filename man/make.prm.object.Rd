@@ -7,18 +7,18 @@
 make.prm.object(bgm.file, grp.file, prm.file)
 }
 \arguments{
-\item{bgm.file}{Box Geometry Model (.bgm) file used by Atlantis}
+\item{bgm.file}{Box geometry (.bgm) file used by Atlantis that defines box boundaries}
 
-\item{grp.file}{.csv file used by Atlantis that defines group attributes}
+\item{grp.file}{Text file (.csv) file used by Atlantis containing group attributes}
 
-\item{prm.file}{.prm file used by Atlantis describing biological parameters}
+\item{prm.file}{Text file (.prm) file used by Atlantis containing biological parameters}
 }
 \value{
 R list object
 }
 \description{
-Takes data from a .bgm, a .csv group file, and .prm Atlantis input parameter file,
-and generates a list object that is the parameter to \code{sh.prm}.
+Takes data from a .bgm box geometry file, a .csv group file, and .prm Atlantis input parameter file
+and generates a list object that is the parameter to \code{sh.prm} (see Examples).
 }
 \examples{
 \dontrun{

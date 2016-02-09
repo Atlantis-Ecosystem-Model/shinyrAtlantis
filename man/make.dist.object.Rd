@@ -7,14 +7,14 @@
 make.dist.object(bgm.file)
 }
 \arguments{
-\item{bgm.file}{Box Geometry Model (.bgm) file used by Atlantis}
+\item{Box}{geometry (.bgm) file used by Atlantis that defines box boundaries}
 }
 \value{
 R list object
 }
 \description{
-Takes data from a .bgm Atlantis input parameter file and generates a
-list object that is the parameter to \code{sh.dist}.
+Takes data from a .bgm box geometry file used by Atlantis to define box boundaries
+and generates a list object that is the parameter to \code{sh.dist}.
 }
 \examples{
 \dontrun{

@@ -7,16 +7,16 @@
 make.init.object(bgm.file, nc.file)
 }
 \arguments{
-\item{bgm.file}{Box Geometry Model (.bgm) file used by Atlantis}
+\item{bgm.file}{Box Geometry Model (.bgm) file used by Atlantis that defines box boundaries}
 
-\item{nc.file}{NetCDF initialisation file used by Atlantis}
+\item{nc.file}{NetCDF (.nc) file used by Atlantis to set initial conditions}
 }
 \value{
 R list object
 }
 \description{
-Takes data from a .bgm and .nc Atlantis input parameter files and generates a
-list object that is the parameter to \code{sh.init}.
+Takes data from a box geometry .bgm and a .nc Atlantis input parameter file and generates a
+list object that is the parameter to \code{sh.init} (see Examples).
 }
 \examples{
 \dontrun{
