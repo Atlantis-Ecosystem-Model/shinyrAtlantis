@@ -6,10 +6,16 @@ Authors@R: c(person("Michael D.", "Sumner", email = "mdsumner@gmail.com", role =
           comment = "majority author of the R code"))
 Description: Shiny apps for Atlantis.
 Depends:
-    R (>= 3.2.3),
+    R (>= 3.2.3), 
+    shiny
+Imports: dplyr, 
+         DT,
+         ggplot2,
+         stringr
 License: GPL-3
 LazyData: true
 RoxygenNote: 5.0.1
 Suggests: knitr,
     rmarkdown
 VignetteBuilder: knitr
+Remotes: mareframe/vat

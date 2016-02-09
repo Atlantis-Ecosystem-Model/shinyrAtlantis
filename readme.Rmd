@@ -40,29 +40,21 @@ knitr::opts_chunk$set(
 Install these dependencies. 
 
 ```{r,eval=FALSE}
-install.packages(c("DT", "devtools", "dplyr", "ggplot2", "scales", "shiny", "stringr", "data.table"))
-devtools::install_github(repo = "mareframe/vat")
+
+install.packages(c("DT", "dplyr", "ggplot2", "scales", "shiny", "stringr", "data.table"))
+#devtools::install_github(repo = "mareframe/vat")
 ```
 
 Install the package (from private Github). 
 
 ```{r,eval=FALSE}
+install.packages("devtools")
 devtools::install_git("shanearichards/shinyrAtlantis ")
 ```
 
 Load packages (can fix by namespace later)
 
 ```{r}
-library(dplyr)
-library(shiny)
-library(DT)
-
-library(ggplot2)
-
-library(stringr)
-## library(vat) 
-library(scales)
-
 library(shinyrAtlantis)
 ```
 
@@ -103,11 +95,6 @@ shinyrAtlantis::SpatialDistributionsExample()
 
 ```{r,eval=FALSE}
 library(shinyrAtlantis)
-library(shiny)
-library(dplyr)
-library(ggplot2)
-library(DT)
-library(stringr)
 
 
 def.all.file <- system.file("extdata", "paramdefns.csv", package = "shinyrAtlantis")
@@ -119,6 +106,9 @@ prm.file <- system.file("extdata", "SO90_biol.prm", package = "shinyrAtlantis")
 obj <- make.prm.object(bgm.file, grp.file, prm.file)
 sh.prm(obj) # run the shiny App
 
+
+```{r,eval=FALSE}
+shinyrAtlantis::DisplayParametersExample()
 ```
 
 
@@ -126,12 +116,6 @@ sh.prm(obj) # run the shiny App
 
 ```{r,eval=FALSE}
 library(shinyrAtlantis)
-library(shiny)
-library(dplyr)
-library(ggplot2)
-library(DT)
-library(stringr)
-library(ncdf4)
 
 
 bgm.file <-system.file("extdata", "BanzareAtlantis.bgm", package = "shinyrAtlantis")
@@ -140,4 +124,9 @@ nc.file <- system.file("extdata", "input.nc", package = "shinyrAtlantis")
 
 input.object <- make.init.object(bgm.file, nc.file)
 a <- sh.init(input.object)
+```
+
+
+```{r,eval=FALSE}
+shinyrAtlantis::DisplayInitializationExample()
 ```

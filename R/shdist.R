@@ -6,6 +6,9 @@
 #' This is where details go
 #' @param map.object 
 #' @return object of class 'shiny.appobj' see \code{\link[shiny]{shinyApp}}
+#' @importFrom dplyr mutate
+#' @importFrom stringr str_split
+#' @importFrom ggplot2 ggplot aes element_blank geom_polygon geom_text labs scale_fill_gradient scale_fill_manual scale_x_continuous scale_y_continuous theme theme_bw  xlab ylab
 #' @export
 sh.dist <- function(map.object){
   # Global parameters
@@ -100,8 +103,8 @@ sh.dist <- function(map.object){
       df.map$valid.z <- ifelse((df.map$z >= min.depth) & (df.map$z < max.depth), 
         df.map$z, NA) # remove depths not in desired range
 
-      ggplot(data = df.map, aes(x = x, y = y, group = boxid, fill = valid.z)) +
-        geom_polygon(colour = "grey90", size = 0.25) +          
+      ggplot2::ggplot(data = df.map, ggplot2::aes(x = x, y = y, group = boxid, fill = valid.z)) +
+        ggplot2::geom_polygon(colour = "grey90", size = 0.25) +          
         scale_fill_gradient(low = "#9ecae1", high = "#084594", na.value="grey90",
           limits=c(min.depth, max.depth)) +
         labs(fill = "Depth (m)") +
@@ -170,7 +173,7 @@ sh.dist <- function(map.object){
 
       # make sure that fractions when rounded to 4 d.p. sum exactly to 1
       largest.box <- which(frac.short == max(frac.short))[1] # index not id
-      rounded.vals <- as.numeric(unlist(str_split(txt.tmp.2, pattern = " ")))
+      rounded.vals <- as.numeric(unlist(stringr::str_split(txt.tmp.2, pattern = " ")))
       eps <- 1 - sum(rounded.vals)      
       rounded.vals[largest.box] <- rounded.vals[largest.box] + eps
       frac.long <- rep(0, num.boxes)
@@ -205,7 +208,6 @@ sh.dist <- function(map.object){
 #' collect data to display the map
 #'
 #' @param bgm.file 
-#'
 #' @export
 make.dist.object <- function(bgm.file){
   bgm <- readLines(bgm.file) # read in the geometry file
@@ -254,14 +256,14 @@ make.dist.object <- function(bgm.file){
   z.tmp <- strsplit(bgm[box.indices], "\t")
   z <- as.numeric(sapply(z.tmp,`[`,2))
   box.data <- data.frame(boxid = 0:(numboxes-1), z = z)
-  box.data <- mutate(box.data, is.island = (z >= 0.0))
+  box.data <- dplyr::mutate(box.data, is.island = (z >= 0.0))
   for(i in 1:numboxes){ # box area
     box.indices[i] <- grep(paste("box", i - 1, ".area", sep = ""), bgm)
   }
   a.tmp <- strsplit(bgm[box.indices], "\t")
   a <- as.numeric(sapply(a.tmp,`[`,2))
   box.data$area <- a
-  box.data <- mutate(box.data, volume = -z*area)
+  box.data <- dplyr::mutate(box.data, volume = -z*area)
   
   # read in the internal coordinates from bgm file
   box.indices <- rep(0, numboxes)  

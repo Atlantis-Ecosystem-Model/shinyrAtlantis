@@ -695,6 +695,7 @@ sh.prm <- function(obj){
   )  
 }
 
+#' @importFrom stringr str_extract str_extract_all
 # +===================================================+
 # |  make.prm.map : collect data for displaying maps  |
 # +===================================================+
@@ -711,7 +712,7 @@ make.prm.map <- function(bgm.file){
       text.split <- unlist(str_split(
         gsub(pattern = "[\t ]+", x = bgm[j[jj]], replacement = " "), " "))
       if ((text.split[1] == txt.find) &
-          (str_extract(text.split[2], "[0-9.-]+") == text.split[2])) {
+          (stringr::str_extract(text.split[2], "[0-9.-]+") == text.split[2])) {
         jnew <- c(jnew,j[jj]) # add the row that satisfies the criteria
       }
     }
@@ -833,7 +834,7 @@ make.prm.attributes <- function(prm.file, grp.vals){
 # +=======================================================================+
 # |  make.prm.general : collect non-group attributes data for displaying  |
 # +=======================================================================+
-make.prm.general <- function(prm.file){
+make.prm.general <- function(prm.file, def.all.file){
   prm <- readLines(prm.file) # read in the biological parameter file
   # read in the parameter definition file
   df.prm.defns <- read.csv(def.all.file, header = TRUE)
@@ -1173,13 +1174,13 @@ make.prm.refuges <- function(grp.vals, gen.prm, grp.att) {
 #' @param bgm.file  BGM
 #' @param grp.file  groups
 #' @param prm.file  parameters
-#'
+#' @param def.all.file defs
 #' @return list . . .
 #' @export
 #'
 #' @examples
 #' #See readme
-make.prm.object <- function(bgm.file, grp.file, prm.file) {
+make.prm.object <- function(bgm.file, grp.file, prm.file, def.all.file) {
   cat("-- Extracting map data\n")
   map.objects <- make.prm.map(bgm.file)
   numboxes <- map.objects$numboxes
@@ -1191,7 +1192,7 @@ make.prm.object <- function(bgm.file, grp.file, prm.file) {
   habitat.types <- grp.object$habitat.types
   
   cat("-- Extracting general parameters\n")
-  gen.prm <- make.prm.general(prm.file)
+  gen.prm <- make.prm.general(prm.file, def.all.file)
   
   cat("-- Extracting group parameters (this may take a few minutes)\n")
   grp.att <- make.prm.attributes(prm.file, grp.vals)

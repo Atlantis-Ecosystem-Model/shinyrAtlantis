@@ -4,7 +4,7 @@
 \alias{make.prm.object}
 \title{Make PRM object}
 \usage{
-make.prm.object(bgm.file, grp.file, prm.file)
+make.prm.object(bgm.file, grp.file, prm.file, def.all.file)
 }
 \arguments{
 \item{bgm.file}{BGM}
@@ -12,6 +12,8 @@ make.prm.object(bgm.file, grp.file, prm.file)
 \item{grp.file}{groups}
 
 \item{prm.file}{parameters}
+
+\item{def.all.file}{defs}
 }
 \value{
 list . . .

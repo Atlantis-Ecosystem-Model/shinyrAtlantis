@@ -1,20 +1,16 @@
 #' Spatial Distributions Shiny example
-#'
+#' @rdname ShinyAtlantisExamples
 #' @return nothing
 #' @export
 #'
 #' @examples
 #' shinyrAtlantis::SpatialDistributionsExample()
+#' 
+#' shinyrAtlantis::DisplayParametersExample()
+#' 
+#' shinyrAtlantis::DisplayInitializationExample()
 SpatialDistributionsExample <- function() {
-  
-  library(shiny)
-  library(dplyr)
-  library(ggplot2)
-  library(DT)
-  library(stringr)
-  
-  library(shinyrAtlantis)
-  # ====================================================================
+# ====================================================================
   # code to choose the spatial data file (.bgm)
   
   bgm.file <- system.file("extdata", "BanzareAtlantis.bgm", package = "shinyrAtlantis")
@@ -24,4 +20,28 @@ SpatialDistributionsExample <- function() {
   
   map.object <- make.dist.object(bgm.file)
   sh.dist(map.object)
+}
+
+#' @rdname ShinyAtlantisExamples
+#' @export
+DisplayParametersExample <- function() {
+  def.all.file <- system.file("extdata", "paramdefns.csv", package = "shinyrAtlantis")
+  def.grp.file <- system.file("extdata", "grpTemplates.csv", package = "shinyrAtlantis")
+  bgm.file <- system.file("extdata", "BanzareAtlantis.bgm", package = "shinyrAtlantis")
+  grp.file <- system.file("extdata", "AntarcticGroups.csv", package = "shinyrAtlantis")
+  prm.file <- system.file("extdata", "SO90_biol.prm", package = "shinyrAtlantis")
+  
+  obj <- make.prm.object(bgm.file, grp.file, prm.file, def.all.file)
+  sh.prm(obj) # run the shiny App
+}
+
+#' @rdname ShinyAtlantisExamples
+#' @export
+DisplayInitializationExample <- function() {
+  bgm.file <-system.file("extdata", "BanzareAtlantis.bgm", package = "shinyrAtlantis")
+  
+  nc.file <- system.file("extdata", "input.nc", package = "shinyrAtlantis")
+  
+  input.object <- make.init.object(bgm.file, nc.file)
+  a <- sh.init(input.object)
 }
