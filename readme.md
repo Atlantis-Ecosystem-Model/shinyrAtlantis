@@ -5,25 +5,11 @@ Shiny Atlantis
 Development
 -----------
 
-1.  Clone this repo in RStudio, New Project, Version Control, Git, "<https://github.com/mdsumner/shinyrAtlantis.git>"
+1.  Clone this repo in RStudio, New Project, Version Control, Git, "<https://github.com/shanerichards/shinyrAtlantis.git>"
 2.  Click Tools/Project Options/Build Tools/Generate documentation with roxygen - click all options ON.
 3.  Click Build & Reload in the Build Tab (or hit Ctrl-SHIFT-Enter).
 4.  Make edits, build/reload/test, commit.
 5.  Etc.
-
-If you want to re-point the origin of your local repo (i.e. copy it to your own Github account)
-
-1.  Go to Tools/shell... and type in
-
-``` bash
-git remote remove origin
-
-git remote add origin git remote add origin https://github.com/[username]/[reponame].git
-
-git push -u origin master
-```
-
-2.  Tell the other collaborators. :)
 
 Usage
 -----
