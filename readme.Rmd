@@ -12,15 +12,6 @@ knitr::opts_chunk$set(
   comment = "#>",
   fig.path = "README-"
 )
-
-    # shiny,
-    # dplyr,
-    # DT,
-    # ggplot2,
-    # stringr,
-    # vat,
-    # scales
-    # 
 ```
 
 ## Shiny Atlantis
@@ -42,7 +33,6 @@ Install these dependencies.
 ```{r,eval=FALSE}
 
 install.packages(c("DT", "dplyr", "ggplot2", "scales", "shiny", "stringr", "data.table"))
-#devtools::install_github(repo = "mareframe/vat")
 ```
 
 Install the package (from private Github). 
@@ -97,8 +87,10 @@ bgm.file <- system.file("extdata", "BanzareAtlantis.bgm", package = "shinyrAtlan
 grp.file <- system.file("extdata", "AntarcticGroups.csv", package = "shinyrAtlantis")
 prm.file <- system.file("extdata", "SO90_biol.prm", package = "shinyrAtlantis")
 
-obj <- make.prm.object(bgm.file, grp.file, prm.file)
-sh.prm(obj) # run the shiny App
+## prior to packaging, the scope of these file names was a bit "global"
+obj <- make.prm.object(bgm.file, grp.file, prm.file, def.all.file, def.grp.file)
+## this def.grp.file contents should be included in object above??
+sh.prm(obj, def.grp.file)  # run the shiny App
 
 ```
 

@@ -17,43 +17,23 @@ Usage
 Install these dependencies.
 
 ``` r
-install.packages(c("DT", "devtools", "dplyr", "ggplot2", "scales", "shiny", "stringr", "data.table"))
-devtools::install_github(repo = "mareframe/vat")
+
+install.packages(c("DT", "dplyr", "ggplot2", "scales", "shiny", "stringr", "data.table"))
+#devtools::install_github(repo = "mareframe/vat")
 ```
 
 Install the package (from private Github).
 
 ``` r
+install.packages("devtools")
 devtools::install_git("shanearichards/shinyrAtlantis ")
 ```
 
 Load packages (can fix by namespace later)
 
 ``` r
-library(dplyr)
-#> 
-#> Attaching package: 'dplyr'
-#> The following objects are masked from 'package:stats':
-#> 
-#>     filter, lag
-#> The following objects are masked from 'package:base':
-#> 
-#>     intersect, setdiff, setequal, union
-library(shiny)
-library(DT)
-#> 
-#> Attaching package: 'DT'
-#> The following objects are masked from 'package:shiny':
-#> 
-#>     dataTableOutput, renderDataTable
-
-library(ggplot2)
-
-library(stringr)
-## library(vat) 
-library(scales)
-
 library(shinyrAtlantis)
+#> Loading required package: shiny
 ```
 
 Spatial Distributions "sh.dist"
@@ -81,22 +61,11 @@ map.object <- make.dist.object(bgm.file)
 sh.dist(map.object)
 ```
 
-To launch the above app in one step, run the `spatialDistributions` example.
-
-``` r
-shinyrAtlantis::SpatialDistributionsExample()
-```
-
 Shiny PRM Run `shprm.R`
 -----------------------
 
 ``` r
 library(shinyrAtlantis)
-library(shiny)
-library(dplyr)
-library(ggplot2)
-library(DT)
-library(stringr)
 
 
 def.all.file <- system.file("extdata", "paramdefns.csv", package = "shinyrAtlantis")
@@ -105,8 +74,10 @@ bgm.file <- system.file("extdata", "BanzareAtlantis.bgm", package = "shinyrAtlan
 grp.file <- system.file("extdata", "AntarcticGroups.csv", package = "shinyrAtlantis")
 prm.file <- system.file("extdata", "SO90_biol.prm", package = "shinyrAtlantis")
 
-obj <- make.prm.object(bgm.file, grp.file, prm.file)
-sh.prm(obj) # run the shiny App
+## prior to packaging, the scope of these file names was a bit "global"
+obj <- make.prm.object(bgm.file, grp.file, prm.file, def.all.file, def.grp.file)
+## this def.grp.file contents should be included in object above??
+sh.prm(obj, def.grp.file)  # run the shiny App
 ```
 
 Shiny INIT Run `shinit.R`
@@ -114,12 +85,6 @@ Shiny INIT Run `shinit.R`
 
 ``` r
 library(shinyrAtlantis)
-library(shiny)
-library(dplyr)
-library(ggplot2)
-library(DT)
-library(stringr)
-library(ncdf4)
 
 
 bgm.file <-system.file("extdata", "BanzareAtlantis.bgm", package = "shinyrAtlantis")
@@ -128,4 +93,21 @@ nc.file <- system.file("extdata", "input.nc", package = "shinyrAtlantis")
 
 input.object <- make.init.object(bgm.file, nc.file)
 a <- sh.init(input.object)
+```
+
+One step launch
+---------------
+
+To launch any the above apps in one step, run the these examples.
+
+``` r
+shinyrAtlantis::SpatialDistributionsExample()
+```
+
+``` r
+shinyrAtlantis::DisplayParametersExample()
+```
+
+``` r
+shinyrAtlantis::DisplayInitializationExample()
 ```
