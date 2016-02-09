@@ -28,14 +28,26 @@ knitr::opts_chunk$set(
 
 ## Usage
 
-
-Install the package (from Github). 
+Install dependencies. 
 
 ```{r,eval=FALSE}
+install.packages(c("shiny", 
+                 "dplyr", 
+                 "DT",
+                 "ggplot2",
+                 "ncdf4",
+                 "stringr"))
+
+```
+
+Install the package from Github with devtools. 
+
+```{r,eval=FALSE}
+
 if (packageVersion("devtools") < 1.6) {
   install.packages("devtools")
 }
-devtools::install_github("mdsumner/shinyrAtlantis")
+devtools::install_github("shanearichards/shinyrAtlantis")
 ```
 
 Load and attach the package. 
