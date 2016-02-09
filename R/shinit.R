@@ -1,8 +1,8 @@
 # shinit.R
-# 15/01/2016
+# 09/02/2016
 
 # rm(list = ls()) # clear memory
-# 
+
 # library(shiny)
 # library(dplyr)
 # library(ggplot2)
@@ -10,11 +10,23 @@
 # library(stringr)
 # library(ncdf4)
 
-#' Shiny application for viewing Atlantis initial data 
+#' @title Shiny application for viewing Atlantis initialisation data
 #'
-#' @param input.object from \code{\link{make.map.object}}
+#' @description
+#' Takes data from a .bgm and .nc Atlantis input parameter files and provides
+#' a visualisation of the data in the form of a shiny application. The two data
+#' files must first be pre-processed by \code{make.init.object}, which generates a 
+#' list object that is the parameter to \code{sh.init}.
+#' 
+#' @param input.object R list object generated from \code{make.init.object}
 #'
 #' @return object of class 'shiny.appobj' see \code{\link[shiny]{shinyApp}}
+#' 
+#' @examples
+#' \dontrun{
+#' input.object <- make.init.object(bgm.file, nc.file)
+#' sh.init(input.object)
+#' }
 #' @export
 sh.init <- function(input.object){
   # set up layer indices when plotting 3D values  
@@ -22,13 +34,11 @@ sh.init <- function(input.object){
     ncol = input.object$numboxes)
   for (i in 1:input.object$numboxes) {
     if (!is.na(input.object$box.info$layers.water[i]) &
-      (input.object$box.info$layers.water[i] > 0)) {
+        (input.object$box.info$layers.water[i] > 0)) {
       depth.layers[1:input.object$box.info$layers.water[i],i] <- 
         input.object$box.info$layers.water[i]:1
     }
   }
-  
-  ##
   has.water.layers <- input.object$box.info$layers.water > 0 # box has water
   depth.layers[input.object$numlevels,has.water.layers] <- input.object$numlevels
   
@@ -37,19 +47,20 @@ sh.init <- function(input.object){
   ndx.2.end <- cumsum(input.object$species.2.groups)
   ndx.2.start[1] <- 1
   ndx.2.start[2:length(input.object$species.2.names)] <- 1 + ndx.2.end[1:(length(input.object$species.2.names)-1)]
-
+  
   ndx.3.start <- rep(0, length(input.object$species.3.names))
   ndx.3.end <- cumsum(input.object$species.3.groups)
   ndx.3.start[1] <- 1
   ndx.3.start[2:length(input.object$species.3.names)] <- 1 + ndx.3.end[1:(length(input.object$species.3.names)-1)]
-
+  
   Nums.Choices <- c("Raw data", "Divide by box area")
   # determine which 3D biotic groups can have transformable data (contains _Nums)
   Nums.names <- rep(FALSE, length(input.object$species.3.names.full))
   Nums.names[grep(pattern = "_Nums$", x = input.object$species.3.names.full)] <- TRUE
-
+  
   # create HTML text for viewing on help tab  
   txtHelp <- "<p>This program displays data from the .nc file used to provide initial conditions for an <b>Atlantis</b> run.</p>"
+  txtHelp <- paste(txtHelp, "<p>Plots have a zoom feature. Draw a box and double click to zoom into the box. Double click to reset zoom.</p>") 
   txtHelp <- paste(txtHelp, "<p>Reef, soft, and flat values are expected to sum to one (100% cover) within the domain.</p>") 
   txtHelp <- paste(txtHelp, "<p>The code attempts to separate variables into biotic and abiotic groups. Biotic groups are those where there exists a variable that contains _N in the name as this indicates the presence of nitrogen. The code also attempts to distinguish data where a vertical dimension is present (3D). Some biotic groups may be presented under the 2D and 3D panels.</p>") 
   txtHelp <- paste(txtHelp, "<p>If more than one time dimension is detected then only the first time layer is displayed.</p>")
@@ -65,19 +76,20 @@ sh.init <- function(input.object){
   
   plotHeight3D <- paste(as.character(350 * ((input.object$numlevels - 1) %/% 2 + 1)),
     "px", sep = "") # calculate a reasonable overall plot size for 3D plots
-
+  
   # set up consistent association between colours used to categorise cover check    
   myColors <- c("#deebf7", "#de2d26", "#a1d99b", "#a50f15")
   names(myColors) <- levels(input.object$box.info$cover.check)
   colScale <- scale_fill_manual(name = "check",values = myColors)  
-
+  
   # copy relevant box info worth showing
-  df.cover <- input.object$box.info[c(1:11,17)]
+  df.cover <- input.object$box.info[c(1:11,13,17)]
   df.cover$z <- -df.cover$z
   names(df.cover) <- c("boxid", "reef", "flat", "soft", "canyon", "cover",
-    "check", "layers (total)", "layers (water)", "depth (nc)", "depth (bgm)", "numlayers")
-  df.cover <- df.cover[c(1:9, 12, 10, 11)] # reorder columns for display
-        
+    "check", "layers (total)", "layers (water)", "depth (nc)", "depth (bgm)",
+    "area", "numlayers")
+  df.cover <- df.cover[c(1:9, 13, 10, 11, 12)] # reorder columns for display
+  
   shinyApp(
     
     # USER INPUT FUNCTION
@@ -92,8 +104,26 @@ sh.init <- function(input.object){
             column(6, h4("Habitat cover"))
           ),
           fluidRow(
-            column(6, plotOutput("plotLayers", height = "475px")),
-            column(6, plotOutput("plotCover", height = "475px"))
+            column(6, 
+              plotOutput("plotLayers",         
+                height = "475px",
+                dblclick = "plotLayers_dblclick",
+                brush = brushOpts(
+                  id = "plotLayers_brush",
+                  resetOnNew = TRUE
+                )
+              )
+            ),
+            column(6, 
+              plotOutput("plotCover", 
+                height = "475px",
+                dblclick = "plotCover_dblclick",
+                brush = brushOpts(
+                  id = "plotCover_brush",
+                  resetOnNew = TRUE
+                )
+              )
+            )
           ),
           hr(),
           fluidRow(column(12,
@@ -113,7 +143,16 @@ sh.init <- function(input.object){
             htmlOutput("txtnSp2att")
           ),    
           mainPanel(
-            fluidRow(column(12, plotOutput("plot2D", height = "625px"))),
+            fluidRow(column(12, 
+              plotOutput("plot2D", 
+                height = "625px",
+                dblclick = "plot2D_dblclick",
+                brush = brushOpts(
+                  id = "plot2D_brush",
+                  resetOnNew = TRUE
+                )
+              )
+            )),
             hr(),
             fluidRow(column(4, DT::dataTableOutput("table.2D")))
           )
@@ -129,7 +168,16 @@ sh.init <- function(input.object){
             htmlOutput("txtnSp3att")
           ),    
           mainPanel(
-            fluidRow(column(12, plotOutput("plot3D", height = plotHeight3D))),
+            fluidRow(column(12, 
+              plotOutput("plot3D", 
+                height = plotHeight3D,
+                dblclick = "plot3D_dblclick",
+                brush = brushOpts(
+                  id = "plot3D_brush",
+                  resetOnNew = TRUE
+                )
+              )
+            )),
             fluidRow(column(12,
               HTML("<p>Numbers in the panel headers indicate the depth at the bottom of the water layer.</p>"))
             ),
@@ -151,7 +199,16 @@ sh.init <- function(input.object){
             htmlOutput("txtSp2att")
           ),    
           mainPanel(
-            fluidRow(column(12, plotOutput("plotSpecies2", height = "625px"))),
+            fluidRow(column(12, 
+              plotOutput("plotSpecies2", 
+                height = "625px",
+                dblclick = "plotSpecies2_dblclick",
+                brush = brushOpts(
+                  id = "plotSpecies2_brush",
+                  resetOnNew = TRUE
+                )
+              )
+            )),
             hr(),
             fluidRow(column(4, DT::dataTableOutput("table.species2")))
           )
@@ -172,7 +229,16 @@ sh.init <- function(input.object){
             htmlOutput("txtSp3att")
           ),    
           mainPanel(
-            fluidRow(column(12, plotOutput("plotSpecies3", height = plotHeight3D))),
+            fluidRow(column(12, 
+              plotOutput("plotSpecies3", 
+                height = plotHeight3D,
+                dblclick = "plotSpecies3_dblclick",
+                brush = brushOpts(
+                  id = "plotSpecies3_brush",
+                  resetOnNew = TRUE
+                )
+              )
+            )),
             fluidRow(column(12,
               HTML("<p>Numbers in the panel headers indicate the depth at the bottom of the water layer.</p>"))
             ),
@@ -198,6 +264,14 @@ sh.init <- function(input.object){
       values$sp2att  <- ""
       values$sp3att  <- ""
       
+      # reactive variables used to set plot ranges
+      ranges         <- reactiveValues(x = NULL, y = NULL)
+      rangesCover    <- reactiveValues(x = NULL, y = NULL)
+      ranges2D       <- reactiveValues(x = NULL, y = NULL)
+      ranges3D       <- reactiveValues(x = NULL, y = NULL)
+      rangesSpecies2 <- reactiveValues(x = NULL, y = NULL)
+      rangesSpecies3 <- reactiveValues(x = NULL, y = NULL)
+      
       observeEvent(input$exitButton, {
         stopApp()
       })
@@ -207,19 +281,19 @@ sh.init <- function(input.object){
         indx <- which(input.object$nonspecies.2.names == input$SI.NS2)
         values$nsp2att <- input.object$nonspecies.2.att[indx]
       })
-
+      
       # register change in 3D abiotic sub-group and update displayed netCDF attributes
       observeEvent(input$SI.NS3, {
         indx <- which(input.object$nonspecies.3.names == input$SI.NS3)
         values$nsp3att <- input.object$nonspecies.3.att[indx]
       })
-
+      
       # register change in 2D biotic sub-group and update displayed netCDF attributes
       observeEvent(input$SI2.SG, {
         indx <- which(input.object$species.2.names.full == input$SI2.SG)
         values$sp2att <- input.object$species.2.att[indx]
       })
-
+      
       # register change in 3D biotic sub-group and update displayed netCDF attributes
       observeEvent(input$SI3.SG, {
         indx <- which(input.object$species.3.names.full == input$SI3.SG)
@@ -245,27 +319,105 @@ sh.init <- function(input.object){
         updateSelectInput(session, "SI2.SG", 
           choices = input.object$species.2.names.full[ndx.2.start[i]:ndx.2.end[i]])
       })
-
+      
+      # When a double-click happens, check if there's a brush on the plot.
+      # If so, zoom to the brush bounds; if not, reset the zoom.
+      observeEvent(input$plotLayers_dblclick, {
+        brush <- input$plotLayers_brush
+        if (!is.null(brush)) {
+          ranges$x <- c(brush$xmin, brush$xmax)
+          ranges$y <- c(brush$ymin, brush$ymax)
+        } else {
+          ranges$x <- NULL
+          ranges$y <- NULL
+        }
+      })
+      
+      # When a double-click happens, check if there's a brush on the plot.
+      # If so, zoom to the brush bounds; if not, reset the zoom.
+      observeEvent(input$plotCover_dblclick, {
+        brush <- input$plotCover_brush
+        if (!is.null(brush)) {
+          rangesCover$x <- c(brush$xmin, brush$xmax)
+          rangesCover$y <- c(brush$ymin, brush$ymax)
+        } else {
+          rangesCover$x <- NULL
+          rangesCover$y <- NULL
+        }
+      })
+      
+      # When a double-click happens, check if there's a brush on the plot.
+      # If so, zoom to the brush bounds; if not, reset the zoom.
+      observeEvent(input$plot2D_dblclick, {
+        brush <- input$plot2D_brush
+        if (!is.null(brush)) {
+          ranges2D$x <- c(brush$xmin, brush$xmax)
+          ranges2D$y <- c(brush$ymin, brush$ymax)
+        } else {
+          ranges2D$x <- NULL
+          ranges2D$y <- NULL
+        }
+      })
+      
+      # When a double-click happens, check if there's a brush on the plot.
+      # If so, zoom to the brush bounds; if not, reset the zoom.
+      observeEvent(input$plot3D_dblclick, {
+        brush <- input$plot3D_brush
+        if (!is.null(brush)) {
+          ranges3D$x <- c(brush$xmin, brush$xmax)
+          ranges3D$y <- c(brush$ymin, brush$ymax)
+        } else {
+          ranges3D$x <- NULL
+          ranges3D$y <- NULL
+        }
+      })
+      
+      # When a double-click happens, check if there's a brush on the plot.
+      # If so, zoom to the brush bounds; if not, reset the zoom.
+      observeEvent(input$plotSpecies2_dblclick, {
+        brush <- input$plotSpecies2_brush
+        if (!is.null(brush)) {
+          rangesSpecies2$x <- c(brush$xmin, brush$xmax)
+          rangesSpecies2$y <- c(brush$ymin, brush$ymax)
+        } else {
+          rangesSpecies2$x <- NULL
+          rangesSpecies2$y <- NULL
+        }
+      })
+      
+      # When a double-click happens, check if there's a brush on the plot.
+      # If so, zoom to the brush bounds; if not, reset the zoom.
+      observeEvent(input$plotSpecies3_dblclick, {
+        brush <- input$plotSpecies3_brush
+        if (!is.null(brush)) {
+          rangesSpecies3$x <- c(brush$xmin, brush$xmax)
+          rangesSpecies3$y <- c(brush$ymin, brush$ymax)
+        } else {
+          rangesSpecies3$x <- NULL
+          rangesSpecies3$y <- NULL
+        }
+      })
+      
       # display 2D 1biotic netCDF variable attributes
       output$txtnSp2att <- renderUI({
         HTML(values$nsp2att)
       })
-
+      
       # display 3D abiotic netCDF variable attributes
       output$txtnSp3att <- renderUI({
         HTML(values$nsp3att)
       })
-
+      
       # display 2D biotic netCDF variable attributes
       output$txtSp2att <- renderUI({
         HTML(values$sp2att)
       })
-
+      
       # display 3D biotic netCDF variable attributes
       output$txtSp3att <- renderUI({
         HTML(values$sp3att)
       })
-            
+      
       # display 2D habitat data in table form
       output$table.box.info <- DT::renderDataTable({
         DT::datatable(df.cover, rownames = FALSE)
@@ -282,6 +434,7 @@ sh.init <- function(input.object){
           geom_text(aes(x = x.in, y = y.in, label = boxid), size = 2.5) +
           theme_bw() + xlab("") + ylab("") +
           theme(plot.background = element_blank()) +
+          coord_cartesian(xlim = ranges$x, ylim = ranges$y) +
           scale_y_continuous(breaks=NULL) + scale_x_continuous(breaks=NULL)
       })
       
@@ -295,6 +448,7 @@ sh.init <- function(input.object){
           geom_text(aes(x = x.in, y = y.in, label = boxid), size = 2.5) +
           theme_bw() + xlab("") + ylab("") +
           theme(plot.background = element_blank()) +
+          coord_cartesian(xlim = rangesCover$x, ylim = rangesCover$y) +
           scale_y_continuous(breaks=NULL) + scale_x_continuous(breaks=NULL)      
       })
       
@@ -317,6 +471,7 @@ sh.init <- function(input.object){
           labs(fill = "value") +
           theme_bw() + xlab("") + ylab("") +
           theme(plot.background = element_blank()) +
+          coord_cartesian(xlim = ranges2D$x, ylim = ranges2D$y) +
           scale_y_continuous(breaks=NULL) + scale_x_continuous(breaks=NULL)      
       })
       
@@ -363,7 +518,7 @@ sh.init <- function(input.object){
         }
         df.plot <- left_join(input.object$df.map, df.plot, by = "boxid")
         ggplot(data = df.plot, 
-            aes(x = x, y = y, group = boxid, fill = vals)) +
+          aes(x = x, y = y, group = boxid, fill = vals)) +
           geom_polygon(colour = "black", size = 0.25) + 
           scale_fill_gradient(low="#fee6ce", high="#d94801",
             na.value="black", guide=guide_legend()) +
@@ -371,6 +526,7 @@ sh.init <- function(input.object){
           facet_wrap( ~ depth, ncol = 2) +
           theme_bw() + xlab("") + ylab("") +
           theme(plot.background = element_blank()) +
+          coord_cartesian(xlim = ranges3D$x, ylim = ranges3D$y) +
           scale_y_continuous(breaks=NULL) + scale_x_continuous(breaks=NULL)      
       })
       
@@ -425,6 +581,7 @@ sh.init <- function(input.object){
           labs(fill = "value") +
           theme_bw() + xlab("") + ylab("") +
           theme(plot.background = element_blank()) +
+          coord_cartesian(xlim = rangesSpecies2$x, ylim = rangesSpecies2$y) +
           scale_y_continuous(breaks=NULL) + scale_x_continuous(breaks=NULL)      
       })
       
@@ -433,7 +590,7 @@ sh.init <- function(input.object){
         boxid <- 0:(input.object$numboxes-1)
         indx <- which(input.object$species.2.names.full == input$SI2.SG)
         data.2D <- input.object$species.2.data[indx, ]
-
+        
         df.plot <- data.frame(
           boxid = boxid,
           vals = data.2D
@@ -484,9 +641,10 @@ sh.init <- function(input.object){
           facet_wrap( ~ depth, ncol = 2) +
           theme_bw() + xlab("") + ylab("") +
           theme(plot.background = element_blank()) +
+          coord_cartesian(xlim = rangesSpecies3$x, ylim = rangesSpecies3$y) +
           scale_y_continuous(breaks=NULL) + scale_x_continuous(breaks=NULL)      
       })
-
+      
       # display 3D biotic data in table form
       output$table.species3 <- DT::renderDataTable({
         boxid <- 0:(input.object$numboxes-1)
@@ -1070,14 +1228,23 @@ make.init.data <- function(nc.file, numboxes, numlevels) {
   ))
 }
 
-#' Collect all data to display
+#' @title Function that generates an object used by sh.init
 #'
-#' @param bgm.file Box Geometry Model (.bgm) file
-#' @param nc.file NetCDF init file
+#' @description
+#' Takes data from a .bgm and .nc Atlantis input parameter files and generates a 
+#' list object that is the parameter to \code{sh.init}.
+#' 
+#' @param bgm.file Box Geometry Model (.bgm) file used by Atlantis
+#' @param nc.file NetCDF initialisation file used by Atlantis
 #'
-#' @return list ...
+#' @return R list object
+#' 
+#' @examples
+#' \dontrun{
+#' input.object <- make.init.object(bgm.file, nc.file)
+#' sh.init(input.object)
+#' }
 #' @export
-#'
 make.init.object <- function(bgm.file, nc.file) {
   cat("-- Extracting map data\n")
   map.object <- make.init.map(bgm.file)
@@ -1115,48 +1282,3 @@ make.init.object <- function(bgm.file, nc.file) {
     species.3.att = data.object$species.3.att
   ))    
 }
-
-# # ====================================================================
-# # code to choose initialisation files to view
-# 
-# # SEAP
-# wdir <- "~/Atlantis/RunFiles/SEAP/" # working directory
-# in.dir <- "params/" # input subdirectory
-# setwd(wdir) # set working directory
-# in.bgm <- "SEAP_extended_shelf" # .bgm file name
-# bgm.file <- paste(in.dir, in.bgm, ".bgm", sep = "")
-# in.nc  <- "initSEAPaquacult_pH"
-# nc.file <- paste(in.dir, in.nc, ".nc", sep = "")
-# 
-# # Guam 
-# wdir <- "~/Atlantis/RunFiles/Guam/" # working directory
-# in.dir <- "" # input subdirectory
-# setwd(wdir) # set working directory
-# in.bgm <- "Guam_utm1" # .bgm file name
-# bgm.file <- paste(in.dir, in.bgm, ".bgm", sep = "")
-# in.nc  <- "biol_103013"
-# nc.file <- paste(in.dir, in.nc, ".nc", sep = "")
-#  
-# # SETas
-# wdir <- "~/Atlantis/RunFiles/SETas_model_New_Trunk/" # working directory
-# in.dir <- "" # input subdirectory
-# setwd(wdir) # set working directory
-# in.bgm <- "VMPA_setas" # .bgm file name
-# bgm.file <- paste(in.dir, in.bgm, ".bgm", sep = "")
-# in.nc  <- "INIT_VMPA_Jan2015"
-# nc.file <- paste(in.dir, in.nc, ".nc", sep = "")
-# 
-# # Antarctic
-# wdir <- "/Users/ric352/Documents/Projects/Fisheries/Atlantis/Initial nc Tool/" # working directory
-# in.dir <- "" # input subdirectory
-# setwd(wdir) # set working directory
-# in.bgm <- "BanzareAtlantis" # .bgm file name
-# bgm.file <- paste(in.dir, in.bgm, ".bgm", sep = "")
-# in.nc  <- "test 2"
-# nc.file <- paste(in.dir, in.nc, ".nc", sep = "")
-# 
-# # ====================================================================
-# # code to collect initialisation data and view
-# 
-# input.object <- make.init.object(bgm.file, nc.file)
-# sh.init(input.object)
