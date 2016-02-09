@@ -35,7 +35,7 @@ Install the package (from Github).
 if (packageVersion("devtools") < 1.6) {
   install.packages("devtools")
 }
-devtools::install_github("shanearichards/shinyrAtlantis ")
+devtools::install_github("mdsumner/shinyrAtlantis")
 ```
 
 Load and attach the package. 
