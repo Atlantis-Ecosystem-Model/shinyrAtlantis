@@ -1,11 +1,10 @@
-<!-- README.md is generated from README.Rmd. Please edit that file -->
 Shiny Atlantis
 --------------
 
 Development
 -----------
 
-1.  Clone this repo in RStudio, New Project, Version Control, Git, "<https://github.com/shanerichards/shinyrAtlantis.git>"
+1.  Clone this repo in RStudio, New Project, Version Control, Git, "<https://github.com/shanearichards/shinyrAtlantis.git>"
 2.  Click Tools/Project Options/Build Tools/Generate documentation with roxygen - click all options ON.
 3.  Click Build & Reload in the Build Tab (or hit Ctrl-SHIFT-Enter).
 4.  Make edits, build/reload/test, commit.
@@ -14,13 +13,25 @@ Development
 Usage
 -----
 
-Install the package (from Github).
+Install dependencies.
 
 ``` r
+install.packages(c("shiny", 
+                 "dplyr", 
+                 "DT",
+                 "ggplot2",
+                 "ncdf4",
+                 "stringr"))
+```
+
+Install the package from Github with devtools.
+
+``` r
+
 if (packageVersion("devtools") < 1.6) {
   install.packages("devtools")
 }
-devtools::install_github("shanearichards/shinyrAtlantis ")
+devtools::install_github("shanearichards/shinyrAtlantis")
 ```
 
 Load and attach the package.
