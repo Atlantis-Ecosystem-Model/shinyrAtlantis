@@ -11,6 +11,7 @@ Depends:
 Imports: dplyr, 
          DT,
          ggplot2,
+         ncdf4,
          stringr
 License: GPL-3
 LazyData: true

@@ -4,10 +4,12 @@
 \alias{sh.prm}
 \title{Shiny Parameters}
 \usage{
-sh.prm(obj)
+sh.prm(obj, def.grp.file)
 }
 \arguments{
 \item{obj}{object from \code{\link{mark.prm.object}}}
+
+\item{def.grp.file}{groups def}
 }
 \value{
 object of class 'shiny.appobj' see \code{\link[shiny]{shinyApp}}

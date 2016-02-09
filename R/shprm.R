@@ -15,11 +15,11 @@
 #' Shiny Parameters
 #'
 #' @param obj object from \code{\link{mark.prm.object}}
-#'
+#' @param def.grp.file groups def
 #' @return object of class 'shiny.appobj' see \code{\link[shiny]{shinyApp}}
 #' @export
 #'
-sh.prm <- function(obj){
+sh.prm <- function(obj, def.grp.file){
   # obj is a list: numboxes, map_base, box.data, grp.def, grp.att, 
   #   gen.prm, grp.hab, grp.dist
   
@@ -789,7 +789,7 @@ make.prm.groups <- function(grp.file){
 # +======================================================================+
 # |  make.prm.attributes : collect group attributes data for displaying  |
 # +======================================================================+
-make.prm.attributes <- function(prm.file, grp.vals){
+make.prm.attributes <- function(prm.file, grp.vals, def.grp.file){
   prm <- readLines(prm.file) # read in the biological parameter file
   grp.att <- grp.vals[c("Code", "Name", "GroupType")] # develop this data frame
   
@@ -1175,12 +1175,13 @@ make.prm.refuges <- function(grp.vals, gen.prm, grp.att) {
 #' @param grp.file  groups
 #' @param prm.file  parameters
 #' @param def.all.file defs
+#' @param def.grp.file def groups
 #' @return list . . .
 #' @export
 #'
 #' @examples
 #' #See readme
-make.prm.object <- function(bgm.file, grp.file, prm.file, def.all.file) {
+make.prm.object <- function(bgm.file, grp.file, prm.file, def.all.file, def.grp.file) {
   cat("-- Extracting map data\n")
   map.objects <- make.prm.map(bgm.file)
   numboxes <- map.objects$numboxes
@@ -1195,7 +1196,7 @@ make.prm.object <- function(bgm.file, grp.file, prm.file, def.all.file) {
   gen.prm <- make.prm.general(prm.file, def.all.file)
   
   cat("-- Extracting group parameters (this may take a few minutes)\n")
-  grp.att <- make.prm.attributes(prm.file, grp.vals)
+  grp.att <- make.prm.attributes(prm.file, grp.vals, def.grp.file)
   
   cat("-- Extracting habitat parameters\n")
   grp.hab <- make.prm.habitats(prm.file, grp.vals, habitat.types) # three data frames

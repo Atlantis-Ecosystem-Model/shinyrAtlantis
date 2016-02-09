@@ -31,8 +31,8 @@ DisplayParametersExample <- function() {
   grp.file <- system.file("extdata", "AntarcticGroups.csv", package = "shinyrAtlantis")
   prm.file <- system.file("extdata", "SO90_biol.prm", package = "shinyrAtlantis")
   
-  obj <- make.prm.object(bgm.file, grp.file, prm.file, def.all.file)
-  sh.prm(obj) # run the shiny App
+  obj <- make.prm.object(bgm.file, grp.file, prm.file, def.all.file, def.grp.file)
+  sh.prm(obj, def.grp.file) # run the shiny App
 }
 
 #' @rdname ShinyAtlantisExamples
@@ -43,5 +43,5 @@ DisplayInitializationExample <- function() {
   nc.file <- system.file("extdata", "input.nc", package = "shinyrAtlantis")
   
   input.object <- make.init.object(bgm.file, nc.file)
-  a <- sh.init(input.object)
+  sh.init(input.object)
 }

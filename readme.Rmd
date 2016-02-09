@@ -84,12 +84,6 @@ sh.dist(map.object)
 
 ```
 
-To launch the above app in one step, run the `spatialDistributions` example.  
-
-
-```{r,eval=FALSE}
-shinyrAtlantis::SpatialDistributionsExample()
-```
 
 ## Shiny PRM Run `shprm.R`
 
@@ -106,9 +100,6 @@ prm.file <- system.file("extdata", "SO90_biol.prm", package = "shinyrAtlantis")
 obj <- make.prm.object(bgm.file, grp.file, prm.file)
 sh.prm(obj) # run the shiny App
 
-
-```{r,eval=FALSE}
-shinyrAtlantis::DisplayParametersExample()
 ```
 
 
@@ -126,6 +117,19 @@ input.object <- make.init.object(bgm.file, nc.file)
 a <- sh.init(input.object)
 ```
 
+
+## One step launch
+
+To launch any the above apps in one step, run the these examples.  
+
+
+```{r,eval=FALSE}
+shinyrAtlantis::SpatialDistributionsExample()
+```
+
+```{r,eval=FALSE}
+shinyrAtlantis::DisplayParametersExample()
+```
 
 ```{r,eval=FALSE}
 shinyrAtlantis::DisplayInitializationExample()

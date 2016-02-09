@@ -16,6 +16,7 @@
 #'
 #' @return object of class 'shiny.appobj' see \code{\link[shiny]{shinyApp}}
 #' @export
+#' @importFrom ggplot2 guide_legend
 sh.init <- function(input.object){
   # set up layer indices when plotting 3D values  
   depth.layers <- matrix(NA, nrow = input.object$numlevels, 
@@ -607,6 +608,8 @@ make.init.map <- function(bgm.file){
 # +======================================================+
 # |  make.init.cover : collect cover data to display  |
 # +======================================================+
+#' @importFrom ncdf4 nc_open ncvar_get nc_close ncatt_get
+#' @importFrom dplyr %>% filter group_by summarise mutate
 make.init.cover <- function(box.data, map.vertices, nc.file) {
   nc.out <- nc_open(nc.file) # open .nc file
   
@@ -685,7 +688,7 @@ make.init.cover <- function(box.data, map.vertices, nc.file) {
   # layers.total is based on non-zero nominal_dz values
   # this code assumes a single sediment layer
   df.box$lvl <- as.integer(df.box$lvl)
-  box.summary.2 <- df.box %>% filter(lvl < max.z.levels) %>%
+  box.summary.2 <- df.box %>% dplyr::filter(lvl < max.z.levels) %>%
     group_by(boxid) %>% 
     dplyr::summarise(depth.total = sum(dz, na.rm = TRUE)) 
   # limit water layers to not be less than zero
@@ -734,6 +737,7 @@ make.init.cover <- function(box.data, map.vertices, nc.file) {
 # +======================================================+
 # |  make.init.data : collect remaining data to display  |
 # +======================================================+
+#' @importFrom stringr str_length str_split str_sub 
 make.init.data <- function(nc.file, numboxes, numlevels) {
   nc.out <- nc_open(nc.file) # open .nc file
   
@@ -748,8 +752,8 @@ make.init.data <- function(nc.file, numboxes, numlevels) {
   species.names <- var.names[grep(pattern = "(_N)*_N$", x = var.names)]
   for (i in 1:length(species.names)) {
     species.old <- species.names[i]
-    str_sub(species.old, start = str_length(species.old)-1,
-      end = str_length(species.old)) <- "" # remove _N
+    stringr::str_sub(species.old, start = str_length(species.old)-1,
+      end = stringr::str_length(species.old)) <- "" # remove _N
     species.names[i] <- species.old # replace name with _N removed
   }
   
