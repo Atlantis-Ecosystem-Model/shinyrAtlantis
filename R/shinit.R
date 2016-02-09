@@ -27,6 +27,8 @@ sh.init <- function(input.object){
         input.object$box.info$layers.water[i]:1
     }
   }
+  
+  ##
   has.water.layers <- input.object$box.info$layers.water > 0 # box has water
   depth.layers[input.object$numlevels,has.water.layers] <- input.object$numlevels
   
