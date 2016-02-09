@@ -35,11 +35,13 @@ Install these dependencies.
 install.packages(c("DT", "dplyr", "ggplot2", "scales", "shiny", "stringr", "data.table"))
 ```
 
-Install the package (from private Github). 
+Install the package (from Github). 
 
 ```{r,eval=FALSE}
-install.packages("devtools")
-devtools::install_git("shanearichards/shinyrAtlantis ")
+if (packageVersion("devtools") < 1.6) {
+  install.packages("devtools")
+}
+devtools::install_github("shanearichards/shinyrAtlantis ")
 ```
 
 Load packages (can fix by namespace later)
