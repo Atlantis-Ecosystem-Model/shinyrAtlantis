@@ -1,11 +1,25 @@
 
-#' shiny application for generating Atlantis horizontal distributions
+#' @title Shiny application for generating horizontal distributions 
+#'
+#' @description
+#' Takes data from a .bgm Atlantis input parameter file and provides
+#' a visualisation of the data in the form of a shiny application. 
+#' The .bgm file must first be pre-processed by \code{make.dist.object}, which generates a 
+#' list object that is the parameter to \code{sh.dist}.
+#' The application allows users to create probability distributions that
+#' describe how a species is distributed across boxes assuming that the distribution
+#' is uniform within the range. The output can be cut-and-pasted into an
+#' Atlantis .prm file.
 #' 
-#' This is where description goes
-#' 
-#' This is where details go
-#' @param map.object 
+#' @param map.obj R list object generated from \code{make.dist.object}
+#'
 #' @return object of class 'shiny.appobj' see \code{\link[shiny]{shinyApp}}
+#' 
+#' @examples
+#' \dontrun{
+#' prm.object <- make.dist.object(bgm.file)
+#' sh.dist(dist.object)
+#' }
 #' @export
 sh.dist <- function(map.object){
   # Global parameters
@@ -202,10 +216,21 @@ sh.dist <- function(map.object){
   ) # End of shinyApp
 }
 
-#' collect data to display the map
+#' @title Function that generates an object used by sh.dist
 #'
-#' @param bgm.file 
+#' @description
+#' Takes data from a .bgm Atlantis input parameter file and generates a 
+#' list object that is the parameter to \code{sh.dist}.
+#' 
+#' @param bgm.file Box Geometry Model (.bgm) file used by Atlantis
 #'
+#' @return R list object
+#' 
+#' @examples
+#' \dontrun{
+#' prm.object <- make.dist.object(bgm.file)
+#' sh.dist(dist.object)
+#' }
 #' @export
 make.dist.object <- function(bgm.file){
   bgm <- readLines(bgm.file) # read in the geometry file

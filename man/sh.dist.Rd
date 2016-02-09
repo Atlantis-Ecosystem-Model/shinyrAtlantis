@@ -2,20 +2,30 @@
 % Please edit documentation in R/shdist.R
 \name{sh.dist}
 \alias{sh.dist}
-\title{shiny application for generating Atlantis horizontal distributions}
+\title{Shiny application for generating horizontal distributions}
 \usage{
 sh.dist(map.object)
 }
 \arguments{
-\item{map.object}{}
+\item{map.obj}{R list object generated from \code{make.dist.object}}
 }
 \value{
 object of class 'shiny.appobj' see \code{\link[shiny]{shinyApp}}
 }
 \description{
-This is where description goes
+Takes data from a .bgm Atlantis input parameter file and provides
+a visualisation of the data in the form of a shiny application.
+The .bgm file must first be pre-processed by \code{make.dist.object}, which generates a
+list object that is the parameter to \code{sh.dist}.
+The application allows users to create probability distributions that
+describe how a species is distributed across boxes assuming that the distribution
+is uniform within the range. The output can be cut-and-pasted into an
+Atlantis .prm file.
 }
-\details{
-This is where details go
+\examples{
+\dontrun{
+prm.object <- make.dist.object(bgm.file)
+sh.dist(dist.object)
+}
 }
 
