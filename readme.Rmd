@@ -47,7 +47,7 @@ devtools::install_github(repo = "mareframe/vat")
 Install the package (from private Github). 
 
 ```{r,eval=FALSE}
-devtools::install_git("mdsumner/shinyrAtlantis ")
+devtools::install_git("shanearichards/shinyrAtlantis ")
 ```
 
 Load packages (can fix by namespace later)
