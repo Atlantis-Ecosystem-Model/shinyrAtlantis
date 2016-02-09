@@ -19,4 +19,3 @@ RoxygenNote: 5.0.1
 Suggests: knitr,
     rmarkdown
 VignetteBuilder: knitr
-Remotes: mareframe/vat

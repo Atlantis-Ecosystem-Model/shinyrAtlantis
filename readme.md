@@ -14,22 +14,16 @@ Development
 Usage
 -----
 
-Install these dependencies.
+Install the package (from Github).
 
 ``` r
-
-install.packages(c("DT", "dplyr", "ggplot2", "scales", "shiny", "stringr", "data.table"))
-#devtools::install_github(repo = "mareframe/vat")
+if (packageVersion("devtools") < 1.6) {
+  install.packages("devtools")
+}
+devtools::install_github("shanearichards/shinyrAtlantis ")
 ```
 
-Install the package (from private Github).
-
-``` r
-install.packages("devtools")
-devtools::install_git("shanearichards/shinyrAtlantis ")
-```
-
-Load packages (can fix by namespace later)
+Load and attach the package.
 
 ``` r
 library(shinyrAtlantis)
@@ -42,11 +36,6 @@ Spatial Distributions "sh.dist"
 Shiny application for generating spatial distributions with constant density (per unit area)
 
 ``` r
-library(shiny)
-library(dplyr)
-library(ggplot2)
-library(DT)
-library(stringr)
 
 library(shinyrAtlantis)
 # ====================================================================
@@ -66,7 +55,6 @@ Shiny PRM Run `shprm.R`
 
 ``` r
 library(shinyrAtlantis)
-
 
 def.all.file <- system.file("extdata", "paramdefns.csv", package = "shinyrAtlantis")
 def.grp.file <- system.file("extdata", "grpTemplates.csv", package = "shinyrAtlantis")

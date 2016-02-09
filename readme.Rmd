@@ -28,12 +28,6 @@ knitr::opts_chunk$set(
 
 ## Usage
 
-Install these dependencies. 
-
-```{r,eval=FALSE}
-
-install.packages(c("DT", "dplyr", "ggplot2", "scales", "shiny", "stringr", "data.table"))
-```
 
 Install the package (from Github). 
 
@@ -44,7 +38,7 @@ if (packageVersion("devtools") < 1.6) {
 devtools::install_github("shanearichards/shinyrAtlantis ")
 ```
 
-Load packages (can fix by namespace later)
+Load and attach the package. 
 
 ```{r}
 library(shinyrAtlantis)
@@ -56,11 +50,6 @@ Shiny application for generating spatial distributions with constant density (pe
 
 
 ```{r,eval=FALSE}
-library(shiny)
-library(dplyr)
-library(ggplot2)
-library(DT)
-library(stringr)
 
 library(shinyrAtlantis)
 # ====================================================================
@@ -81,7 +70,6 @@ sh.dist(map.object)
 
 ```{r,eval=FALSE}
 library(shinyrAtlantis)
-
 
 def.all.file <- system.file("extdata", "paramdefns.csv", package = "shinyrAtlantis")
 def.grp.file <- system.file("extdata", "grpTemplates.csv", package = "shinyrAtlantis")
