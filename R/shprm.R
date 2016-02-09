@@ -1178,7 +1178,7 @@ make.prm.refuges <- function(grp.vals, gen.prm, grp.att) {
 #' @export
 #'
 #' @examples
-#' See readme
+#' #See readme
 make.prm.object <- function(bgm.file, grp.file, prm.file) {
   cat("-- Extracting map data\n")
   map.objects <- make.prm.map(bgm.file)

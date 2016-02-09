@@ -20,6 +20,6 @@ list . . .
 Make PRM object
 }
 \examples{
-See readme
+#See readme
 }
 
