@@ -13,6 +13,9 @@ sh.dist(map.object)
 object of class 'shiny.appobj' see \code{\link[shiny]{shinyApp}}
 }
 \description{
-shiny application for generating Atlantis horizontal distributions
+This is where description goes
+}
+\details{
+This is where details go
 }
 

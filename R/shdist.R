@@ -1,6 +1,9 @@
 
 #' shiny application for generating Atlantis horizontal distributions
-#'
+#' 
+#' This is where description goes
+#' 
+#' This is where details go
 #' @param map.object 
 #' @return object of class 'shiny.appobj' see \code{\link[shiny]{shinyApp}}
 #' @export
