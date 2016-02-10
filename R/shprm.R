@@ -42,7 +42,8 @@ sh.prm <- function(obj){
   numboxes <- obj$numboxes
   
   # checkbox labels for group templates
-  df.prms.all <- read.csv(file = def.grp.file, header = TRUE)
+  ##df.prms.all <- read.csv(file = def.grp.file, header = TRUE)
+  df.prms.all <- obj$df.prms.all
   tmplts <- df.prms.all$Template
   tmplts <- setNames(1:length(tmplts), tmplts)
   
@@ -1316,6 +1317,9 @@ make.prm.object <- function(bgm.file, grp.file, prm.file) {
   cat("-- Extracting group parameters (this may take a few minutes)\n")
   grp.att <- make.prm.attributes(prm.file, grp.vals, def.grp.file)
   
+  ## also need the raw defs for sh.prm
+  df.prms.all <- read.csv(file = def.grp.file, header = TRUE)
+  
   cat("-- Extracting habitat parameters\n")
   grp.hab <- make.prm.habitats(prm.file, grp.vals, habitat.types) # three data frames
   
@@ -1339,6 +1343,7 @@ make.prm.object <- function(bgm.file, grp.file, prm.file) {
     grp.hab = grp.hab,
     grp.dist = grp.dist,
     prey.data = prey.data,
-    refuge.data = refuge.data
+    refuge.data = refuge.data, 
+    df.prms.all = df.prms.all
   ))    
 }
