@@ -2,28 +2,28 @@
 % Please edit documentation in R/shprm.R
 \name{make.prm.object}
 \alias{make.prm.object}
-\title{Make PRM object}
+\title{Function that generates an object used by sh.prm}
 \usage{
-make.prm.object(bgm.file, grp.file, prm.file, def.all.file, def.grp.file)
+make.prm.object(bgm.file, grp.file, prm.file)
 }
 \arguments{
-\item{bgm.file}{BGM}
+\item{bgm.file}{Box geometry (.bgm) file used by Atlantis that defines box boundaries}
 
-\item{grp.file}{groups}
+\item{grp.file}{Text file (.csv) file used by Atlantis containing group attributes}
 
-\item{prm.file}{parameters}
-
-\item{def.all.file}{defs}
-
-\item{def.grp.file}{def groups}
+\item{prm.file}{Text file (.prm) file used by Atlantis containing biological parameters}
 }
 \value{
-list . . .
+R list object
 }
 \description{
-Make PRM object
+Takes data from a .bgm box geometry file, a .csv group file, and .prm Atlantis input parameter file 
+and generates a list object that is the parameter to \code{sh.prm} (see Examples).
 }
 \examples{
-#See readme
+\dontrun{
+prm.object <- make.prm.object(bgm.file, grp.file, prm.file)
+sh.prm(prm.object)
+}
 }
 

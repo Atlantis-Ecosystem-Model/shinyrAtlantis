@@ -2,19 +2,26 @@
 % Please edit documentation in R/shprm.R
 \name{sh.prm}
 \alias{sh.prm}
-\title{Shiny Parameters}
+\title{Shiny application for viewing Atlantis biological parameters}
 \usage{
-sh.prm(obj, def.grp.file)
+sh.prm(obj)
 }
 \arguments{
-\item{obj}{object from \code{\link{mark.prm.object}}}
-
-\item{def.grp.file}{groups def}
+\item{obj}{R list object generated from \code{make.prm.object}}
 }
 \value{
 object of class 'shiny.appobj' see \code{\link[shiny]{shinyApp}}
 }
 \description{
-Shiny Parameters
+Takes data from a .bgm box geometry file, a .csv group file, and .prm Atlantis input parameter file 
+and provides a visualisation of the data in the form of a shiny application. 
+The three data files must first be pre-processed by \code{make.prm.object}, 
+which generates a list object that is the parameter to \code{sh.prm} (see Examples).
+}
+\examples{
+\dontrun{
+prm.object <- make.prm.object(bgm.file, grp.file, prm.file)
+sh.prm(prm.object)
+}
 }
 

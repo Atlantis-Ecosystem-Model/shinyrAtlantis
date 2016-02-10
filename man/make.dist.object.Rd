@@ -2,14 +2,24 @@
 % Please edit documentation in R/shdist.R
 \name{make.dist.object}
 \alias{make.dist.object}
-\title{collect data to display the map}
+\title{Function that generates an object used by sh.dist}
 \usage{
 make.dist.object(bgm.file)
 }
 \arguments{
-\item{bgm.file}{}
+\item{bgm.file}{Box geometry (.bgm) file used by Atlantis that defines box boundaries}
+}
+\value{
+R list object
 }
 \description{
-collect data to display the map
+Takes data from a .bgm box geometry file used by Atlantis to define box boundaries
+and generates a list object that is the parameter to \code{sh.dist}.
+}
+\examples{
+\dontrun{
+prm.object <- make.dist.object(bgm.file)
+sh.dist(dist.object)
+}
 }
 
