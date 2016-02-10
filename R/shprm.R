@@ -28,7 +28,7 @@
 #' }
 #' @export
 sh.prm <- function(obj){
-  # obj is a list: numboxes, map_base, box.data, grp.def, grp.att, 
+# obj is a list: numboxes, map_base, box.data, grp.def, grp.att, 
   #   gen.prm, grp.hab, grp.dist
   
   # set up variables needed to plot the map  
@@ -42,7 +42,8 @@ sh.prm <- function(obj){
   numboxes <- obj$numboxes
   
   # checkbox labels for group templates
-  df.prms.all <- read.csv(file = def.grp.file, header = TRUE)
+  ##df.prms.all <- read.csv(file = def.grp.file, header = TRUE)
+  df.prms.all <- obj$df.prms.all
   tmplts <- df.prms.all$Template
   tmplts <- setNames(1:length(tmplts), tmplts)
   
@@ -807,6 +808,7 @@ sh.prm <- function(obj){
   )  
 }
 
+#' @importFrom stringr str_extract str_extract_all
 # +===================================================+
 # |  make.prm.map : collect data for displaying maps  |
 # +===================================================+
@@ -823,7 +825,7 @@ make.prm.map <- function(bgm.file){
       text.split <- unlist(str_split(
         gsub(pattern = "[\t ]+", x = bgm[j[jj]], replacement = " "), " "))
       if ((text.split[1] == txt.find) &
-          (str_extract(text.split[2], "[0-9.-]+") == text.split[2])) {
+          (stringr::str_extract(text.split[2], "[0-9.-]+") == text.split[2])) {
         jnew <- c(jnew,j[jj]) # add the row that satisfies the criteria
       }
     }
@@ -900,7 +902,7 @@ make.prm.groups <- function(grp.file){
 # +======================================================================+
 # |  make.prm.attributes : collect group attributes data for displaying  |
 # +======================================================================+
-make.prm.attributes <- function(prm.file, grp.vals){
+make.prm.attributes <- function(prm.file, grp.vals, def.grp.file){
   prm <- readLines(prm.file) # read in the biological parameter file
   grp.att <- grp.vals[c("Code", "Name", "GroupType")] # develop this data frame
   
@@ -945,7 +947,7 @@ make.prm.attributes <- function(prm.file, grp.vals){
 # +=======================================================================+
 # |  make.prm.general : collect non-group attributes data for displaying  |
 # +=======================================================================+
-make.prm.general <- function(prm.file){
+make.prm.general <- function(prm.file, def.all.file){
   prm <- readLines(prm.file) # read in the biological parameter file
   # read in the parameter definition file
   df.prm.defns <- read.csv(def.all.file, header = TRUE)
@@ -1286,6 +1288,7 @@ make.prm.refuges <- function(grp.vals, gen.prm, grp.att) {
 #' @param bgm.file Box geometry (.bgm) file used by Atlantis that defines box boundaries
 #' @param grp.file Text file (.csv) file used by Atlantis containing group attributes
 #' @param prm.file Text file (.prm) file used by Atlantis containing biological parameters
+#' @export
 #'
 #' @return R list object
 #' 
@@ -1298,8 +1301,7 @@ make.prm.refuges <- function(grp.vals, gen.prm, grp.att) {
 make.prm.object <- function(bgm.file, grp.file, prm.file) {
   def.grp.file <- system.file("extdata/grpTemplates.csv", package = "shinyrAtlantis")
   def.all.file <- system.file("extdata/paramdefns.csv", package = "shinyrAtlantis")
-  
-  cat("-- Extracting map data\n")
+   cat("-- Extracting map data\n")
   map.objects <- make.prm.map(bgm.file)
   numboxes <- map.objects$numboxes
   
@@ -1310,10 +1312,13 @@ make.prm.object <- function(bgm.file, grp.file, prm.file) {
   habitat.types <- grp.object$habitat.types
   
   cat("-- Extracting general parameters\n")
-  gen.prm <- make.prm.general(prm.file)
+  gen.prm <- make.prm.general(prm.file, def.all.file)
   
   cat("-- Extracting group parameters (this may take a few minutes)\n")
-  grp.att <- make.prm.attributes(prm.file, grp.vals)
+  grp.att <- make.prm.attributes(prm.file, grp.vals, def.grp.file)
+  
+  ## also need the raw defs for sh.prm
+  df.prms.all <- read.csv(file = def.grp.file, header = TRUE)
   
   cat("-- Extracting habitat parameters\n")
   grp.hab <- make.prm.habitats(prm.file, grp.vals, habitat.types) # three data frames
@@ -1338,6 +1343,7 @@ make.prm.object <- function(bgm.file, grp.file, prm.file) {
     grp.hab = grp.hab,
     grp.dist = grp.dist,
     prey.data = prey.data,
-    refuge.data = refuge.data
+    refuge.data = refuge.data, 
+    df.prms.all = df.prms.all
   ))    
 }
