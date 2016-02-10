@@ -1,14 +1,27 @@
 
-#' shiny application for generating Atlantis horizontal distributions
+#' @title Shiny application for generating horizontal distributions 
+#'
+#' @description
+#' Takes data from a .bgm box geometry file used by Atlantis to define box boundaries and provides
+#' a visualisation of the data in the form of a shiny application. 
+#' The .bgm file must first be pre-processed by \code{make.dist.object}, which generates a 
+#' list object that is the parameter to \code{sh.dist}.
+#' The application allows users to create probability distributions that
+#' describe how a species is distributed across boxes assuming that the distribution
+#' is uniform within the spatial range defined by the user. The output produced within the shiny output can then 
+#' be cut-and-pasted into an Atlantis .prm file.
 #' 
-#' This is where description goes
-#' 
-#' This is where details go
-#' @param map.object 
+#' @param map.obj R list object generated from \code{make.dist.object}
+#'
 #' @return object of class 'shiny.appobj' see \code{\link[shiny]{shinyApp}}
 #' @importFrom dplyr mutate
 #' @importFrom stringr str_split
 #' @importFrom ggplot2 ggplot aes element_blank geom_polygon geom_text labs scale_fill_gradient scale_fill_manual scale_x_continuous scale_y_continuous theme theme_bw  xlab ylab
+#' @examples
+#' \dontrun{
+#' prm.object <- make.dist.object(bgm.file)
+#' sh.dist(dist.object)
+#' }
 #' @export
 sh.dist <- function(map.object){
   # Global parameters
@@ -19,6 +32,12 @@ sh.dist <- function(map.object){
   box.data$z <- - box.data$z
   largest.box <- which(box.data$area == max(box.data$area)) # index not id
   max.depth <- max(box.data$z)
+  
+  display.data <- map.object$box.data # display this data in a table
+  display.data$z <- -display.data$z # present absolute depths
+  names(display.data)[2] <- "depth (m)" # change column title
+  names(display.data)[3] <- "Is an island?" # change column title
+  display.data <- display.data[1:5] # no need to display x.in and y.in
   
   df.map              <- merge(map.vertices, box.data, by = "boxid")
   df.map$valid.z      <- TRUE
@@ -32,7 +51,8 @@ sh.dist <- function(map.object){
   txtHelp <- paste(txtHelp, "<p>The wide text box below both plots presents the fraction of the population present in all boxes that define its range (as specified by the right plot). These values assume that the species is uniformly distributed in the horizontal across its range.</p>")
   txtHelp <- paste(txtHelp, "<p>Enter into <em>Header text</em> the text that <b>Atlantis</b> uses to identify the meaning of the probability distribution. The header text above the probability distribution will match this change and it will also add the number of boxes in the domain.</p>")
   txtHelp <- paste(txtHelp, "<p>When you are satisfied with the probability distribution cut-and-paste the text in the wide text box into the .prm file.</p>")
-
+  txtHelp <- paste(txtHelp, "<p>Plots have a zoom feature. Draw a box and double click to zoom into the box. Double click to reset zoom.</p>") 
+  
   shinyApp(
     
     # USER INPUT FUNCTION
@@ -57,25 +77,42 @@ sh.dist <- function(map.object){
               column(6, h4("Depth distribution")),
               column(6, h4("Species distribution"))
             ),
-           fluidRow(
-              column(6, plotOutput("plot.map", height = "375px")),
-              column(6, plotOutput("plot.distribution", height = "375px"))
-           ),
+            fluidRow(
+              column(6, 
+                plotOutput("plot.map", 
+                  height = "375px",
+                  dblclick = "plot.map_dblclick",
+                  brush = brushOpts(
+                    id = "plot.map_brush",
+                    resetOnNew = TRUE
+                  )
+                )
+              ),
+              column(6, 
+                plotOutput("plot.distribution", 
+                  height = "375px",
+                  dblclick = "plot.distribution_dblclick",
+                  brush = brushOpts(
+                    id = "plot.distribution_brush",
+                    resetOnNew = TRUE
+                  )
+                )
+              )
+            ),
             fluidRow(h4("Boxes")),
             fluidRow(
-             column(6, verbatimTextOutput("txtValid")),
-             column(6, verbatimTextOutput("txtDist"))
-           ),
-           fluidRow(h4("Text to enter into an Atlantis (.prm) input file")),
-           fluidRow(
-             column(12, verbatimTextOutput("txtDistribution"))
-           ),
-           hr(),
-           fluidRow(h4("Box locations")),
-           fluidRow(
-             column(12, plotOutput("plot.boxes", height = "750px"))
+              column(6, verbatimTextOutput("txtValid")),
+              column(6, verbatimTextOutput("txtDist"))
+            ),
+            fluidRow(h4("Text to enter into an Atlantis (.prm) input file")),
+            fluidRow(
+              column(12, verbatimTextOutput("txtDistribution"))
+            ),
+            hr(),
+            fluidRow(
+              column(12, DT::dataTableOutput('table.data'))
             )
-          )
+          )  
         )
       ),  
       tabPanel("Help", 
@@ -95,6 +132,35 @@ sh.dist <- function(map.object){
     values$distribution <- rep(TRUE, num.boxes) # box is in distribution range
     values$txtAtlantis  <- "" # text that can be cut-pasted into Atlantis prm file
 
+    ranges_plot.map <- reactiveValues(x = NULL, y = NULL)
+    ranges_plot.distribution <- reactiveValues(x = NULL, y = NULL)
+    
+    # When a double-click happens, check if there's a brush on the plot.
+    # If so, zoom to the brush bounds; if not, reset the zoom.
+    observeEvent(input$plot.map_dblclick, {
+      brush <- input$plot.map_brush
+      if (!is.null(brush)) {
+        ranges_plot.map$x <- c(brush$xmin, brush$xmax)
+        ranges_plot.map$y <- c(brush$ymin, brush$ymax)
+      } else {
+        ranges_plot.map$x <- NULL
+        ranges_plot.map$y <- NULL
+      }
+    })
+
+    # When a double-click happens, check if there's a brush on the plot.
+    # If so, zoom to the brush bounds; if not, reset the zoom.
+    observeEvent(input$plot.distribution_dblclick, {
+      brush <- input$plot.distribution_brush
+      if (!is.null(brush)) {
+        ranges_plot.distribution$x <- c(brush$xmin, brush$xmax)
+        ranges_plot.distribution$y <- c(brush$ymin, brush$ymax)
+      } else {
+        ranges_plot.distribution$x <- NULL
+        ranges_plot.distribution$y <- NULL
+      }
+    })
+
     # Display spatial distribution bounded by prescribed depths        
     output$plot.map <- renderPlot({
       min.depth <- input$DepthMin # minimum depth to display in polygons
@@ -103,14 +169,17 @@ sh.dist <- function(map.object){
       df.map$valid.z <- ifelse((df.map$z >= min.depth) & (df.map$z < max.depth), 
         df.map$z, NA) # remove depths not in desired range
 
-      ggplot2::ggplot(data = df.map, ggplot2::aes(x = x, y = y, group = boxid, fill = valid.z)) +
-        ggplot2::geom_polygon(colour = "grey90", size = 0.25) +          
+      ggplot(data = df.map, aes(x = x, y = y, group = boxid, fill = valid.z)) +
+        geom_polygon(colour = "black", size = 0.25) +          
+
         scale_fill_gradient(low = "#9ecae1", high = "#084594", na.value="grey90",
           limits=c(min.depth, max.depth)) +
         labs(fill = "Depth (m)") +
         geom_text(aes(x = x.in, y = y.in, label = boxid), size = 2.5) +
         theme_bw() + xlab("") + ylab("") +
         theme(plot.background = element_blank()) +
+        coord_cartesian(xlim = ranges_plot.map$x, 
+          ylim = ranges_plot.map$y) +
         scale_y_continuous(breaks=NULL) + scale_x_continuous(breaks=NULL)
     })
 
@@ -120,22 +189,15 @@ sh.dist <- function(map.object){
       df.map$distribution <- values$distribution[df.map$boxid+1]
 
       ggplot(data = df.map, aes(x = x, y = y, group = boxid, fill = distribution)) +
-        geom_polygon(colour = "grey40", size = 0.25) +          
+        geom_polygon(colour = "white", size = 0.25) +          
         geom_text(aes(x = x.in, y = y.in, label = boxid), size = 2.5) +
         labs(fill = "Present") +
         scale_fill_manual(values=c("tomato", "springgreen")) +
         theme_bw() + xlab("") + ylab("") +
         theme(plot.background = element_blank()) +
+        coord_cartesian(xlim = ranges_plot.distribution$x, 
+          ylim = ranges_plot.distribution$y) +
         scale_y_continuous(breaks=NULL) + scale_x_continuous(breaks=NULL)
-    })
-
-    # Display the spatial distribution of boxes        
-    output$plot.boxes <- renderPlot({
-      ggplot(data = df.map, aes(x = x, y = y, group = boxid)) +
-        geom_polygon(colour = "khaki3", size = 0.25, fill = "khaki1") +          
-        geom_text(aes(x = x.in, y = y.in, label = boxid), size = 2.5) +
-        theme_bw() + xlab("") + ylab("") +
-        theme(plot.background = element_blank())
     })
 
     # Print the text that can be pasted into Atlantis
@@ -196,18 +258,34 @@ sh.dist <- function(map.object){
       paste(values$box.id[values$distribution])
     })
 
+    output$table.data <- DT::renderDataTable({
+      DT::datatable(display.data, rownames = FALSE)
+    })  
+
     # Respond to pressing the exit button
     observeEvent(input$exitButton, {
       stopApp()
     })
   }
-    
+
   ) # End of shinyApp
 }
 
-#' collect data to display the map
+#' @title Function that generates an object used by sh.dist
 #'
-#' @param bgm.file 
+#' @description
+#' Takes data from a .bgm box geometry file used by Atlantis to define box boundaries
+#' and generates a list object that is the parameter to \code{sh.dist}.
+#' 
+#' @param bgm.file Box geometry (.bgm) file used by Atlantis that defines box boundaries
+#'
+#' @return R list object
+#' 
+#' @examples
+#' \dontrun{
+#' prm.object <- make.dist.object(bgm.file)
+#' sh.dist(dist.object)
+#' }
 #' @export
 make.dist.object <- function(bgm.file){
   bgm <- readLines(bgm.file) # read in the geometry file

@@ -8,19 +8,27 @@
 # library(ggplot2)
 # library(DT)
 # library(stringr)
-
-# +==================================================================+
-# |  sh.prm : shiny application for viewing Atlantis prm input file  |
-# +==================================================================+
-#' Shiny Parameters
+#
+#' @title Shiny application for viewing Atlantis biological parameters 
 #'
-#' @param obj object from \code{\link{mark.prm.object}}
-#' @param def.grp.file groups def
+#' @description
+#' Takes data from a .bgm box geometry file, a .csv group file, and .prm Atlantis input parameter file 
+#' and provides a visualisation of the data in the form of a shiny application. 
+#' The three data files must first be pre-processed by \code{make.prm.object}, 
+#' which generates a list object that is the parameter to \code{sh.prm} (see Examples).
+#' 
+#' @param obj R list object generated from \code{make.prm.object}
+#'
 #' @return object of class 'shiny.appobj' see \code{\link[shiny]{shinyApp}}
+#' 
+#' @examples
+#' \dontrun{
+#' prm.object <- make.prm.object(bgm.file, grp.file, prm.file)
+#' sh.prm(prm.object)
+#' }
 #' @export
-#'
-sh.prm <- function(obj, def.grp.file){
-  # obj is a list: numboxes, map_base, box.data, grp.def, grp.att, 
+sh.prm <- function(obj){
+# obj is a list: numboxes, map_base, box.data, grp.def, grp.att, 
   #   gen.prm, grp.hab, grp.dist
   
   # set up variables needed to plot the map  
@@ -50,6 +58,7 @@ sh.prm <- function(obj, def.grp.file){
   
   # create HTML text for viewing on help tab  
   txtHelp <- "<p>This tool displays data from the .prm file used to provide initial conditions for an <b>Atlantis</b> run.</p>"
+  txtHelp <- paste(txtHelp, "<p>Some plots have a zoom feature. Draw a box and double click to zoom into the box. Double click to reset zoom.</p>") 
   txtHelp <- paste(txtHelp, "<p>This tool is not completed and the following problems are currently being fixed or implemented:</p>")
   txtHelp <- paste(txtHelp, "<ul><li>Update the definitions of general and group parameters. Definitions are often unclear and in some cases missing.</li>")
   txtHelp <- paste(txtHelp, "<li>Add information on growth</li>")
@@ -73,7 +82,15 @@ sh.prm <- function(obj, def.grp.file){
         fluidRow(  
           column(2),
           column(8,
-            plotOutput("box_location_plot", height = "500px"))
+            plotOutput("box_location_plot", 
+              height = "500px",
+              dblclick = "box_location_plot_dblclick",
+              brush = brushOpts(
+                id = "box_location_plot_brush",
+                resetOnNew = TRUE
+              )
+            )
+          )
         )
       ),
       # GROUP DEFINITIONS
@@ -156,33 +173,57 @@ sh.prm <- function(obj, def.grp.file){
           ),
           fluidRow(
             column(5, 
-              plotOutput("H_ad_distribution_plot", height = "325px")),
+              plotOutput("H_ad_distribution_plot", 
+                height = "325px",
+                dblclick = "H_ad_distribution_plot_dblclick",
+                brush = brushOpts(
+                  id = "H_ad_distribution_plot_brush",
+                  resetOnNew = TRUE
+                )
+              )
+            ),
             column(5, 
-              plotOutput("H_juv_distribution_plot", height = "325px"))
+              plotOutput("H_juv_distribution_plot", 
+                height = "325px",
+                dblclick = "H_juv_distribution_plot_dblclick",
+                brush = brushOpts(
+                  id = "H_juv_distribution_plot_brush",
+                  resetOnNew = TRUE
+                )
+              )
+            )
           ),
           fluidRow(
-            column(5, plotOutput("vert_distribution_plot", height = "400px")),
-            column(5, plotOutput("vert_juv_distribution_plot", height = "400px"))
+            column(5, plotOutput("vert_distribution_plot", height = "325px")),
+            column(5, plotOutput("vert_juv_distribution_plot", height = "325px"))
           ),
           hr(),
           fluidRow(column(12, h4("Density plots (per unit area): FXXX_SQ[juv]"))),
           fluidRow(
             column(5, 
-              plotOutput("H_ad_distribution_area_plot", height = "400px")),
+              plotOutput("H_ad_distribution_area_plot", height = "325px")),
             column(5, 
-              plotOutput("H_juv_distribution_area_plot", height = "400px"))
+              plotOutput("H_juv_distribution_area_plot", height = "325px"))
           ),
           hr(),
           fluidRow(column(12, h3("Recruitment"))),
           fluidRow(
             column(5, 
-              plotOutput("H_recruit_plot", height = "325px")),
+              plotOutput("H_recruit_plot", 
+                height = "325px",
+                dblclick = "H_recruit_plot_dblclick",
+                brush = brushOpts(
+                  id = "H_recruit_plot_brush",
+                  resetOnNew = TRUE
+                )
+              )
+            ),
             column(5, 
               plotOutput("H_recruit_area_plot", height = "325px"))
           ),
           fluidRow(
             column(5, 
-              plotOutput("vertical_recruit_plot", height = "400px"))
+              plotOutput("vertical_recruit_plot", height = "325px"))
           ),
           width = 10
         )
@@ -228,6 +269,63 @@ sh.prm <- function(obj, def.grp.file){
     # SERVER FUNCTION
     
     server = function(input, output) {
+      ranges_box_location_plot <- reactiveValues(x = NULL, y = NULL)
+      ranges_H_ad_distribution_plot <- reactiveValues(x = NULL, y = NULL)
+      ranges_H_juv_distribution_plot <- reactiveValues(x = NULL, y = NULL)
+      ranges_H_recruit_plot <- reactiveValues(x = NULL, y = NULL) 
+      
+      # When a double-click happens, check if there's a brush on the plot.
+      # If so, zoom to the brush bounds; if not, reset the zoom.
+      observeEvent(input$box_location_plot_dblclick, {
+        brush <- input$box_location_plot_brush
+        if (!is.null(brush)) {
+          ranges_box_location_plot$x <- c(brush$xmin, brush$xmax)
+          ranges_box_location_plot$y <- c(brush$ymin, brush$ymax)
+        } else {
+          ranges_box_location_plot$x <- NULL
+          ranges_box_location_plot$y <- NULL
+        }
+      })
+      
+      # When a double-click happens, check if there's a brush on the plot.
+      # If so, zoom to the brush bounds; if not, reset the zoom.
+      observeEvent(input$H_ad_distribution_plot_dblclick, {
+        brush <- input$H_ad_distribution_plot_brush
+        if (!is.null(brush)) {
+          ranges_H_ad_distribution_plot$x <- c(brush$xmin, brush$xmax)
+          ranges_H_ad_distribution_plot$y <- c(brush$ymin, brush$ymax)
+        } else {
+          ranges_H_ad_distribution_plot$x <- NULL
+          ranges_H_ad_distribution_plot$y <- NULL
+        }
+      })
+      
+      # When a double-click happens, check if there's a brush on the plot.
+      # If so, zoom to the brush bounds; if not, reset the zoom.
+      observeEvent(input$H_juv_distribution_plot_dblclick, {
+        brush <- input$H_juv_distribution_plot_brush
+        if (!is.null(brush)) {
+          ranges_H_juv_distribution_plot$x <- c(brush$xmin, brush$xmax)
+          ranges_H_juv_distribution_plot$y <- c(brush$ymin, brush$ymax)
+        } else {
+          ranges_H_juv_distribution_plot$x <- NULL
+          ranges_H_juv_distribution_plot$y <- NULL
+        }
+      })
+      
+      # When a double-click happens, check if there's a brush on the plot.
+      # If so, zoom to the brush bounds; if not, reset the zoom.
+      observeEvent(input$H_recruit_plot_dblclick, {
+        brush <- input$H_recruit_plot_brush
+        if (!is.null(brush)) {
+          ranges_H_recruit_plot$x <- c(brush$xmin, brush$xmax)
+          ranges_H_recruit_plot$y <- c(brush$ymin, brush$ymax)
+        } else {
+          ranges_H_recruit_plot$x <- NULL
+          ranges_H_recruit_plot$y <- NULL
+        }
+      })
+      
       output$table.grp <- DT::renderDataTable({
         DT::datatable(obj$grp.def, rownames = FALSE)
       })  
@@ -272,6 +370,8 @@ sh.prm <- function(obj, def.grp.file){
           geom_text(aes(x = x.in, y = y.in, label = boxid), size = 2.5) +
           theme_bw() + xlab("") + ylab("") +
           theme(plot.background = element_blank()) + 
+          coord_cartesian(xlim = ranges_box_location_plot$x, 
+            ylim = ranges_box_location_plot$y) +
           scale_y_continuous(breaks=NULL) + scale_x_continuous(breaks=NULL)
       })
       
@@ -303,12 +403,14 @@ sh.prm <- function(obj, def.grp.file){
             scale_y_continuous(breaks=NULL) + scale_x_continuous(breaks=NULL)
         } else {
           ggplot(data = df.map.ad, aes(x = x, y = y, group = boxid, fill = p)) +
-            geom_polygon(colour = "grey90", size = 0.25) +          
+            geom_polygon(colour = "grey50", size = 0.25) +          
             scale_fill_gradient(high = "blue", low = "white", na.value="grey90") +
             labs(fill = "Fraction") + ggtitle("FXXX_SQ") + 
             theme_bw() + xlab("") + ylab("") +
             theme(plot.background = element_blank()) + 
-            scale_y_continuous(breaks=NULL) + scale_x_continuous(breaks=NULL)
+            scale_y_continuous(breaks=NULL) + scale_x_continuous(breaks=NULL) +
+            coord_cartesian(xlim = ranges_H_ad_distribution_plot$x, 
+              ylim = ranges_H_ad_distribution_plot$y)
         }  
       })
       
@@ -331,12 +433,14 @@ sh.prm <- function(obj, def.grp.file){
             scale_y_continuous(breaks=NULL) + scale_x_continuous(breaks=NULL)
         } else {
           ggplot(data = df.map.juv, aes(x = x, y = y, group = boxid, fill = p)) +
-            geom_polygon(colour = "grey90", size = 0.25) +          
+            geom_polygon(colour = "grey50", size = 0.25) +          
             scale_fill_gradient(high = "blue", low = "white", na.value="grey90") +
             labs(fill = "Fraction") + ggtitle("FXXX_SQjuv") + 
             theme_bw() + xlab("") + ylab("") +
             theme(plot.background = element_blank()) + 
-            scale_y_continuous(breaks=NULL) + scale_x_continuous(breaks=NULL)
+            scale_y_continuous(breaks=NULL) + scale_x_continuous(breaks=NULL) +
+            coord_cartesian(xlim = ranges_H_juv_distribution_plot$x, 
+              ylim = ranges_H_juv_distribution_plot$y)
         }  
       })
       
@@ -440,7 +544,9 @@ sh.prm <- function(obj, def.grp.file){
             labs(fill = "Density [m^-2]") + ggtitle("Invertebrate/Adult") +
             theme_bw() + xlab("") + ylab("") +
             theme(plot.background = element_blank()) + 
-            scale_y_continuous(breaks=NULL) + scale_x_continuous(breaks=NULL)
+            scale_y_continuous(breaks=NULL) + scale_x_continuous(breaks=NULL) +
+            coord_cartesian(xlim = ranges_H_ad_distribution_plot$x, 
+              ylim = ranges_H_ad_distribution_plot$y)
         }  
       })
       
@@ -469,7 +575,9 @@ sh.prm <- function(obj, def.grp.file){
             labs(fill = "Density [m^-2]") + ggtitle("Juvenile") + 
             theme_bw() + xlab("") + ylab("") +
             theme(plot.background = element_blank()) + 
-            scale_y_continuous(breaks=NULL) + scale_x_continuous(breaks=NULL)
+            scale_y_continuous(breaks=NULL) + scale_x_continuous(breaks=NULL) +
+            coord_cartesian(xlim = ranges_H_juv_distribution_plot$x, 
+              ylim = ranges_H_juv_distribution_plot$y)
         }  
       })
       
@@ -491,12 +599,14 @@ sh.prm <- function(obj, def.grp.file){
             scale_y_continuous(breaks=NULL) + scale_x_continuous(breaks=NULL)
         } else {
           ggplot(data = df.map.recruit, aes(x = x, y = y, group = boxid, fill = p)) +
-            geom_polygon(colour = "grey90", size = 0.25) +          
+            geom_polygon(colour = "grey50", size = 0.25) +          
             scale_fill_gradient(high = "blue", low = "white", na.value="grey90") +
             labs(fill = "Fraction") + ggtitle("XXX_recruit_hdistrib") + 
             theme_bw() + xlab("") + ylab("") +
             theme(plot.background = element_blank()) + 
-            scale_y_continuous(breaks=NULL) + scale_x_continuous(breaks=NULL)
+            scale_y_continuous(breaks=NULL) + scale_x_continuous(breaks=NULL) +
+            coord_cartesian(xlim = ranges_H_recruit_plot$x, 
+              ylim = ranges_H_recruit_plot$y)
         }  
       })
       
@@ -524,7 +634,9 @@ sh.prm <- function(obj, def.grp.file){
             labs(fill = "Density [m^-2]") + ggtitle("Recruitment density") + 
             theme_bw() + xlab("") + ylab("") +
             theme(plot.background = element_blank()) + 
-            scale_y_continuous(breaks=NULL) + scale_x_continuous(breaks=NULL)
+            scale_y_continuous(breaks=NULL) + scale_x_continuous(breaks=NULL) +
+            coord_cartesian(xlim = ranges_H_recruit_plot$x, 
+              ylim = ranges_H_recruit_plot$y)
         }  
       })
       
@@ -558,7 +670,7 @@ sh.prm <- function(obj, def.grp.file){
             )
         }  
       })
-
+      
       output$refuge.1.plot <- renderPlot({
         j <- which(obj$gen.prm$Parameter == "flag_refuge_model", arr.ind = TRUE)
         flag_refuge_model <- obj$gen.prm$Value[j]
@@ -578,7 +690,7 @@ sh.prm <- function(obj, def.grp.file){
           xlab(x.axis.text) + ylab("Relative availability") +
           theme_bw() + theme(plot.background = element_blank())
       })
-
+      
       output$refuge.2.plot <- renderPlot({
         j <- which(obj$gen.prm$Parameter == "flag_refuge_model", arr.ind = TRUE)
         flag_refuge_model <- obj$gen.prm$Value[j]
@@ -610,7 +722,7 @@ sh.prm <- function(obj, def.grp.file){
             )
         }  
       })
-
+      
       output$table.avail.prey <- DT::renderDataTable({
         xxx <- as.integer(input$SIPGroup)
         
@@ -1166,23 +1278,29 @@ make.prm.refuges <- function(grp.vals, gen.prm, grp.att) {
   return(list(model.1 = model.1, model.2 = model.2))
 }
 
-# +============================================================+
-# |  make.init.object : collect all parameter data to display  |
-# +============================================================+
-#' Make PRM object
+#' @title Function that generates an object used by sh.prm
 #'
-#' @param bgm.file  BGM
-#' @param grp.file  groups
-#' @param prm.file  parameters
-#' @param def.all.file defs
-#' @param def.grp.file def groups
-#' @return list . . .
+#' @description
+#' Takes data from a .bgm box geometry file, a .csv group file, and .prm Atlantis input parameter file 
+#' and generates a list object that is the parameter to \code{sh.prm} (see Examples).
+#' 
+#' @param bgm.file Box geometry (.bgm) file used by Atlantis that defines box boundaries
+#' @param grp.file Text file (.csv) file used by Atlantis containing group attributes
+#' @param prm.file Text file (.prm) file used by Atlantis containing biological parameters
 #' @export
 #'
+#' @return R list object
+#' 
 #' @examples
-#' #See readme
-make.prm.object <- function(bgm.file, grp.file, prm.file, def.all.file, def.grp.file) {
-  cat("-- Extracting map data\n")
+#' \dontrun{
+#' prm.object <- make.prm.object(bgm.file, grp.file, prm.file)
+#' sh.prm(prm.object)
+#' }
+#' @export
+make.prm.object <- function(bgm.file, grp.file, prm.file) {
+  def.grp.file <- system.file("extdata/grpTemplates.csv", package = "shinyrAtlantis")
+  def.all.file <- system.file("extdata/paramdefns.csv", package = "shinyrAtlantis")
+   cat("-- Extracting map data\n")
   map.objects <- make.prm.map(bgm.file)
   numboxes <- map.objects$numboxes
   
@@ -1224,84 +1342,3 @@ make.prm.object <- function(bgm.file, grp.file, prm.file, def.all.file, def.grp.
     refuge.data = refuge.data
   ))    
 }
-
-# # === sh.ast R code needed if supported by a package ===
-# 
-# # globally available file names
-# wd <- "/Users/ric352/Documents/Projects/Fisheries/Atlantis/Setup Tool/"
-# setwd(wd)
-# def.all.file <- paste(wd, "paramdefns.csv", sep = "")
-# def.grp.file <- paste(wd, "grpTemplates.csv", sep = "")
-# 
-# # AMS model
-# wd <- "/Users/ric352/Documents/Projects/Fisheries/Atlantis/Setup Tool/AMS/"
-# setwd(wd)
-# bgm.file <- paste(wd, "ams71.bgm", sep = "")
-# grp.file <- paste(wd, "AMSGroups_SPF.csv", sep = "")
-# prm.file <- paste(wd, "ams71_SPF_biology.prm", sep = "")
-# obj.ast.AMS <- make.prm.object(bgm.file, grp.file, prm.file)
-# sh.prm(obj.ast.AMS) # run the shiny App
-# # 
-# # # Baltic model
-# # wd <- "/Users/ric352/Documents/Projects/Fisheries/Atlantis/Setup Tool/Baltic/"
-# # setwd(wd)
-# # bgm.file <- paste(wd, "Baltic_aea_v2.bgm", sep = "")
-# # grp.file <- paste(wd, "BalticGroups_Atlantis2015.csv", sep = "")
-# # prm.file <- paste(wd, "Baltic_biol_FSnoEvo.prm", sep = "")
-# # obj.ast.Baltic <- make.setup.object(bgm.file, grp.file, prm.file)
-# # sh.ast(obj.ast.Baltic) # run the shiny App
-# # 
-# # JFRE model
-# # wd <- "/Users/ric352/Documents/Projects/Fisheries/Atlantis/Setup Tool/JFRE"
-# # setwd(wd)
-# # bgm.file <- paste(wd, "JFRE_ll.bgm", sep = "")
-# # grp.file <- paste(wd, "JFREGroups.csv", sep = "")
-# # prm.file <- paste(wd, "JFREBiol.prm", sep = "")
-# # habitat.types.JFRE <- c("MA", "reef", "flat", "soft", "canyon")
-# # obj.ast.JFRE <- make.setup.object(bgm.file, grp.file, prm.file, habitat.types.JFRE)
-# # sh.ast(obj.ast.JFRE) # run the shiny App
-# # 
-# # SEAP model
-# # wd <- "/Users/ric352/Documents/Projects/Fisheries/Atlantis/Setup Tool/SEAP/"
-# # setwd(wd)
-# # bgm.file <- paste(wd, "SEAP_extended_shelf.bgm", sep = "")
-# # grp.file <- paste(wd, "SEAP_Groups_Aquacult.csv", sep = "")
-# # prm.file <- paste(wd, "SEAP_biol_pH_Aquacult.prm", sep = "")
-# # obj.ast.SEAP <- make.setup.object(bgm.file, grp.file, prm.file)
-# # sh.ast(obj.ast.SEAP) # run the shiny App
-# # 
-# # GBR model
-# # wd <- "/Users/ric352/Documents/Projects/Fisheries/Atlantis/Setup Tool/GBR/"
-# # setwd(wd)
-# # bgm.file <- paste(wd, "gbr_test.bgm", sep = "")
-# # grp.file <- paste(wd, "GBRGroups.csv", sep = "")
-# # prm.file <- paste(wd, "GBR_biol SAR.prm", sep = "")
-# # obj.ast.GBR <- make.prm.object(bgm.file, grp.file, prm.file)
-# # sh.prm(obj.ast.GBR) # run the shiny App
-# # 
-# # Guam model
-# # wd <- "/Users/ric352/Documents/Projects/Fisheries/Atlantis/Setup Tool/Guam/"
-# # setwd(wd)
-# # bgm.file <- paste(wd, "Guam_utm1.bgm", sep = "")
-# # grp.file <- paste(wd, "GUAM_FGDemCoral.csv", sep = "")
-# # prm.file <- paste(wd, "GUAM_biolW_Dem.prm", sep = "")
-# # obj.ast.Guam <- make.setup.object(bgm.file, grp.file, prm.file)
-# # sh.ast(obj.ast.Guam) # run the shiny App
-# # 
-# # === vat::create_vadt R code needed if supported by a package ===
-# # 
-# # wdir <- "~/Atlantis/RunFiles/SEAP/" # working directory
-# # setwd(wdir)
-# # 
-# # outdir    <- "SEAPout/"
-# # fgfile    <- "params/SEAP_Groups_Aquacult.csv"
-# # biolprm   <- "params/SEAP_biol_pH_Aquacult.prm"
-# # ncout     <- "SEAPoutput"
-# # startyear <- 2010 
-# # toutinc   <- 365
-# # diet      <- TRUE
-# # 
-# # obj.vat <- create_vadt(outdir = outdir, fgfile = fgfile, biolprm = biolprm, 
-# #   ncout = ncout, startyear = 2010, toutinc = 365, diet = TRUE)
-# # 
-# # vadt(obj.vat, NULL)

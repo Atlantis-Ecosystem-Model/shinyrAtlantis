@@ -2,17 +2,26 @@
 % Please edit documentation in R/shinit.R
 \name{sh.init}
 \alias{sh.init}
-\title{Shiny application for viewing Atlantis initial data}
+\title{Shiny application for viewing Atlantis initialisation data}
 \usage{
 sh.init(input.object)
 }
 \arguments{
-\item{input.object}{from \code{\link{make.map.object}}}
+\item{input.object}{R list object generated from \code{make.init.object}}
 }
 \value{
 object of class 'shiny.appobj' see \code{\link[shiny]{shinyApp}}
 }
 \description{
-Shiny application for viewing Atlantis initial data
+Takes data from a .bgm box geometry file and a .nc Atlantis input parameter file and provides
+a visualisation of the data in the form of a shiny application. The two data
+files must first be pre-processed by \code{make.init.object}, which generates a 
+list object that is the parameter to \code{sh.init} (see Examples).
+}
+\examples{
+\dontrun{
+input.object <- make.init.object(bgm.file, nc.file)
+sh.init(input.object)
+}
 }
 

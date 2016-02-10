@@ -2,19 +2,26 @@
 % Please edit documentation in R/shinit.R
 \name{make.init.object}
 \alias{make.init.object}
-\title{Collect all data to display}
+\title{Function that generates an object used by sh.init}
 \usage{
 make.init.object(bgm.file, nc.file)
 }
 \arguments{
-\item{bgm.file}{Box Geometry Model (.bgm) file}
+\item{bgm.file}{Box Geometry Model (.bgm) file used by Atlantis that defines box boundaries}
 
-\item{nc.file}{NetCDF init file}
+\item{nc.file}{NetCDF (.nc) file used by Atlantis to set initial conditions}
 }
 \value{
-list ...
+R list object
 }
 \description{
-Collect all data to display
+Takes data from a box geometry .bgm and a .nc Atlantis input parameter file and generates a 
+list object that is the parameter to \code{sh.init} (see Examples).
+}
+\examples{
+\dontrun{
+input.object <- make.init.object(bgm.file, nc.file)
+sh.init(input.object)
+}
 }
 
