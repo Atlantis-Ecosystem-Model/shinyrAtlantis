@@ -4,22 +4,23 @@
 #' @description
 #' Takes data from a .bgm box geometry file used by Atlantis to define box boundaries and provides
 #' a visualisation of the data in the form of a shiny application. 
-#' The .bgm file must first be pre-processed by \code{make.dist.object}, which generates a 
+#' The .bgm file must first be pre-processed by \code{\link[shinyrAtlantis]{make.sh.dist.object}}, which generates a 
 #' list object that is the parameter to \code{sh.dist}.
 #' The application allows users to create probability distributions that
 #' describe how a species is distributed across boxes assuming that the distribution
 #' is uniform within the spatial range defined by the user. The output produced within the shiny output can then 
 #' be cut-and-pasted into an Atlantis .prm file.
 #' 
-#' @param map.obj R list object generated from \code{make.dist.object}
+#' @param map.obj R list object generated from \code{\link[shinyrAtlantis]{make.sh.dist.object}}.
 #'
-#' @return object of class 'shiny.appobj' see \code{\link[shiny]{shinyApp}}
+#' @return Object of class 'shiny.appobj' see \code{\link[shiny]{shinyApp}}.
 #' @importFrom dplyr mutate
 #' @importFrom stringr str_split
 #' @importFrom ggplot2 ggplot aes coord_cartesian element_blank geom_polygon geom_text labs scale_fill_gradient scale_fill_manual scale_x_continuous scale_y_continuous theme theme_bw  xlab ylab ggtitle
 #' @examples
 #' \dontrun{
-#' prm.object <- make.dist.object(bgm.file)
+#' bgm.file <- "gbr_box_03012012.bgm"
+#' dist.object <- make.sh.dist.object(bgm.file)
 #' sh.dist(dist.object)
 #' }
 #' @export
@@ -274,20 +275,21 @@ sh.dist <- function(map.object){
 #' @title Function that generates an object used by sh.dist
 #'
 #' @description
-#' Takes data from a .bgm box geometry file used by Atlantis to define box boundaries
-#' and generates a list object that is the parameter to \code{sh.dist}.
+#' Takes data from a box geometry model file used by Atlantis to define box boundaries
+#' and uses it to generates a list object that is the parameter to \code{\link[shinyrAtlantis]{sh.dist}}.
 #' 
-#' @param bgm.file Box geometry (.bgm) file used by Atlantis that defines box boundaries
+#' @param bgm.file Box geometry model (.bgm) file used by Atlantis that defines box boundaries and depths.
 #'
-#' @return R list object
+#' @return R list object.
 #' 
 #' @examples
 #' \dontrun{
-#' prm.object <- make.dist.object(bgm.file)
+#' bgm.file <- "gbr_box_03012012.bgm"
+#' dist.object <- make.sh.dist.object(bgm.file)
 #' sh.dist(dist.object)
 #' }
 #' @export
-make.dist.object <- function(bgm.file){
+make.sh.dist.object <- function(bgm.file){
   bgm <- readLines(bgm.file) # read in the geometry file
   
   numboxes <- 0

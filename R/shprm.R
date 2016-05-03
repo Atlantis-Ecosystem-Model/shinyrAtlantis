@@ -1,49 +1,74 @@
-# # shprm.R
-# # 15/01/2016
-# 
-# rm(list = ls()) # clear memory
-# 
-# library(shiny)
-# library(dplyr)
-# library(ggplot2)
-# library(DT)
-# library(stringr)
+# 03/05/2016
 #
-#' @title Shiny application for viewing Atlantis biological parameters 
+# +==================================================================+
+# |  sh.prm : shiny application for viewing Atlantis prm input file  |
+# +==================================================================+
+#' @title Shiny application for viewing Atlantis biological parameters
 #'
 #' @description
-#' Takes data from a .bgm box geometry file, a .csv group file, and .prm Atlantis input parameter file 
-#' and provides a visualisation of the data in the form of a shiny application. 
-#' The three data files must first be pre-processed by \code{make.prm.object}, 
+#' Uses data from an Atlantis box geometry model file, a group file, and a biological parameter file
+#' and provides a visualisation of the data in the form of a shiny application.
+#' The three data files must first be pre-processed by \code{\link[shinyrAtlantis]{make.sh.prm.object}},
 #' which generates a list object that is the parameter to \code{sh.prm} (see Examples).
+#'
+#' The \emph{Map} tab displays the spatial distribution of box depths.
 #' 
-#' @param obj R list object generated from \code{make.prm.object}
+#' The \emph{Groups} tab displays the information stored in the Atlantis group file.
+#' 
+#' The \emph{Global params} tab shows the global variables that have values provided
+#' in the biological parameters file.
+#' 
+#' The \emph{Group params} tab allows the user to see a list of possible parameters associated with groups
+#' (Definitions) and the values provided in the biological parameters file (Values). 
+#' Use the checkboxes to view the group parameters of interest.
+#' 
+#' The \emph{Habitat} tab shows which groups are associated with habitats.
+#' 
+#' The \emph{Distributions} tab shows horizontal and vertical distributions for
+#' chosen groups. Initial values, recruitment and migration parameters can be viewed here.
+#'
+#' The \emph{Feeding} tab shows clearance rates, maximum growth rates, 
+#' prey availability and refuge-related parameters.
+#' 
+#' The \emph{Migration} tab provides migrant biomasses (structural and reserve) 
+#' and numbers.
+#' 
+#' The \emph{Recruitment} tab shows the relation between structural and
+#' reserve biomass across all groups.
+#' 
+#' @param obj R list object generated from \code{\link[shinyrAtlantis]{make.sh.prm.object}}
 #'
 #' @return object of class 'shiny.appobj' see \code{\link[shiny]{shinyApp}}
-#' 
+#'
 #' @examples
 #' \dontrun{
-#' prm.object <- make.prm.object(bgm.file, grp.file, prm.file)
-#' sh.prm(prm.object)
+#' bgm.file <- "SEAP_extended_shelf.bgm"
+#' grp.file <- "SEAP_Groups_Aquacult.csv"
+#' prm.file <- "SEAP_biol_pH_Aquacult.prm"
+#' obj <- make.sh.prm.object(bgm.file, grp.file, prm.file)
+#' sh.prm(obj)
 #' }
 #' @export
+#' @importFrom ggplot2 xlim element_rect geom_hline position_jitter scale_x_log10 scale_y_log10 geom_bar coord_flip scale_y_continuous
 sh.prm <- function(obj){
-# obj is a list: numboxes, map_base, box.data, grp.def, grp.att, 
+  # obj is a list: numboxes, map_base, box.data, grp.def, grp.att, 
   #   gen.prm, grp.hab, grp.dist
   
-  # set up variables needed to plot the map  
+  # set up variables needed to plot the map 
   df.map    <- merge(obj$map_base, obj$box.data, by = "boxid")
+  df.map$z <- -df.map$z # change to absolute depth
+  df.map$z[df.map$z == 0] <- NA
   depth.min <- min(df.map$z) # deepest box
   depth.max <- max(df.map$z) # shallowest box
-  # set slider limits so plot always renders
-  depth.display.min <- round(depth.min - 2) 
-  depth.display.max <- round(depth.max - 1)
   
   numboxes <- obj$numboxes
+  flagfishrates <- obj$flagfishrates
+  flag_fine_ontogenetic_diets <- obj$gen.prm$Value[which(obj$gen.prm$Parameter == "flag_fine_ontogenetic_diets")]
+  no.clearance.data <- sum(obj$clearance.data$co.1, na.rm = TRUE) == 0  
   
   # checkbox labels for group templates
-  ##df.prms.all <- read.csv(file = def.grp.file, header = TRUE)
-  df.prms.all <- obj$df.prms.all
+  def.grp.file <- system.file("extdata", "grpTemplates.csv", package = "shinyrAtlantis")
+  df.prms.all <- read.csv(file = def.grp.file, header = TRUE)
   tmplts <- df.prms.all$Template
   tmplts <- setNames(1:length(tmplts), tmplts)
   
@@ -74,17 +99,14 @@ sh.prm <- function(obj){
       title = "Atlantis parameter viewer",
       # MAP
       tabPanel("Map", 
-        fluidRow(
-          column(12, wellPanel(
-            sliderInput("SI.max.depth", label = "Maximum depth to display", 
-              min = depth.display.min, max = depth.display.max, 
-              value = depth.display.min, round = FALSE)))
-        ),
         fluidRow(  
-          column(2),
-          column(8,
+          column(3,
+            h4("Depth distribution"),
+            HTML("<p>This plot has a zoom feature.</p><p>Draw a box and double click to zoom into the box.</p><p>Double click to reset the zoom.</p>") 
+          ),
+          column(7,
             plotOutput("box_location_plot", 
-              height = "500px",
+              height = "600px",
               dblclick = "box_location_plot_dblclick",
               brush = brushOpts(
                 id = "box_location_plot_brush",
@@ -155,7 +177,7 @@ sh.prm <- function(obj){
         )
       ),
       # DISTRIBUTION
-      tabPanel("Distribution",
+      tabPanel("Distributions",
         sidebarPanel(
           selectInput(inputId = 'SIHGroup', label = 'Group: XXX', 
             choices = grp.codes.ord),
@@ -167,7 +189,7 @@ sh.prm <- function(obj){
             column(10, h3(textOutput('VTO.dist.species')))
           ),
           hr(),
-          fluidRow(column(12, h3("Distribution of age-groups"))),
+          fluidRow(column(12, h3("Horizontal and vertical distributions"))),
           fluidRow(
             column(5, h4("Invertebrate/Adult")),
             column(5, h4("Juvenile"))
@@ -198,8 +220,7 @@ sh.prm <- function(obj){
             column(5, plotOutput("vert_distribution_plot", height = "325px")),
             column(5, plotOutput("vert_juv_distribution_plot", height = "325px"))
           ),
-          hr(),
-          fluidRow(column(12, h4("Density plots (per unit area): FXXX_SQ[juv]"))),
+          fluidRow(column(12, h4("Corresponding density plots [per m^2]"))),
           fluidRow(
             column(5, 
               plotOutput("H_ad_distribution_area_plot", height = "325px")),
@@ -226,39 +247,141 @@ sh.prm <- function(obj){
             column(5, 
               plotOutput("vertical_recruit_plot", height = "325px"))
           ),
+          hr(),
+          fluidRow(column(12, h3("Migration: fraction of occupants that exit when group migrates out of model domain"))),
+          fluidRow(
+            column(5, 
+              plotOutput("migration.ad.plot", height = "325px")),
+            column(5, 
+              plotOutput("migration.juv.plot", height = "325px"))
+          ),
+          fluidRow(
+            column(5, 
+              plotOutput("migration.plot", height = "325px"))
+          ),
           width = 10
         )
       ),
-      # Refuge
-      tabPanel("Refuge",
-        fluidRow(column(12, h4("Cover-based availability"))),
-        fluidRow(column(12, 
-          plotOutput("refuge.1.plot", height = "625px"))),
-        hr(),
-        fluidRow(column(12, h4("Refuge-based availability"))),
-        fluidRow(column(12, 
-          plotOutput("refuge.2.plot", height = "200px")))
-      ),  
-      tabPanel("Feeding",
-        fluidRow(
-          column(2, selectInput(inputId = 'SIPGroup', label = 'Group: XXX', 
-            choices = grp.codes.ord)),
-          column(10, h3(textOutput('VTO.prey.species')))
+      navbarMenu("Feeding",
+        # Clearance rates
+        tabPanel("Clearance Rates",
+          fluidPage(
+            fluidRow(column(12, h4("Clearance rates: C_XXX"))),
+            if (flagfishrates == "0") {
+              HTML( paste("<p><b>flagfishrates</b> = ", flagfishrates, 
+                " so clearance rates are absolute [m^3 per day per undividual].</p>", sep = ""))  
+            } else {
+              HTML( paste("<p><b>flagfishrates</b> = ", flagfishrates, 
+                " so clearance rates are proportional to body mass [m^3 per day per (mg N)].</p>", sep = ""))  
+            }
+          ),
+          hr(),
+          fluidRow(column(12, plotOutput("clearance.plot", height = "800px"))
+          ),  
+          fluidRow(
+            column(12, DT::dataTableOutput('table.clearance'))
+          )
         ),
-        hr(),
-        fluidRow(column(12, h4("pPREY[1,2]XXX[1,2]"))),
-        fluidRow(column(12, 
-          plotOutput("avail.prey.plot", height = "600px"))
-        ),  
-        fluidRow(
-          column(12, DT::dataTableOutput('table.avail.prey'))
+        # Maximum growth rates
+        tabPanel("Maximum growth rates",
+          fluidPage(
+            fluidRow(column(12, h4("Maximum growth rates: mum_XXX")))
+          ),
+          fluidRow(
+            column(12, plotOutput("growth.max.plot", height = "800px"))
+          ),
+          fluidRow(
+            column(12, DT::dataTableOutput('table.growth.max'))
+          )
         ),
-        hr(),
-        fluidRow(column(12, h4("p_YYYXXX"))),
-        fluidRow(
-          column(12, DT::dataTableOutput('table.age.prey'))
+        # Availibiity
+        tabPanel("Availability (base-line)",
+          fluidRow(column(12, 
+            if (flag_fine_ontogenetic_diets == 0) {
+              HTML( paste("<p><b>flag_fine_ontogenetic_diets</b> = ", flag_fine_ontogenetic_diets, 
+                " so only juvenile and adult diets.</p>", sep = ""))  
+            } else {
+              HTML( paste("<p><b>flag_fine_ontogenetic_diets</b> = ", flag_fine_ontogenetic_diets, 
+                " so cohort-dependent diets.</p>", sep = ""))  
+            })
+          ),
+          fluidRow(
+            column(2, selectInput(inputId = 'SIPGroup', label = 'Group: XXX', 
+              choices = grp.codes.ord)),
+            column(10, h3(textOutput('VTO.prey.species')))
+          ),
+          hr(),
+          fluidRow(column(12, h4("pPREY[1,2]XXX[1,2]"))),
+          fluidRow(column(12, 
+            plotOutput("avail.prey.plot", height = "600px"))
+          ),  
+          fluidRow(
+            column(12, DT::dataTableOutput('table.avail.prey'))
+          ),
+          hr(),
+          fluidRow(column(12, h4("p_YYYXXX"))),
+          fluidRow(column(12, 
+            plotOutput("avail.age.plot", height = "400px"))
+          ),  
+          fluidRow(
+            column(12, DT::dataTableOutput('table.age.prey'))
+          )
+        ),
+        # Refuge
+        tabPanel("Availability modifiers",
+          fluidRow(column(12, h4("Cover modifier"))),
+          fluidRow(column(12, 
+            plotOutput("refuge.1.plot", height = "625px"))),
+          hr(),
+          fluidRow(column(12, h4("Refuge modifier"))),
+          fluidRow(column(12, 
+            plotOutput("refuge.2.plot", height = "200px")))
         )
-      ),  
+      ),
+      # Migration
+      tabPanel("Migration",
+        fluidRow(
+          column(12, HTML("<p><b>Note:</b> the spatial patterns of migration can be found under the <em>Distributions</em> tab (at the bottom).</p>"))
+        ),
+        fluidRow(
+          column(12, wellPanel(
+            h4("KMIGa_INVERT_XXX: migrant biomass")))
+        ),        
+        fluidRow(
+          column(12, plotOutput("mig.bio.plot", height = "250px"))
+        ),
+        hr(),
+        fluidRow(
+          column(12, wellPanel(
+            h4("KMIGa_XXX: migrant numbers")))
+        ),        
+        fluidRow(
+          column(12, plotOutput("mig.num.plot", height = "750px"))
+        ),
+        hr(),
+        fluidRow(
+          column(12, wellPanel(
+            h4("KMIGa_XXXsn, KMIGa_XXXrn: migrant state (mg N)")))
+        ),    
+        fluidRow(
+          column(12, HTML("<p><b>Key:</b> black = reserve, blue = structural</p>")),
+          column(12, plotOutput("mig.plot", height = "750px"))
+        )
+      ),
+      # Recruitment
+      tabPanel("Recruitment",
+        fluidRow(
+          column(12, wellPanel(
+            h4("Weight of recruits (per individual)")))
+        ),        
+        fluidRow(
+          column(3, 
+            HTML("<p>Group names have been jittered in the vertical.</p>"),
+            HTML("<p>x-axis is KWSR_XXX and y-axis is KWRR_XXX.</p>")
+          ),
+          column(7, plotOutput("recruit.mass.plot", height = "400px"))
+        )
+      ),
       tabPanel("Help", 
         fluidPage(
           HTML(txtHelp)
@@ -356,24 +479,29 @@ sh.prm <- function(obj){
         DT::datatable(obj$grp.hab$df.hab.juv, rownames = FALSE)
       })
       
+      output$table.clearance <- DT::renderDataTable({
+        DT::datatable(obj$clearance.data, rownames = FALSE)
+      })
+      
+      output$table.growth.max <- DT::renderDataTable({
+        DT::datatable(obj$grp.growth, rownames = FALSE)
+      })
+      
       observeEvent(input$exitButton, {
         stopApp()
       })
       
       output$box_location_plot <- renderPlot({
-        df.map$limitedz <- ifelse((df.map$z >= input$SI.max.depth) & (df.map$z < 0), 
-          df.map$z, NA)
-        ggplot(data = df.map, aes(x = x, y = y, group = boxid, fill = limitedz)) +
+        ggplot(data = df.map, aes(x = x, y = y, group = boxid, fill = z)) +
           geom_polygon(colour = "grey90", size = 0.25) +          
-          scale_fill_gradient(high = "#9ecae1", low = "#084594", na.value="grey90",
-            limits=c(input$SI.max.depth, 0)) +
+          scale_fill_gradient(low = "#9ecae1", high = "#084594", na.value="grey90") +
           labs(fill = "Depth (m)") +
           geom_text(aes(x = x.in, y = y.in, label = boxid), size = 2.5) +
-          theme_bw() + xlab("") + ylab("") +
+          theme_bw() + xlab("Longitude") + ylab("Latitude") + 
           theme(plot.background = element_blank()) + 
           coord_cartesian(xlim = ranges_box_location_plot$x, 
-            ylim = ranges_box_location_plot$y) +
-          scale_y_continuous(breaks=NULL) + scale_x_continuous(breaks=NULL)
+            ylim = ranges_box_location_plot$y) # + 
+        # scale_y_continuous(breaks=NULL) + scale_x_continuous(breaks=NULL)
       })
       
       # There must be an easier way?
@@ -472,7 +600,7 @@ sh.prm <- function(obj){
           ggplot(data = df.vert, aes(x = depth, y = fraction, colour = period)) +
             geom_line() + geom_point() + ylim(0,1) + xlim(1,levs) + coord_flip() +
             ggtitle("VERTday_XXX[2], VERTnight_XXX[2]") + 
-            scale_colour_manual(values=c("#FF6666", "blue")) + 
+            scale_color_manual(values=c("#FF6666", "blue")) + 
             xlab("Depth layer (deep:shallow)") + ylab("Fraction") +
             theme_bw() + 
             theme(
@@ -509,8 +637,7 @@ sh.prm <- function(obj){
           ggplot(data = df.vert, aes(x = depth, y = fraction, colour = period)) +
             geom_line() + geom_point() + ylim(0,1) + xlim(1,levs) +
             ggtitle("VERTday_XXX1, VERTnight_XXX1") + coord_flip() +
-            scale_colour_manual(values=c("#FF6666", "blue")) + 
-            # scale_colour_manual(values=c("red", "blue")) + 
+            scale_color_manual(values=c("#FF6666", "blue")) + 
             xlab("Depth layer (deep:shallow)") + ylab("Fraction") +
             theme_bw() + 
             theme(
@@ -603,11 +730,101 @@ sh.prm <- function(obj){
             geom_polygon(colour = "grey50", size = 0.25) +          
             scale_fill_gradient(high = "blue", low = "white", na.value="grey90") +
             labs(fill = "Fraction") + ggtitle("XXX_recruit_hdistrib") + 
-            theme_bw() + xlab("") + ylab("") +
+            theme_bw() + xlab("") + ylab("") + 
             theme(plot.background = element_blank()) + 
             scale_y_continuous(breaks=NULL) + scale_x_continuous(breaks=NULL) +
             coord_cartesian(xlim = ranges_H_recruit_plot$x, 
               ylim = ranges_H_recruit_plot$y)
+        }  
+      })
+      
+      output$migration.plot <- renderPlot({
+        xxx <- as.integer(input$SIHGroup)
+        df.migration <- data.frame(
+          boxid = 0:(numboxes - 1), 
+          p = obj$grp.dist$mig.invert[xxx,])
+        df.map.migration <- merge(obj$map_base, df.migration, by = "boxid")
+        
+        if (sum(!is.na(df.migration$p)) == 0) {
+          ggplot(data = df.map.migration, aes(x = x, y = y, group = boxid)) +
+            geom_polygon(colour = "grey90", size = 0.25, fill = "red") +          
+            ggtitle("MigIOBox_XXX: No data provided") + 
+            theme_bw() + xlab("") + ylab("") +
+            theme(
+              plot.background = element_blank(),
+              plot.title=element_text(colour="red")
+            ) + 
+            scale_y_continuous(breaks=NULL) + scale_x_continuous(breaks=NULL)
+        } else {
+          ggplot(data = df.map.migration, aes(x = x, y = y, group = boxid, fill = p)) +
+            geom_polygon(colour = "grey50", size = 0.25) +          
+            scale_fill_gradient(high = "blue", low = "white", na.value="grey90") +
+            labs(fill = "Fraction") + 
+            ggtitle("MigIOBox_XXX") + 
+            theme_bw() + xlab("") + ylab("") + 
+            theme(plot.background = element_blank()) + 
+            scale_y_continuous(breaks=NULL) + scale_x_continuous(breaks=NULL) # +
+          # coord_cartesian(xlim = ranges_H_recruit_plot$x, ylim = ranges_H_recruit_plot$y)
+        }  
+      })
+      
+      output$migration.ad.plot <- renderPlot({
+        xxx <- as.integer(input$SIHGroup)
+        df.migration <- data.frame(
+          boxid = 0:(numboxes - 1), 
+          p = obj$grp.dist$mig.ad[xxx,])
+        df.map.migration <- merge(obj$map_base, df.migration, by = "boxid")
+        
+        if (sum(!is.na(df.migration$p)) == 0) {
+          ggplot(data = df.map.migration, aes(x = x, y = y, group = boxid)) +
+            geom_polygon(colour = "grey90", size = 0.25, fill = "red") +          
+            ggtitle("MigIOBox_XXXad: No data provided") + 
+            theme_bw() + xlab("") + ylab("") +
+            theme(
+              plot.background = element_blank(),
+              plot.title=element_text(colour="red")
+            ) + 
+            scale_y_continuous(breaks=NULL) + scale_x_continuous(breaks=NULL)
+        } else {
+          ggplot(data = df.map.migration, aes(x = x, y = y, group = boxid, fill = p)) +
+            geom_polygon(colour = "grey50", size = 0.25) +          
+            scale_fill_gradient(high = "blue", low = "white", na.value="grey90") +
+            labs(fill = "Fraction") + 
+            ggtitle("MigIOBox_XXXad") + 
+            theme_bw() + xlab("") + ylab("") + 
+            theme(plot.background = element_blank()) + 
+            scale_y_continuous(breaks=NULL) + scale_x_continuous(breaks=NULL) # +
+          # coord_cartesian(xlim = ranges_H_recruit_plot$x, ylim = ranges_H_recruit_plot$y)
+        }  
+      })
+      
+      output$migration.juv.plot <- renderPlot({
+        xxx <- as.integer(input$SIHGroup)
+        df.migration <- data.frame(
+          boxid = 0:(numboxes - 1), 
+          p = obj$grp.dist$mig.juv[xxx,])
+        df.map.migration <- merge(obj$map_base, df.migration, by = "boxid")
+        
+        if (sum(!is.na(df.migration$p)) == 0) {
+          ggplot(data = df.map.migration, aes(x = x, y = y, group = boxid)) +
+            geom_polygon(colour = "grey90", size = 0.25, fill = "red") +          
+            ggtitle("MigIOBox_XXXjuv: No data provided") + 
+            theme_bw() + xlab("") + ylab("") +
+            theme(
+              plot.background = element_blank(),
+              plot.title=element_text(colour="red")
+            ) + 
+            scale_y_continuous(breaks=NULL) + scale_x_continuous(breaks=NULL)
+        } else {
+          ggplot(data = df.map.migration, aes(x = x, y = y, group = boxid, fill = p)) +
+            geom_polygon(colour = "grey50", size = 0.25) +          
+            scale_fill_gradient(high = "blue", low = "white", na.value="grey90") +
+            labs(fill = "Fraction") + 
+            ggtitle("MigIOBox_XXXjuv") + 
+            theme_bw() + xlab("") + ylab("") + 
+            theme(plot.background = element_blank()) + 
+            scale_y_continuous(breaks=NULL) + scale_x_continuous(breaks=NULL) # +
+          # coord_cartesian(xlim = ranges_H_recruit_plot$x, ylim = ranges_H_recruit_plot$y)
         }  
       })
       
@@ -689,7 +906,13 @@ sh.prm <- function(obj){
           geom_hline(yintercept = 1, color = "grey", linetype = "dashed") +
           facet_wrap( ~ Code, ncol = 8) + ylim(0,NA) + 
           xlab(x.axis.text) + ylab("Relative availability") +
-          theme_bw() + theme(plot.background = element_blank())
+          theme_bw() + 
+          scale_color_manual(values=c("Blue 3", "Red 3")) +
+          theme(
+            strip.text = element_text(colour = "white", face="bold"),
+            strip.background = element_rect(fill="Red 3"),
+            plot.background = element_blank()
+          )
       })
       
       output$refuge.2.plot <- renderPlot({
@@ -705,7 +928,12 @@ sh.prm <- function(obj){
             geom_hline(yintercept = 1, color = "grey", linetype = "dashed") +
             facet_wrap( ~ Code, ncol = 8) + ylim(0,NA) + 
             xlab("Rugosity") + ylab("Relative availability") +
-            theme_bw() + theme(plot.background = element_blank())
+            theme_bw() + 
+            theme(
+              strip.text = element_text(colour = "white", face="bold"),
+              strip.background = element_rect(fill="Red 3"),
+              plot.background = element_blank()
+            )
         } else {
           df.blank <- data.frame(x = 1, y = 0)
           ggplot(data = df.blank, aes(x = x, y = y)) +
@@ -755,6 +983,54 @@ sh.prm <- function(obj){
         DT::datatable(df.age.prey, rownames = FALSE)
       })
       
+      
+      output$avail.age.plot <- renderPlot({
+        xxx <- as.integer(input$SIPGroup)
+        
+        # generate the data frame to plot
+        ogd <- dplyr::arrange(obj$grp.def, Code)
+        Prey <- ogd$Code
+        Name <- ogd$Name
+        GroupType <- ogd$GroupType
+        m <- obj$prey.data$age.data[xxx, , ]
+        df.age.prey <- data.frame(Prey, Name, GroupType, m)
+        
+        df.age.prey <- df.age.prey[!is.na(df.age.prey$X1), ]
+        max.cohorts <- dim(df.age.prey)[2] - 3
+        names(df.age.prey)[4:(3+max.cohorts)] <- 1:max.cohorts
+        df.age.prey <- tidyr::gather(data = df.age.prey, key = "Cohort",
+          "Availability", 4:(3+max.cohorts))
+        
+        if (dim(df.age.prey)[1] > 0) {
+          ggplot(data = df.age.prey, aes(x = Cohort, y = Availability, group = Prey)) +
+            geom_point() + geom_line() + 
+            xlab("Cohort") + ylab("Availability") + ylim(c(0, NA)) +
+            facet_wrap( ~ Prey, ncol = 4, scales="free_y") +
+            theme_bw() + 
+            theme(
+              panel.grid.minor = element_blank(),
+              strip.text = element_text(colour = "white", face="bold"),
+              strip.background = element_rect(fill="Red 3"),
+              plot.background = element_blank()
+            )
+        } else {
+          df.blank <- data.frame(x = 1, y = 0)
+          ggplot(data = df.blank, aes(x = x, y = y)) +
+            geom_point(size = 0) +
+            ggtitle("No data provided") + 
+            theme_bw() + xlim(0,1) + ylim(0,1) +
+            xlab("") + ylab("") +
+            theme(
+              plot.background = element_blank(),
+              panel.grid.minor = element_blank(),
+              panel.grid.major = element_blank(),
+              axis.ticks = element_blank(), 
+              axis.text = element_blank(),
+              plot.title=element_text(colour="red")
+            )
+        } 
+      })
+      
       output$avail.prey.plot <- renderPlot({
         xxx <- as.integer(input$SIPGroup)
         
@@ -793,22 +1069,276 @@ sh.prm <- function(obj){
           ggplot(data = df.avail.prey, 
             aes(x = Pred.Ad, y = Fraction, fill = Prey.Ad)) +
             geom_bar(position="dodge", stat="identity") +  
-            scale_fill_manual(values=c("#FF6666", "blue")) + 
+            scale_fill_manual(values=c("Red 3", "Blue 3")) + 
             xlab("Predator is adult") + ylab("Fraction") +
             facet_wrap( ~ Prey, ncol = 8) +
             labs(fill = "Prey is adult") +
             theme_bw() + 
             theme(
               panel.grid.minor = element_blank(),
+              strip.text = element_text(colour = "white", face="bold"),
+              strip.background = element_rect(fill="Red 3"),
               plot.background = element_blank()
             )
         }  
       })
+      
+      output$clearance.plot <- renderPlot({
+        if (no.clearance.data) {
+          df.blank <- data.frame(x = 1, y = 0)
+          ggplot(data = df.blank, aes(x = x, y = y)) +
+            geom_point(size = 0) +
+            ggtitle("No data provided") + 
+            theme_bw() + xlim(0,1) + ylim(0,1) +
+            xlab("") + ylab("") +
+            theme(
+              plot.background = element_blank(),
+              panel.grid.minor = element_blank(),
+              panel.grid.major = element_blank(),
+              axis.ticks = element_blank(), 
+              axis.text = element_blank(),
+              plot.title=element_text(colour="red")
+            )
+        } else {
+          # get maximum number of cohorts
+          df.clearance <- obj$clearance.data
+          max.cohorts <- dim(df.clearance)[2]-5
+          names(df.clearance)[6:(5+max.cohorts)] <- 1:max.cohorts
+          df.clearance <- tidyr::gather(data = df.clearance, key = "Cohort",
+            value = "Clearance", 6:(5+max.cohorts))
+          df.clearance <- df.clearance[!is.na(df.clearance$Clearance),]
+          
+          ggplot(data = df.clearance, aes(x = Cohort, y = Clearance, group = Code)) +
+            geom_point() + geom_line() + 
+            xlab("Cohort") + ylab("Clearance rate (m^3 per day per individual/(mg N))") + ylim(c(0, NA)) +
+            facet_wrap( ~ Code, ncol = 4, scales="free_y") +
+            theme_bw() + 
+            theme(
+              panel.grid.minor = element_blank(),
+              strip.text = element_text(colour = "white", face="bold"),
+              strip.background = element_rect(fill="Red 3"),
+              plot.background = element_blank()
+            )
+        }  
+      })
+      
+      output$growth.max.plot <- renderPlot({
+        no.data <- sum(!is.na(obj$grp.growth$co.1)) == 0
+        if (no.clearance.data) {
+          df.blank <- data.frame(x = 1, y = 0)
+          ggplot(data = df.blank, aes(x = x, y = y)) +
+            geom_point(size = 0) +
+            ggtitle("No data provided") + 
+            theme_bw() + xlim(0,1) + ylim(0,1) +
+            xlab("") + ylab("") +
+            theme(
+              plot.background = element_blank(),
+              panel.grid.minor = element_blank(),
+              panel.grid.major = element_blank(),
+              axis.ticks = element_blank(), 
+              axis.text = element_blank(),
+              plot.title=element_text(colour="red")
+            )
+        } else {
+          # get maximum number of cohorts
+          df.growth <- obj$grp.growth
+          max.cohorts <- dim(df.growth)[2]-5
+          names(df.growth)[6:(5+max.cohorts)] <- 1:max.cohorts
+          df.growth <- tidyr::gather(data = df.growth, key = "Cohort",
+            value = "Growth", 6:(5+max.cohorts))
+          df.growth <- df.growth[!is.na(df.growth$Growth),]
+          
+          ggplot(data = df.growth, aes(x = Cohort, y = Growth, group = Code)) +
+            geom_point() + geom_line() + 
+            xlab("Cohort") + ylab("Maximum growth rate (mg N d-1)") + ylim(c(0, NA)) +
+            facet_wrap( ~ Code, ncol = 4, scales="free_y") +
+            theme_bw() + 
+            theme(
+              panel.grid.minor = element_blank(),
+              strip.text = element_text(colour = "white", face="bold"),
+              strip.background = element_rect(fill="Red 3"),
+              plot.background = element_blank()
+            )
+        }  
+      })
+      
+      output$mig.num.plot <- renderPlot({
+        no.data <- sum(!is.na(obj$grp.mig$mig.num$co.1)) == 0
+        if (no.data) {
+          df.blank <- data.frame(x = 1, y = 0)
+          ggplot(data = df.blank, aes(x = x, y = y)) +
+            geom_point(size = 0) +
+            ggtitle("No data provided") + 
+            theme_bw() + xlim(0,1) + ylim(0,1) +
+            xlab("") + ylab("") +
+            theme(
+              plot.background = element_blank(),
+              panel.grid.minor = element_blank(),
+              panel.grid.major = element_blank(),
+              axis.ticks = element_blank(), 
+              axis.text = element_blank(),
+              plot.title=element_text(colour="red")
+            )
+        } else {
+          df.num <- obj$grp.mig$mig.num
+          max.cohorts <- dim(df.num)[2]-1
+          names(df.num)[2:(1+max.cohorts)] <- 1:max.cohorts
+          df.num <- tidyr::gather(data = df.num, key = "Cohort",
+            value = "number", 2:(1+max.cohorts))
+          df.num <- df.num[!is.na(df.num$number),]
+          
+          ggplot(data = df.num, aes(x = Cohort, y = number, group = Code)) +
+            geom_point() + geom_line() + 
+            xlab("Cohort") + ylab("Number") + ylim(c(0, NA)) +
+            facet_wrap( ~ Code, ncol = 4, scales="free_y") +
+            theme_bw() + 
+            theme(
+              panel.grid.minor = element_blank(),
+              strip.text = element_text(colour = "white", face="bold"),
+              strip.background = element_rect(fill="Red 3"),
+              plot.background = element_blank()
+            )
+        }  
+      })
+      
+      output$mig.bio.plot <- renderPlot({
+        # TO DO: do not use complete cases!
+        
+        no.data <- sum(!is.na(obj$grp.mig$mig.bio$co.1)) == 0
+        if (no.data) {
+          df.blank <- data.frame(x = 1, y = 0)
+          ggplot(data = df.blank, aes(x = x, y = y)) +
+            geom_point(size = 0) +
+            ggtitle("No data provided") + 
+            theme_bw() + xlim(0,1) + ylim(0,1) +
+            xlab("") + ylab("") +
+            theme(
+              plot.background = element_blank(),
+              panel.grid.minor = element_blank(),
+              panel.grid.major = element_blank(),
+              axis.ticks = element_blank(), 
+              axis.text = element_blank(),
+              plot.title=element_text(colour="red")
+            )
+        } else {
+          df.bio <- obj$grp.mig$mig.bio
+          max.cohorts <- dim(df.bio)[2]-1
+          names(df.bio)[2:(1+max.cohorts)] <- 1:max.cohorts
+          df.bio <- tidyr::gather(data = df.bio, key = "Cohort",
+            value = "biomass", 2:(1+max.cohorts))
+          df.bio <- df.bio[!is.na(df.bio$biomass),]
+          
+          ggplot(data = df.bio, aes(x = Cohort, y = biomass, group = Code)) +
+            geom_point() + geom_line() + 
+            xlab("Cohort") + ylab("Biomass (mg N)") + ylim(c(0, NA)) +
+            facet_wrap( ~ Code, ncol = 4, scales="free_y") +
+            theme_bw() + 
+            theme(
+              panel.grid.minor = element_blank(),
+              strip.text = element_text(colour = "white", face="bold"),
+              strip.background = element_rect(fill="Red 3"),
+              plot.background = element_blank()
+            )
+        }  
+      })
+      
+      output$mig.plot <- renderPlot({
+        no.data <- sum(!is.na(obj$grp.mig$mig.res$co.1)) == 0
+        if (no.data) {
+          df.blank <- data.frame(x = 1, y = 0)
+          ggplot(data = df.blank, aes(x = x, y = y)) +
+            geom_point(size = 0) +
+            ggtitle("No data provided") + 
+            theme_bw() + xlim(0,1) + ylim(0,1) +
+            xlab("") + ylab("") +
+            theme(
+              plot.background = element_blank(),
+              panel.grid.minor = element_blank(),
+              panel.grid.major = element_blank(),
+              axis.ticks = element_blank(), 
+              axis.text = element_blank(),
+              plot.title=element_text(colour="red")
+            )
+        } else {
+          df.res <- obj$grp.mig$mig.res
+          max.cohorts <- dim(df.res)[2] - 1
+          names(df.res)[2:(1+max.cohorts)] <- 1:max.cohorts
+          df.res <- tidyr::gather(data = df.res, key = "Cohort",
+            value = "mass", 2:(1+max.cohorts))
+          df.res <- df.res[complete.cases(df.res),]
+          
+          df.str <- obj$grp.mig$mig.str
+          max.cohorts <- dim(df.str)[2] - 1
+          names(df.str)[2:(1+max.cohorts)] <- 1:max.cohorts
+          df.str <- tidyr::gather(data = df.str, key = "Cohort",
+            value = "mass", 2:(1+max.cohorts))
+          df.str <- df.str[complete.cases(df.str),]
+          
+          ggplot(data = df.res, aes(x = Cohort, y = mass, group = Code)) +
+            geom_point() + geom_line() + 
+            geom_point(data = df.str, 
+              aes(x = Cohort, y = mass, group = Code), colour = "blue") + 
+            geom_line(data = df.str, 
+              aes(x = Cohort, y = mass, group = Code), colour = "blue") + 
+            xlab("Cohort") + ylab("Mass (mg N)") + ylim(c(0, NA)) +
+            facet_wrap( ~ Code, ncol = 4, scales="free_y") +
+            theme_bw() + 
+            theme(
+              panel.grid.minor = element_blank(),
+              strip.text = element_text(colour = "white", face="bold"),
+              strip.background = element_rect(fill="Red 3"),
+              plot.background = element_blank()
+            )
+        }  
+      })
+      
+      output$recruit.mass.plot <- renderPlot({
+        # create a data frame for plotting
+        df.recruit.mass <- data.frame(
+          Code = obj$grp.att$Code,
+          KWRR = obj$grp.att$KWRR_XXX,
+          KWSR = obj$grp.att$KWSR_XXX
+        )
+        
+        no.mass.data <- sum(df.recruit.mass$KWSR, na.rm = TRUE) == 0.0
+        df.recruit.mass <- df.recruit.mass[complete.cases(df.recruit.mass), ]
+        
+        if (no.mass.data) {
+          df.blank <- data.frame(x = 1, y = 0)
+          ggplot(data = df.blank, aes(x = x, y = y)) +
+            geom_point(size = 0) +
+            ggtitle("No data provided") + 
+            theme_bw() + xlim(0,1) + ylim(0,1) +
+            xlab("") + ylab("") +
+            theme(
+              plot.background = element_blank(),
+              panel.grid.minor = element_blank(),
+              panel.grid.major = element_blank(),
+              axis.ticks = element_blank(), 
+              axis.text = element_blank(),
+              plot.title=element_text(colour="red")
+            )
+        } else {
+          ggplot(data = df.recruit.mass, aes(x = KWSR, y = KWRR, label = Code)) +
+            geom_point(colour = "red") +
+            geom_text(size = 3, position=position_jitter(width=0, height=6)) + 
+            xlab("Structural mass (mg N)") + ylab("Reserve mass (mg N)") + 
+            scale_x_log10() + scale_y_log10() + # coord_fixed() +
+            theme_bw() + 
+            theme(
+              panel.grid.minor = element_blank(),
+              strip.text = element_text(colour = "white", face="bold"),
+              strip.background = element_rect(fill="Red 3"),
+              plot.background = element_blank()
+            )
+        }  
+        
+      })  
+      
     }
   )  
 }
 
-#' @importFrom stringr str_extract str_extract_all
 # +===================================================+
 # |  make.prm.map : collect data for displaying maps  |
 # +===================================================+
@@ -825,7 +1355,7 @@ make.prm.map <- function(bgm.file){
       text.split <- unlist(str_split(
         gsub(pattern = "[\t ]+", x = bgm[j[jj]], replacement = " "), " "))
       if ((text.split[1] == txt.find) &
-          (stringr::str_extract(text.split[2], "[0-9.-]+") == text.split[2])) {
+          (str_extract(text.split[2], "[0-9.-]+") == text.split[2])) {
         jnew <- c(jnew,j[jj]) # add the row that satisfies the criteria
       }
     }
@@ -902,10 +1432,11 @@ make.prm.groups <- function(grp.file){
 # +======================================================================+
 # |  make.prm.attributes : collect group attributes data for displaying  |
 # +======================================================================+
-make.prm.attributes <- function(prm.file, grp.vals, def.grp.file){
+make.prm.attributes <- function(prm.file, grp.vals){
   prm <- readLines(prm.file) # read in the biological parameter file
   grp.att <- grp.vals[c("Code", "Name", "GroupType")] # develop this data frame
   
+  def.grp.file <- system.file("extdata", "grpTemplates.csv", package = "shinyrAtlantis")
   df.prms.all <- read.csv(file = def.grp.file, header = TRUE)
   tmplts <- df.prms.all$Template # group templates to search for
   Codes <- grp.att$Code # groups to search for
@@ -947,9 +1478,10 @@ make.prm.attributes <- function(prm.file, grp.vals, def.grp.file){
 # +=======================================================================+
 # |  make.prm.general : collect non-group attributes data for displaying  |
 # +=======================================================================+
-make.prm.general <- function(prm.file, def.all.file){
+make.prm.general <- function(prm.file){
   prm <- readLines(prm.file) # read in the biological parameter file
   # read in the parameter definition file
+  def.all.file <- system.file("extdata", "paramdefns.csv", package = "shinyrAtlantis")
   df.prm.defns <- read.csv(def.all.file, header = TRUE)
   df.prms <- df.prm.defns # data frame to return
   df.prms$Value <- NA # set initial values
@@ -989,7 +1521,7 @@ GetHabitats <- function(grp.att, tmplt, prm, habitat.types) {
   habitats <- length(habitat.types)
   codes <- length(Codes)
   
-  txt.rows <- data.frame(Codes, matrix(NA, nrow = codes, ncol = habitats + 1))
+  txt.rows <- data.frame(Codes, matrix(NA, nrow = codes, ncol = habitats))
   names(txt.rows) <- c("Code", habitat.types)
   for (xxx in Codes) { # look for each Code
     txt.find <- gsub(pattern = "XXX", replacement = xxx, x = tmplt)
@@ -1018,6 +1550,84 @@ make.prm.habitats <- function(prm.file, grp.object, habitat.types){
   df.hab.juv <- GetHabitats(grp.att, tmplts[3], prm, habitat.types)
   
   return(list(df.hab = df.hab, df.hab.ad = df.hab.ad, df.hab.juv = df.hab.juv))
+}
+
+# +=======================================================================+
+# |  make.prm.migration : collect group distribution data for displaying  |
+# +=======================================================================+
+make.prm.migration <- function(prm.file, Code){
+  prm   <- readLines(prm.file) # read in the biological parameter file
+  Code <- sort(Code)
+  codes <- length(Code)
+  
+  # find the maximum number of cohorts
+  max.cohorts <- 0
+  for (xxx in Code) { # look for each Code
+    # invertebrate migration data
+    txt.find <- paste("KMIGa_", xxx, sep = "")
+    j <- grep(pattern = txt.find, x = prm, value = FALSE) # file row(s)
+    if (length(j) > 0) { # at least one row with txt.find
+      for (jj in 1:length(j)) {
+        levs <- as.numeric(unlist(str_extract_all(prm[j[jj]],"\\(?[0-9.-]+\\)?")[[1]])[1])
+        if (levs > max.cohorts) {
+          max.cohorts <- levs
+        }
+      }
+    }
+  }  
+  
+  # numbers (vertebrates)
+  grp.mig.num  <- array(NA, dim=c(codes, max.cohorts))
+  dimnames(grp.mig.num)[[1]]  <- Code
+  dimnames(grp.mig.num)[[2]]  <- paste(rep("co", max.cohorts), 1:max.cohorts, sep = "-")
+  # biomass (invertebrates)
+  grp.mig.bio <- array(NA, dim=c(codes, max.cohorts))
+  dimnames(grp.mig.bio)[[1]]  <- Code
+  dimnames(grp.mig.bio)[[2]]  <- paste(rep("co", max.cohorts), 1:max.cohorts, sep = "-")
+  # structural nitrogen
+  grp.mig.str <- array(NA, dim=c(codes, max.cohorts))
+  dimnames(grp.mig.str)[[1]]  <- Code
+  dimnames(grp.mig.str)[[2]]  <- paste(rep("co", max.cohorts), 1:max.cohorts, sep = "-")
+  # reserve nitrogen
+  grp.mig.res <- array(NA, dim=c(codes, max.cohorts))
+  dimnames(grp.mig.res)[[1]]  <- Code
+  dimnames(grp.mig.res)[[2]]  <- paste(rep("co", max.cohorts), 1:max.cohorts, sep = "-")
+  
+  for (xxx in Code) { # look for each Code
+    # invertebrate migration data
+    txt.find <- paste("KMIGa_", xxx, sep = "")
+    j <- grep(pattern = txt.find, x = prm, value = FALSE) # file row(s)
+    txt.find <- paste("KMIGa_INVERT_", xxx, sep = "")
+    j <- c(j, grep(pattern = txt.find, x = prm, value = FALSE)) # file row(s)
+    if (length(j) > 0) { # at least one row with txt.find
+      for (jj in 1:length(j)) {
+        levs <- as.numeric(unlist(str_extract_all(prm[j[jj]],"\\(?[0-9.-]+\\)?")[[1]])[1])
+        vals <- as.numeric(str_split(prm[j[jj]+1], "[\t ]+")[[1]])
+        mig.txt <- unlist(str_split(prm[j[jj]], "[\t ]+"))[1]
+        if (mig.txt == paste("KMIGa_", xxx, sep = "")) { 
+          # numbers
+          grp.mig.num[xxx,1:levs] <- vals[1:levs]
+        } else if (mig.txt == paste("KMIGa_INVERT_", xxx, "", sep = "")) {
+          # biomass
+          grp.mig.bio[xxx,1:levs] <- vals[1:levs]
+        } else if (mig.txt == paste("KMIGa_", xxx, "sn", sep = "")) {
+          # structural nitrogen
+          grp.mig.str[xxx,1:levs] <- vals[1:levs]
+        } else if (mig.txt == paste("KMIGa_", xxx, "rn", sep = "")) {
+          # reserve nitrogen
+          grp.mig.res[xxx,1:levs] <- vals[1:levs]
+        }
+      }
+    }
+  }
+  
+  grp.mig.num <- data.frame(Code = Code, grp.mig.num)
+  grp.mig.bio <- data.frame(Code = Code, grp.mig.bio)
+  grp.mig.str <- data.frame(Code = Code, grp.mig.str)
+  grp.mig.res <- data.frame(Code = Code, grp.mig.res)
+  
+  return(list(mig.num = grp.mig.num, mig.bio = grp.mig.bio,
+    mig.str = grp.mig.str, mig.res = grp.mig.res))
 }
 
 # +===========================================================================+
@@ -1151,10 +1761,46 @@ make.prm.distributions <- function(prm.file, Code, numboxes){
     }  
   }
   
+  # Extract migration data
+  
+  # invertebrate migration
+  grp.migration  <- array(NA, dim=c(codes, numboxes))
+  dimnames(grp.migration)[[1]]  <- Code
+  # adult migration
+  grp.migration.ad <- array(NA, dim=c(codes, numboxes))
+  dimnames(grp.migration.ad)[[1]]  <- Code
+  # juvenile migration
+  grp.migration.juv <- array(NA, dim=c(codes, numboxes))
+  dimnames(grp.migration.juv)[[1]]  <- Code
+  
+  for (xxx in Code) { # look for each Code
+    # invertebrate migration data
+    txt.find <- paste("MigIOBox_", xxx, sep = "")
+    j <- grep(pattern = txt.find, x = prm, value = FALSE) # file row(s)
+    if (length(j) > 0) { # at least one row with txt.find
+      for (jj in 1:length(j)) {
+        levs <- as.numeric(unlist(str_extract_all(prm[j[jj]],"\\(?[0-9.-]+\\)?")[[1]])[1])
+        vals <- as.numeric(str_split(prm[j[jj]+1], "[\t ]+")[[1]])
+        mig.txt <- unlist(str_split(prm[j[jj]], "[\t ]+"))[1]
+        if (mig.txt == paste("MigIOBox_", xxx, sep = "")) { 
+          # invertebrate
+          grp.migration[xxx,1:levs] <- vals[1:levs]
+        } else if (mig.txt == paste("MigIOBox_", xxx, "ad", sep = "")) {
+          # adult
+          grp.migration.ad[xxx,1:levs] <- vals[1:levs]
+        } else if (mig.txt == paste("MigIOBox_", xxx, "juv", sep = "")) {
+          # juvenile
+          grp.migration.juv[xxx,1:levs] <- vals[1:levs]
+        }
+      }
+    }
+  }
+  
   return(list(hor.ad = grp.hor.ad, hor.juv = grp.hor.juv,
     vert.day = grp.vert.day, vert.night = grp.vert.night,
     vert.juv.day = grp.vert.juv.day, vert.juv.night = grp.vert.juv.night,
-    hor.recruit = grp.hor.recruit, vert.recruit = grp.vert.recruit))
+    hor.recruit = grp.hor.recruit, vert.recruit = grp.vert.recruit,
+    mig.invert = grp.migration, mig.ad = grp.migration.ad, mig.juv = grp.migration.juv))
 }
 
 # +====================================================+
@@ -1203,8 +1849,161 @@ make.prm.prey <- function(prm.file, Code) {
     } 
   }
   cat("\n")
-    
+  
   return(list(grp.data = prey.data, age.data = age.data))
+}
+
+# +========================================================+
+# |  make.prm.growth : collect growth data for displaying  |
+# +========================================================+
+make.prm.growth <- function(prm.file, grp.object) {
+  prm <- readLines(prm.file) # read in the biological parameter file
+  Code <- grp.object$grp.vals$Code # group names
+  codes <- length(Code) # number of groups
+  
+  coh.classes <- rep(x = NA, codes) # store number of cohort classes
+  coh.txt <- rep(x = NA, codes) # text containing mum rates
+  k <- 0
+  for (xxx in Code) { # look for each Code
+    k <- k + 1
+    txt.find <- paste("mum_", as.character(xxx),sep = "")
+    j <- grep(pattern = txt.find, x = prm, value = FALSE) # file row(s)
+    
+    if (length(j) > 0) {
+      for (jj in 1:length(j)) {
+        vals <- unlist(str_split(string = prm[j[jj]], pattern = "[\t ]+"))
+        if (vals[1] == txt.find) { # must be the line of interest in prm
+          coh.classes[k] <- as.integer(vals[2]) # second value is array size
+          coh.txt[k] <- prm[j[jj]+1] # collect the clearance text
+        }
+      }  
+    }  
+  }
+  
+  max.classes <- max(coh.classes, na.rm = TRUE) # max size of array
+  growth.data <- array(NA, dim=c(codes, max.classes))
+  dimnames(growth.data)[[1]]  <- Code # name rows and columns
+  dimnames(growth.data)[[2]]  <- paste(rep("co", 10), 1:10, sep = "-")
+  
+  for (j in 1:codes) { # check each group
+    if (!is.na(coh.classes[j])) { # found data
+      tmp1 <- coh.classes[j] # expected number of rates
+      tmp2 <- as.numeric(unlist(str_split(coh.txt[j], pattern = "[\t ]+")))
+      tmp2 <- tmp2[!is.na(tmp2)] # remove any blanks
+      tmp3 <- length(tmp2) # number of rates found
+      if (tmp1 == tmp3) { # check that the data and expected size match
+        tmp2 <- c(tmp2, rep(NA, max.classes-tmp3)) # fill up the row 
+        growth.data[j, ] <- tmp2 # add the clearance data to the array
+      }
+    }
+  }
+  
+  # store clearance rates and additional details in a data frame
+  # need to check for naming of the "is predator" column
+  if (!is.null(grp.object$grp.vals$IsPredator)) {
+    df.growth.data <- data.frame(Code = Code, 
+      Long.Name = grp.object$grp.vals$Long.Name, 
+      GroupType = grp.object$grp.vals$GroupType, 
+      IsPredator = grp.object$grp.vals$IsPredator, 
+      NumCohorts = grp.object$grp.vals$NumCohorts,
+      growth.data)
+  } else if (!is.null(grp.object$grp.vals$isPredator)) {
+    df.growth.data <- data.frame(Code = Code, 
+      Long.Name = grp.object$grp.vals$Long.Name, 
+      GroupType = grp.object$grp.vals$GroupType, 
+      isPredator = grp.object$grp.vals$isPredator, 
+      NumCohorts = grp.object$grp.vals$NumCohorts,
+      growth.data)
+  } else {
+    df.growth.data <- data.frame(Code = Code, 
+      Long.Name = grp.object$grp.vals$Long.Name, 
+      GroupType = grp.object$grp.vals$GroupType, 
+      NumCohorts = grp.object$grp.vals$NumCohorts,
+      growth.data)
+  } 
+  
+  return(df.growth.data)
+}
+
+# +===================================================================+
+# |  make.prm.clearance : collect clearance rate data for displaying  |
+# +===================================================================+
+make.prm.clearance <- function(prm.file, grp.object) {
+  prm <- readLines(prm.file) # read in the biological parameter file
+  Code <- grp.object$grp.vals$Code # group names
+  codes <- length(Code) # number of groups
+  
+  # get flagfishrates as it determines units   
+  j <- grep(pattern = "flagfishrates", x = prm, value = FALSE) # file row(s)
+  if (length(j) == 1) { 
+    flagfishrates <- unlist(str_split(string = prm[j[1]], pattern = "[\t ]+"))[2]
+  } else {
+    flagfishrates <- NA # must be unambiguous
+  }
+  
+  coh.classes <- rep(x = NA, codes) # store number of cohort classes
+  coh.txt <- rep(x = NA, codes) # text containing clearance rates
+  k <- 0
+  for (xxx in Code) { # look for each Code
+    k <- k + 1
+    txt.find <- paste("C_", as.character(xxx),sep = "")
+    j <- grep(pattern = txt.find, x = prm, value = FALSE) # file row(s)
+    
+    if (length(j) > 0) {
+      for (jj in 1:length(j)) {
+        vals <- unlist(str_split(string = prm[j[jj]], pattern = "[\t ]+"))
+        if (vals[1] == txt.find) { # must be the line of interest in prm
+          coh.classes[k] <- as.integer(vals[2]) # second value is array size
+          coh.txt[k] <- prm[j[jj]+1] # collect the clearance text
+        }
+      }  
+    }  
+  }
+  
+  max.classes <- max(coh.classes, na.rm = TRUE) # max size of array
+  clearance.data <- array(NA, dim=c(codes, max.classes))
+  dimnames(clearance.data)[[1]]  <- Code # name rows and columns
+  dimnames(clearance.data)[[2]]  <- paste(rep("co", 10), 1:10, sep = "-")
+  
+  for (j in 1:codes) { # check each group
+    if (!is.na(coh.classes[j])) { # found data
+      tmp1 <- coh.classes[j] # expected number of rates
+      tmp2 <- as.numeric(unlist(str_split(coh.txt[j], pattern = "[\t ]+")))
+      tmp2 <- tmp2[!is.na(tmp2)] # remove any blanks
+      tmp3 <- length(tmp2) # number of rates found
+      if (tmp1 == tmp3) { # check that the data and expected size match
+        tmp2 <- c(tmp2, rep(NA, max.classes-tmp3)) # fill up the row 
+        clearance.data[j, ] <- tmp2 # add the clearance data to the array
+      }
+    }
+  }
+  
+  # store clearance rates and additional details in a data frame
+  # need to check for naming of the "is predator" column
+  if (!is.null(grp.object$grp.vals$IsPredator)) {
+    df.clearance.data <- data.frame(Code = Code, 
+      Long.Name = grp.object$grp.vals$Long.Name, 
+      GroupType = grp.object$grp.vals$GroupType, 
+      IsPredator = grp.object$grp.vals$IsPredator, 
+      NumCohorts = grp.object$grp.vals$NumCohorts,
+      clearance.data)
+  } else if (!is.null(grp.object$grp.vals$isPredator)) {
+    df.clearance.data <- data.frame(Code = Code, 
+      Long.Name = grp.object$grp.vals$Long.Name, 
+      GroupType = grp.object$grp.vals$GroupType, 
+      isPredator = grp.object$grp.vals$isPredator, 
+      NumCohorts = grp.object$grp.vals$NumCohorts,
+      clearance.data)
+  } else {
+    df.clearance.data <- data.frame(Code = Code, 
+      Long.Name = grp.object$grp.vals$Long.Name, 
+      GroupType = grp.object$grp.vals$GroupType, 
+      NumCohorts = grp.object$grp.vals$NumCohorts,
+      clearance.data)
+  } 
+  
+  return(list(flagfishrates = flagfishrates, 
+    clearance.data = df.clearance.data))
 }
 
 # +=========================================================+
@@ -1216,7 +2015,7 @@ make.prm.refuges <- function(grp.vals, gen.prm, grp.att) {
   
   j <- which(gen.prm$Parameter == "flag_rel_cover", arr.ind = TRUE)
   flag_rel_cover <- gen.prm$Value[j]
-
+  
   if (flag_refuge_model == 2) {
     j <- which(gen.prm$Parameter == "RugCover_Coefft", arr.ind = TRUE)
     Rcoefft <- gen.prm$Value[j]
@@ -1279,57 +2078,69 @@ make.prm.refuges <- function(grp.vals, gen.prm, grp.att) {
   return(list(model.1 = model.1, model.2 = model.2))
 }
 
-#' @title Function that generates an object used by sh.prm
+# +==============================================================+
+# |  make.sh.prm.object : collect all parameter data to display  |
+# +=====================================--=======================+
+#' @title Function that generates a list object used by sh.prm
 #'
 #' @description
-#' Takes data from a .bgm box geometry file, a .csv group file, and .prm Atlantis input parameter file 
-#' and generates a list object that is the parameter to \code{sh.prm} (see Examples).
-#' 
-#' @param bgm.file Box geometry (.bgm) file used by Atlantis that defines box boundaries
-#' @param grp.file Text file (.csv) file used by Atlantis containing group attributes
-#' @param prm.file Text file (.prm) file used by Atlantis containing biological parameters
+#' Takes data from a box geometry file, a group file, and an Atlantis input parameter file
+#' and generates a list object that is the parameter to \code{\link[shinyrAtlantis]{sh.prm}} (see Examples).
+#'
+#' @param bgm.file Box geometry model (.bgm) file used by Atlantis that defines box boundaries and depths.
+#' @param grp.file Text file (.csv) used by Atlantis containing group attributes.
+#' @param prm.file Text file (.prm) used by Atlantis containing biological parameters.
 #' @export
 #'
-#' @return R list object
-#' 
+#' @return R list object.
+#'
 #' @examples
 #' \dontrun{
-#' prm.object <- make.prm.object(bgm.file, grp.file, prm.file)
-#' sh.prm(prm.object)
+#' bgm.file <- "SEAP_extended_shelf.bgm"
+#' grp.file <- "SEAP_Groups_Aquacult.csv"
+#' prm.file <- "SEAP_biol_pH_Aquacult.prm"
+#' obj <- make.sh.prm.object(bgm.file, grp.file, prm.file)
+#' sh.prm(obj)
 #' }
 #' @export
-make.prm.object <- function(bgm.file, grp.file, prm.file) {
-  def.grp.file <- system.file("extdata/grpTemplates.csv", package = "shinyrAtlantis")
-  def.all.file <- system.file("extdata/paramdefns.csv", package = "shinyrAtlantis")
-   cat("-- Extracting map data\n")
+#' @importFrom stringr str_extract str_extract_all
+make.sh.prm.object <- function(bgm.file, grp.file, prm.file) {
+  cat("Generating object (10 steps)\n")
+  cat("1.  Extracting map data\n")
   map.objects <- make.prm.map(bgm.file)
   numboxes <- map.objects$numboxes
   
-  cat("-- Reading group summaries\n")
+  cat("2.  Reading group summaries\n")
   grp.object <- make.prm.groups(grp.file)
   grp.vals <- grp.object$grp.vals
   Code <- grp.vals$Code
   habitat.types <- grp.object$habitat.types
   
-  cat("-- Extracting general parameters\n")
-  gen.prm <- make.prm.general(prm.file, def.all.file)
+  cat("3.  Extracting general parameters\n")
+  gen.prm <- make.prm.general(prm.file)
   
-  cat("-- Extracting group parameters (this may take a few minutes)\n")
-  grp.att <- make.prm.attributes(prm.file, grp.vals, def.grp.file)
+  cat("4.  Extracting group parameters (this may take a few minutes)\n")
+  grp.att <- make.prm.attributes(prm.file, grp.vals)
   
-  ## also need the raw defs for sh.prm
-  df.prms.all <- read.csv(file = def.grp.file, header = TRUE)
-  
-  cat("-- Extracting habitat parameters\n")
+  cat("5.  Extracting habitat parameters\n")
   grp.hab <- make.prm.habitats(prm.file, grp.vals, habitat.types) # three data frames
   
-  cat("-- Extracting horizontal distributions (this may take a few minutes)\n")
+  cat("6.  Extracting distribution information\n")
   grp.dist <- make.prm.distributions(prm.file, Code, numboxes)
   
-  cat("-- Extracting prey availability (this may take a few minutes)\n")
+  cat("7.  Extracting migration information\n")
+  grp.mig <- make.prm.migration(prm.file, Code)
+  
+  cat("8.  Extracting prey availability (this may take a few minutes)\n")
   prey.data <- make.prm.prey(prm.file, Code)
   
-  cat("-- Extracting refuge information\n")
+  cat("9.  Extracting clearance information\n")
+  clearance.object <- make.prm.clearance(prm.file, grp.object)
+  
+  cat("10. Extracting growth information\n")
+  growth.data <- make.prm.growth(prm.file, grp.object)
+  
+  cat("11. Extracting refuge information\n")
   refuge.data <- make.prm.refuges(grp.vals, gen.prm, grp.att)
   
   return(list(
@@ -1342,8 +2153,11 @@ make.prm.object <- function(bgm.file, grp.file, prm.file) {
     grp.att = grp.att,
     grp.hab = grp.hab,
     grp.dist = grp.dist,
+    grp.mig = grp.mig,
     prey.data = prey.data,
-    refuge.data = refuge.data, 
-    df.prms.all = df.prms.all
+    flagfishrates = clearance.object$flagfishrates,
+    clearance.data = clearance.object$clearance.data,
+    grp.growth = growth.data,
+    refuge.data = refuge.data
   ))    
 }
