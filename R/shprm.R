@@ -1103,10 +1103,11 @@ sh.prm <- function(obj){
           # get maximum number of cohorts
           df.clearance <- obj$clearance.data
           max.cohorts <- dim(df.clearance)[2]-5
-          names(df.clearance)[6:(5+max.cohorts)] <- 1:max.cohorts
+          names(df.clearance)[6:(5+max.cohorts)] <- as.character(1:max.cohorts)
           df.clearance <- tidyr::gather(data = df.clearance, key = "Cohort",
             value = "Clearance", 6:(5+max.cohorts))
           df.clearance <- df.clearance[!is.na(df.clearance$Clearance),]
+          df.clearance$Cohort <- as.numeric(df.clearance$Cohort)
           
           ggplot(data = df.clearance, aes(x = Cohort, y = Clearance, group = Code)) +
             geom_point() + geom_line() + 
@@ -1143,10 +1144,11 @@ sh.prm <- function(obj){
           # get maximum number of cohorts
           df.growth <- obj$grp.growth
           max.cohorts <- dim(df.growth)[2]-5
-          names(df.growth)[6:(5+max.cohorts)] <- 1:max.cohorts
+          names(df.growth)[6:(5+max.cohorts)] <- as.character(1:max.cohorts)
           df.growth <- tidyr::gather(data = df.growth, key = "Cohort",
             value = "Growth", 6:(5+max.cohorts))
           df.growth <- df.growth[!is.na(df.growth$Growth),]
+          df.growth$Cohort <- as.numeric(df.growth$Cohort)
           
           ggplot(data = df.growth, aes(x = Cohort, y = Growth, group = Code)) +
             geom_point() + geom_line() + 
@@ -1425,6 +1427,12 @@ make.prm.groups <- function(grp.file){
   
   # extract habitat types
   habitat.types <- c(as.character(df$Code[df$IsCover == 1]), "reef", "flat", "soft", "canyon")
+  
+  # check that column title is not LongName
+  tmp <- which(names(df) == "LongName")
+  if (!is.null(tmp)) {
+    names(df)[tmp] <- "Long.Name"
+  }
   
   return (list(grp.vals = df, habitat.types = habitat.types))
 }  
