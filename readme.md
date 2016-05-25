@@ -76,7 +76,7 @@ grp.file <- system.file("extdata", "AntarcticGroups.csv", package = "shinyrAtlan
 prm.file <- system.file("extdata", "SO90_biol.prm", package = "shinyrAtlantis")
 
 ## prior to packaging, the scope of these file names was a bit "global"
-obj <- make.sh.prm.object(bgm.file, grp.file, prm.file, def.all.file, def.grp.file)
+obj <- make.sh.prm.object(bgm.file, grp.file, prm.file)
 ## this def.grp.file contents should be included in object above??
 sh.prm(obj, def.grp.file)  # run the shiny App
 ```
