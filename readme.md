@@ -1,8 +1,8 @@
-Shiny Atlantis
+shinyrAtlantis
 --------------
 
-Usage
------
+Usage in R
+----------
 
 Install dependencies *if they are not already installed*. The complete list of packages used to develop the shinyrAtlantis package are provided below. Remove the package names that are already installed. 
 
@@ -32,7 +32,7 @@ library(shinyrAtlantis)
 #> Loading required package: shiny
 ```
 
-Some example Atlantis files are provided in the package so that the shiny applications can be explored straight away. Note that some of the example Atlantis files are incomplete. The shiny application allows exploration of most incomplete Atlantis files. See the examples presented below for how to use the shiny applications.
+Some example Atlantis files are provided in the package so that the shiny applications can be explored straight away. Note that some of the example Atlantis files are incomplete. The shiny application allows exploration of most incomplete Atlantis files. See the examples presented below for how to use the shiny applications. Also see the documentation provided by typing `?shinyrAtlantis`.
 
 **Additional functionality to the shiny applications provided in this package, and new shiny applications, are currently under development.**
 
