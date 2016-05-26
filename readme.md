@@ -46,7 +46,7 @@ Some example Atlantis files are provided in the package so that the shiny applic
 Spatial Distributions "sh.dist"
 -------------------------------
 
-Shiny application for generating spatial distributions with constant density (per unit area)
+**sh.dist**: A shiny application for generating spatial distributions with constant density (per unit area).
 
 ``` r
 library(shinyrAtlantis)
@@ -59,6 +59,8 @@ sh.dist(obj)
 
 Shiny PRM Run `shprm.R`
 -----------------------
+
+**sh.prm**: A shiny application for exploring the data in the bioloy parameter file.
 
 ``` r
 library(shinyrAtlantis)
@@ -74,9 +76,10 @@ sh.prm(obj)
 Shiny INIT Run `shinit.R`
 -------------------------
 
+**sh.int**: A shiny application for exploring the initial conditions file.
+
 ``` r
 library(shinyrAtlantis)
-
 
 bgm.file <-system.file("extdata", "BanzareAtlantis.bgm", package = "shinyrAtlantis")
 nc.file <- system.file("extdata", "input.nc", package = "shinyrAtlantis")
@@ -85,10 +88,34 @@ obj <- make.sh.init.object(bgm.file, nc.file)
 sh.init(obj)
 ```
 
+Forcings "sh.forcings"
+-------------------------------
+
+**sh.forcings**: A shiny application for exploring the forcings data (time-series of salt and temperature).
+
+``` r
+library(shinyrAtlantis)
+
+salinity.file    <- "GBR108_salt.nc"       # this file is not included in the package
+temperature.file <- "GBR108_temp.nc"       # this file is not included in the package
+bgm.file         <- "gbr_box_03012012.bgm" # this file is not included in the package
+cum.depth <- c(0,5,10,20,50,100,200,3000)  # cumulative water layer depths
+
+input.object <- make.sh.forcings.object(
+  bgm.file         = bgm.file,
+  exchange.file    = exchange.file,
+  cum.depth        = cum.depth,
+  temperature.file = temperature.file,
+  salinity.file    = salinity.file
+)
+
+sh.forcings(input.object)
+```
+
 One step launch
 ---------------
 
-To launch any the above apps in one step, run the these examples.
+Some of the above apps can be launched in one step.
 
 ``` r
 shinyrAtlantis::SpatialDistributionsExample()
