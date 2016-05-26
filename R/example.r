@@ -22,7 +22,7 @@ SpatialDistributionsExample <- function() {
   # ====================================================================
   # code to collect the spatial data and view
   
-  map.object <- make.dist.object(bgm.file)
+  map.object <- make.sh.dist.object(bgm.file)
   sh.dist(map.object)
 }
 

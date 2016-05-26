@@ -1610,6 +1610,7 @@ make.prm.migration <- function(prm.file, Code){
     if (length(j) > 0) { # at least one row with txt.find
       for (jj in 1:length(j)) {
         levs <- as.numeric(unlist(str_extract_all(prm[j[jj]],"\\(?[0-9.-]+\\)?")[[1]])[1])
+        levs <- min(levs, max.cohorts) # cut unnecessary values
         vals <- as.numeric(str_split(prm[j[jj]+1], "[\t ]+")[[1]])
         mig.txt <- unlist(str_split(prm[j[jj]], "[\t ]+"))[1]
         if (mig.txt == paste("KMIGa_", xxx, sep = "")) { 
@@ -1653,14 +1654,14 @@ make.prm.distributions <- function(prm.file, Code, numboxes){
   dimnames(grp.hor.juv)[[1]] <- Code
   
   # Adult vertebrates or invertebrates
-  grp.vert.day   <- array(NA, dim=c(codes, 10))
-  grp.vert.night <- array(NA, dim=c(codes, 10))
+  grp.vert.day   <- array(NA, dim=c(codes, 10)) # assume at most 10 water layers
+  grp.vert.night <- array(NA, dim=c(codes, 10)) # assume at most 10 water layers
   dimnames(grp.vert.day)[[1]]  <- Code
   dimnames(grp.vert.night)[[1]] <- Code
   
   # Juvenile vertebrates
-  grp.vert.juv.day   <- array(NA, dim=c(codes, 10))
-  grp.vert.juv.night <- array(NA, dim=c(codes, 10))
+  grp.vert.juv.day   <- array(NA, dim=c(codes, 10)) # assume at most 10 water layers
+  grp.vert.juv.night <- array(NA, dim=c(codes, 10)) # assume at most 10 water layers
   dimnames(grp.vert.juv.day)[[1]]  <- Code
   dimnames(grp.vert.juv.night)[[1]] <- Code
   
@@ -1688,6 +1689,7 @@ make.prm.distributions <- function(prm.file, Code, numboxes){
     j <- grep(pattern = txt.find, x = prm, value = FALSE) # file row(s)
     if (length(j) == 1) { # unique row, so vertebrate
       levs <- as.numeric(unlist(str_extract_all(prm[j],"\\(?[0-9.-]+\\)?")[[1]])[1])
+      levs <- min(levs,10)
       vals <- as.numeric(str_split(prm[j+1], "[\t ]+")[[1]])
       grp.vert.day[xxx,1:levs] <- vals[1:levs]
     }  
@@ -1695,6 +1697,7 @@ make.prm.distributions <- function(prm.file, Code, numboxes){
     j <- grep(pattern = txt.find, x = prm, value = FALSE) # file row(s)
     if (length(j) == 1) { # unique row
       levs <- as.numeric(unlist(str_extract_all(prm[j],"\\(?[0-9.-]+\\)?")[[1]])[1])
+      levs <- min(levs,10)
       vals <- as.numeric(str_split(prm[j+1], "[\t ]+")[[1]])
       grp.vert.night[xxx,1:levs] <- vals[1:levs]
     }
@@ -1706,6 +1709,7 @@ make.prm.distributions <- function(prm.file, Code, numboxes){
     j <- grep(pattern = txt.find, x = prm, value = FALSE) # file row(s)
     if (length(j) == 1) { # unique row
       levs <- as.numeric(unlist(str_extract_all(prm[j],"\\(?[0-9.-]+\\)?")[[1]])[2])
+      levs <- min(levs,10)
       vals <- as.numeric(str_split(prm[j+1], "[\t ]+")[[1]])
       grp.vert.juv.day[xxx,1:levs] <- vals[1:levs]
     }  
@@ -1713,6 +1717,7 @@ make.prm.distributions <- function(prm.file, Code, numboxes){
     j <- grep(pattern = txt.find, x = prm, value = FALSE) # file row(s)
     if (length(j) == 1) { # unique row
       levs <- as.numeric(unlist(str_extract_all(prm[j],"\\(?[0-9.-]+\\)?")[[1]])[2])
+      levs <- min(levs,10)
       vals <- as.numeric(str_split(prm[j+1], "[\t ]+")[[1]])
       grp.vert.juv.night[xxx,1:levs] <- vals[1:levs]
     }
@@ -1722,6 +1727,7 @@ make.prm.distributions <- function(prm.file, Code, numboxes){
     j <- grep(pattern = txt.find, x = prm, value = FALSE) # file row(s)
     if (length(j) == 1) { # unique row
       levs <- as.numeric(unlist(str_extract_all(prm[j],"\\(?[0-9.-]+\\)?")[[1]])[2])
+      levs <- min(levs,10)
       vals <- as.numeric(str_split(prm[j+1], "[\t ]+")[[1]])
       grp.vert.day[xxx,1:levs] <- vals[1:levs]
     }  
@@ -1729,6 +1735,7 @@ make.prm.distributions <- function(prm.file, Code, numboxes){
     j <- grep(pattern = txt.find, x = prm, value = FALSE) # file row(s)
     if (length(j) == 1) { # unique row
       levs <- as.numeric(unlist(str_extract_all(prm[j],"\\(?[0-9.-]+\\)?")[[1]])[2])
+      levs <- min(levs,10)
       vals <- as.numeric(str_split(prm[j+1], "[\t ]+")[[1]])
       grp.vert.night[xxx,1:levs] <- vals[1:levs]
     }
@@ -1740,7 +1747,7 @@ make.prm.distributions <- function(prm.file, Code, numboxes){
   grp.hor.recruit  <- array(NA, dim=c(codes, numboxes))
   dimnames(grp.hor.recruit)[[1]]  <- Code
   # Vertical recruitment
-  grp.vert.recruit <- array(NA, dim=c(codes, 10))
+  grp.vert.recruit <- array(NA, dim=c(codes, 10)) # assume at most 10 water levels
   dimnames(grp.vert.recruit)[[1]]  <- Code
   
   for (xxx in Code) { # look for each Code
@@ -1764,6 +1771,7 @@ make.prm.distributions <- function(prm.file, Code, numboxes){
     j <- grep(pattern = txt.find, x = prm, value = FALSE) # file row(s)
     if (length(j) == 1) { # unique row, so vertebrate
       levs <- as.numeric(unlist(str_extract_all(prm[j],"\\(?[0-9.-]+\\)?")[[1]])[1])
+      levs <- min(levs,10)
       vals <- as.numeric(str_split(prm[j+1], "[\t ]+")[[1]])
       grp.vert.recruit[xxx,1:levs] <- vals[1:levs]
     }  
@@ -1788,6 +1796,7 @@ make.prm.distributions <- function(prm.file, Code, numboxes){
     if (length(j) > 0) { # at least one row with txt.find
       for (jj in 1:length(j)) {
         levs <- as.numeric(unlist(str_extract_all(prm[j[jj]],"\\(?[0-9.-]+\\)?")[[1]])[1])
+        levs <- min(levs, numboxes)
         vals <- as.numeric(str_split(prm[j[jj]+1], "[\t ]+")[[1]])
         mig.txt <- unlist(str_split(prm[j[jj]], "[\t ]+"))[1]
         if (mig.txt == paste("MigIOBox_", xxx, sep = "")) { 
@@ -1891,7 +1900,7 @@ make.prm.growth <- function(prm.file, grp.object) {
   max.classes <- max(coh.classes, na.rm = TRUE) # max size of array
   growth.data <- array(NA, dim=c(codes, max.classes))
   dimnames(growth.data)[[1]]  <- Code # name rows and columns
-  dimnames(growth.data)[[2]]  <- paste(rep("co", 10), 1:10, sep = "-")
+  dimnames(growth.data)[[2]]  <- paste(rep("co", max.classes), 1:max.classes, sep = "-")
   
   for (j in 1:codes) { # check each group
     if (!is.na(coh.classes[j])) { # found data
@@ -1971,7 +1980,7 @@ make.prm.clearance <- function(prm.file, grp.object) {
   max.classes <- max(coh.classes, na.rm = TRUE) # max size of array
   clearance.data <- array(NA, dim=c(codes, max.classes))
   dimnames(clearance.data)[[1]]  <- Code # name rows and columns
-  dimnames(clearance.data)[[2]]  <- paste(rep("co", 10), 1:10, sep = "-")
+  dimnames(clearance.data)[[2]]  <- paste(rep("co", max.classes), 1:max.classes, sep = "-")
   
   for (j in 1:codes) { # check each group
     if (!is.na(coh.classes[j])) { # found data
