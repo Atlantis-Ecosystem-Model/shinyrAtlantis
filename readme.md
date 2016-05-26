@@ -41,6 +41,8 @@ library(shinyrAtlantis)
 #> Loading required package: shiny
 ```
 
+**Some of the examples given below may not function correctly due to recent changes.**
+
 Spatial Distributions "sh.dist"
 -------------------------------
 
@@ -57,7 +59,7 @@ bgm.file <- system.file("extdata", "BanzareAtlantis.bgm", package = "shinyrAtlan
 # ====================================================================
 # code to collect the spatial data and view
 
-map.object <- make.dist.object(bgm.file)
+map.object <- make.sh.dist.object(bgm.file)
 sh.dist(map.object)
 ```
 
@@ -74,7 +76,7 @@ grp.file <- system.file("extdata", "AntarcticGroups.csv", package = "shinyrAtlan
 prm.file <- system.file("extdata", "SO90_biol.prm", package = "shinyrAtlantis")
 
 ## prior to packaging, the scope of these file names was a bit "global"
-obj <- make.prm.object(bgm.file, grp.file, prm.file, def.all.file, def.grp.file)
+obj <- make.sh.prm.object(bgm.file, grp.file, prm.file)
 ## this def.grp.file contents should be included in object above??
 sh.prm(obj, def.grp.file)  # run the shiny App
 ```
@@ -90,7 +92,7 @@ bgm.file <-system.file("extdata", "BanzareAtlantis.bgm", package = "shinyrAtlant
 
 nc.file <- system.file("extdata", "input.nc", package = "shinyrAtlantis")
 
-input.object <- make.init.object(bgm.file, nc.file)
+input.object <- make.sh.init.object(bgm.file, nc.file)
 a <- sh.init(input.object)
 ```
 
