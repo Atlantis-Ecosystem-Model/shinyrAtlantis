@@ -1,15 +1,6 @@
 Shiny Atlantis
 --------------
 
-Development
------------
-
-1.  Clone this repo in RStudio, New Project, Version Control, Git, "<https://github.com/shanearichards/shinyrAtlantis.git>"
-2.  Click Tools/Project Options/Build Tools/Generate documentation with roxygen - click all options ON.
-3.  Click Build & Reload in the Build Tab (or hit Ctrl-SHIFT-Enter).
-4.  Make edits, build/reload/test, commit.
-5.  Etc.
-
 Usage
 -----
 
@@ -130,3 +121,15 @@ shinyrAtlantis::DisplayParametersExample()
 ``` r
 shinyrAtlantis::DisplayInitializationExample()
 ```
+
+Package development
+--------------------
+
+If you wish to contribute to the development of this package then perform the following steps.
+
+1.  Clone this repo in RStudio, New Project, Version Control, Git, "<https://github.com/shanearichards/shinyrAtlantis.git>"
+2.  Click Tools/Project Options/Build Tools/Generate documentation with roxygen - click all options ON.
+3.  Click Build & Reload in the Build Tab (or hit Ctrl-SHIFT-Enter).
+4.  Make edits, build/reload/test, commit.
+5.  Etc.
+
