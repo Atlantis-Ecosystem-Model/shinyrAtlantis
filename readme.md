@@ -91,7 +91,7 @@ sh.init(obj)
 `sh.forcings`
 -------------------------------
 
-**sh.forcings**: A shiny application for exploring the forcings data (time-series of salt and temperature). Code is located in file `shfrc.R`.
+**sh.forcings**: A shiny application for exploring the forcings data (time-series of salt and temperature). Code is located in file `shforce.R`.
 
 ``` r
 library(shinyrAtlantis)
