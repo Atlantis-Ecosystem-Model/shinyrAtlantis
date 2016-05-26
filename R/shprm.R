@@ -1788,6 +1788,7 @@ make.prm.distributions <- function(prm.file, Code, numboxes){
     if (length(j) > 0) { # at least one row with txt.find
       for (jj in 1:length(j)) {
         levs <- as.numeric(unlist(str_extract_all(prm[j[jj]],"\\(?[0-9.-]+\\)?")[[1]])[1])
+        levs <- min(levs, numboxes) # check that there are not too many data
         vals <- as.numeric(str_split(prm[j[jj]+1], "[\t ]+")[[1]])
         mig.txt <- unlist(str_split(prm[j[jj]], "[\t ]+"))[1]
         if (mig.txt == paste("MigIOBox_", xxx, sep = "")) { 
@@ -1891,7 +1892,7 @@ make.prm.growth <- function(prm.file, grp.object) {
   max.classes <- max(coh.classes, na.rm = TRUE) # max size of array
   growth.data <- array(NA, dim=c(codes, max.classes))
   dimnames(growth.data)[[1]]  <- Code # name rows and columns
-  dimnames(growth.data)[[2]]  <- paste(rep("co", 10), 1:10, sep = "-")
+  dimnames(growth.data)[[2]]  <- paste(rep("co", max.classes), 1:max.classes, sep = "-")
   
   for (j in 1:codes) { # check each group
     if (!is.na(coh.classes[j])) { # found data
@@ -1971,7 +1972,7 @@ make.prm.clearance <- function(prm.file, grp.object) {
   max.classes <- max(coh.classes, na.rm = TRUE) # max size of array
   clearance.data <- array(NA, dim=c(codes, max.classes))
   dimnames(clearance.data)[[1]]  <- Code # name rows and columns
-  dimnames(clearance.data)[[2]]  <- paste(rep("co", 10), 1:10, sep = "-")
+  dimnames(clearance.data)[[2]]  <- paste(rep("co", max.classes), 1:max.classes, sep = "-")
   
   for (j in 1:codes) { # check each group
     if (!is.na(coh.classes[j])) { # found data
