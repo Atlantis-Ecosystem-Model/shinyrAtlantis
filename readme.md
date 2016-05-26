@@ -53,8 +53,8 @@ library(shinyrAtlantis)
 
 bgm.file <- system.file("extdata", "BanzareAtlantis.bgm", package = "shinyrAtlantis")
 
-map.object <- make.sh.dist.object(bgm.file)
-sh.dist(map.object)
+obj <- make.sh.dist.object(bgm.file)
+sh.dist(obj)
 ```
 
 Shiny PRM Run `shprm.R`
@@ -68,7 +68,7 @@ grp.file <- system.file("extdata", "AntarcticGroups.csv", package = "shinyrAtlan
 prm.file <- system.file("extdata", "SO90_biol.prm", package = "shinyrAtlantis")
 
 obj <- make.sh.prm.object(bgm.file, grp.file, prm.file)
-sh.prm(obj, def.grp.file)
+sh.prm(obj)
 ```
 
 Shiny INIT Run `shinit.R`
@@ -81,8 +81,8 @@ library(shinyrAtlantis)
 bgm.file <-system.file("extdata", "BanzareAtlantis.bgm", package = "shinyrAtlantis")
 nc.file <- system.file("extdata", "input.nc", package = "shinyrAtlantis")
 
-input.object <- make.sh.init.object(bgm.file, nc.file)
-sh.init(input.object)
+obj <- make.sh.init.object(bgm.file, nc.file)
+sh.init(obj)
 ```
 
 One step launch
