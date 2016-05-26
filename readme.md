@@ -41,8 +41,6 @@ library(shinyrAtlantis)
 #> Loading required package: shiny
 ```
 
-**Some of the examples given below may not function correctly due to recent changes.**
-
 Spatial Distributions "sh.dist"
 -------------------------------
 
@@ -93,7 +91,7 @@ bgm.file <-system.file("extdata", "BanzareAtlantis.bgm", package = "shinyrAtlant
 nc.file <- system.file("extdata", "input.nc", package = "shinyrAtlantis")
 
 input.object <- make.sh.init.object(bgm.file, nc.file)
-a <- sh.init(input.object)
+sh.init(input.object)
 ```
 
 One step launch
