@@ -46,7 +46,7 @@ Some example Atlantis files are provided in the package so that the shiny applic
 `sh.dist`
 -------------------------------
 
-**sh.dist**: A shiny application for generating spatial distributions with constant density (per unit area).
+**sh.dist**: A shiny application for generating spatial distributions with constant density (per unit area). Code is located in file `shdist.R`.
 
 ``` r
 library(shinyrAtlantis)
@@ -57,10 +57,10 @@ obj <- make.sh.dist.object(bgm.file)
 sh.dist(obj)
 ```
 
-`shprm.R`
+`sh.prm`
 -----------------------
 
-**sh.prm**: A shiny application for exploring the data in the bioloy parameter file.
+**sh.prm**: A shiny application for exploring the data in the bioloy parameter file. Code is located in file `shprm.R`.
 
 ``` r
 library(shinyrAtlantis)
@@ -73,10 +73,10 @@ obj <- make.sh.prm.object(bgm.file, grp.file, prm.file)
 sh.prm(obj)
 ```
 
-`shinit.R`
+`sh.init`
 -------------------------
 
-**sh.int**: A shiny application for exploring the initial conditions file.
+**sh.init**: A shiny application for exploring the initial conditions file. Code is located in file `shinit.R`.
 
 ``` r
 library(shinyrAtlantis)
@@ -91,7 +91,7 @@ sh.init(obj)
 `sh.forcings`
 -------------------------------
 
-**sh.forcings**: A shiny application for exploring the forcings data (time-series of salt and temperature).
+**sh.forcings**: A shiny application for exploring the forcings data (time-series of salt and temperature). Code is located in file `shfrc.R`.
 
 ``` r
 library(shinyrAtlantis)
