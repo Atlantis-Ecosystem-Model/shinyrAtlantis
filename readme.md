@@ -41,7 +41,7 @@ library(shinyrAtlantis)
 #> Loading required package: shiny
 ```
 
-Some example Atlantis files are provided in the package so that shiny applications can be explored straight away. Note that some of the example Atlantis files are incomplete. The shiny application allows exploration of most incomplete Atlantis files. See the examples presented below for how to use the shiny applications.
+Some example Atlantis files are provided in the package so that the shiny applications can be explored straight away. Note that some of the example Atlantis files are incomplete. The shiny application allows exploration of most incomplete Atlantis files. See the examples presented below for how to use the shiny applications.
 
 Spatial Distributions "sh.dist"
 -------------------------------
@@ -49,15 +49,9 @@ Spatial Distributions "sh.dist"
 Shiny application for generating spatial distributions with constant density (per unit area)
 
 ``` r
-
 library(shinyrAtlantis)
-# ====================================================================
-# code to choose the spatial data file (.bgm)
 
 bgm.file <- system.file("extdata", "BanzareAtlantis.bgm", package = "shinyrAtlantis")
-
-# ====================================================================
-# code to collect the spatial data and view
 
 map.object <- make.sh.dist.object(bgm.file)
 sh.dist(map.object)
@@ -69,16 +63,12 @@ Shiny PRM Run `shprm.R`
 ``` r
 library(shinyrAtlantis)
 
-def.all.file <- system.file("extdata", "paramdefns.csv", package = "shinyrAtlantis")
-def.grp.file <- system.file("extdata", "grpTemplates.csv", package = "shinyrAtlantis")
 bgm.file <- system.file("extdata", "BanzareAtlantis.bgm", package = "shinyrAtlantis")
 grp.file <- system.file("extdata", "AntarcticGroups.csv", package = "shinyrAtlantis")
 prm.file <- system.file("extdata", "SO90_biol.prm", package = "shinyrAtlantis")
 
-## prior to packaging, the scope of these file names was a bit "global"
 obj <- make.sh.prm.object(bgm.file, grp.file, prm.file)
-## this def.grp.file contents should be included in object above??
-sh.prm(obj, def.grp.file)  # run the shiny App
+sh.prm(obj, def.grp.file)
 ```
 
 Shiny INIT Run `shinit.R`
@@ -89,7 +79,6 @@ library(shinyrAtlantis)
 
 
 bgm.file <-system.file("extdata", "BanzareAtlantis.bgm", package = "shinyrAtlantis")
-
 nc.file <- system.file("extdata", "input.nc", package = "shinyrAtlantis")
 
 input.object <- make.sh.init.object(bgm.file, nc.file)
