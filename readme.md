@@ -43,6 +43,8 @@ library(shinyrAtlantis)
 
 Some example Atlantis files are provided in the package so that the shiny applications can be explored straight away. Note that some of the example Atlantis files are incomplete. The shiny application allows exploration of most incomplete Atlantis files. See the examples presented below for how to use the shiny applications.
 
+**Additional functionality to the shiny applications provided in this package, and new shiny applications, are currently under development.**
+
 `sh.dist`
 -------------------------------
 
