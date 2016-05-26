@@ -43,7 +43,7 @@ library(shinyrAtlantis)
 
 Some example Atlantis files are provided in the package so that the shiny applications can be explored straight away. Note that some of the example Atlantis files are incomplete. The shiny application allows exploration of most incomplete Atlantis files. See the examples presented below for how to use the shiny applications.
 
-Spatial Distributions "sh.dist"
+`sh.dist`
 -------------------------------
 
 **sh.dist**: A shiny application for generating spatial distributions with constant density (per unit area).
@@ -57,7 +57,7 @@ obj <- make.sh.dist.object(bgm.file)
 sh.dist(obj)
 ```
 
-Shiny PRM Run `shprm.R`
+`shprm.R`
 -----------------------
 
 **sh.prm**: A shiny application for exploring the data in the bioloy parameter file.
@@ -73,7 +73,7 @@ obj <- make.sh.prm.object(bgm.file, grp.file, prm.file)
 sh.prm(obj)
 ```
 
-Shiny INIT Run `shinit.R`
+`shinit.R`
 -------------------------
 
 **sh.int**: A shiny application for exploring the initial conditions file.
@@ -88,7 +88,7 @@ obj <- make.sh.init.object(bgm.file, nc.file)
 sh.init(obj)
 ```
 
-Forcings "sh.forcings"
+`sh.forcings`
 -------------------------------
 
 **sh.forcings**: A shiny application for exploring the forcings data (time-series of salt and temperature).
