@@ -1796,11 +1796,7 @@ make.prm.distributions <- function(prm.file, Code, numboxes){
     if (length(j) > 0) { # at least one row with txt.find
       for (jj in 1:length(j)) {
         levs <- as.numeric(unlist(str_extract_all(prm[j[jj]],"\\(?[0-9.-]+\\)?")[[1]])[1])
-<<<<<<< HEAD
         levs <- min(levs, numboxes)
-=======
-        levs <- min(levs, numboxes) # check that there are not too many data
->>>>>>> 042018dfd1b4b7b650943fad475c2441f2c85661
         vals <- as.numeric(str_split(prm[j[jj]+1], "[\t ]+")[[1]])
         mig.txt <- unlist(str_split(prm[j[jj]], "[\t ]+"))[1]
         if (mig.txt == paste("MigIOBox_", xxx, sep = "")) { 
