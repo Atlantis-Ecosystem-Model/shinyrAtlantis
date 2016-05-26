@@ -13,7 +13,7 @@ Development
 Usage
 -----
 
-Install dependencies.
+Install dependencies *if they are not already installed*. The complete list of packages used to develop the shinyrAtlantis package are provided below. Remove the package names that are already installed. 
 
 ``` r
 install.packages(c("shiny", 
