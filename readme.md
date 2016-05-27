@@ -1,6 +1,8 @@
 shinyrAtlantis
 --------------
 
+A package to help users of Atlantis investigate the parameters that are spread across multiple files (.csv, .nc) when constructing their ecosystem model.
+
 Usage in R
 ----------
 
