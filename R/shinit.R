@@ -698,8 +698,7 @@ sh.init <- function(input.object){
           facet_wrap( ~ Species, ncol=6, scales="free_y") +
           labs(color = "Source") +
           theme_bw() + xlab("Cohort") + ylab("Nitrogen (mg N)") +
-          theme(plot.background = element_blank()) +
-          scale_x_continuous(breaks=c(1,3,5,7,9))
+          theme(plot.background = element_blank())
       })
       
     }  
