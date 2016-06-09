@@ -925,14 +925,19 @@ make.init.data <- function(nc.file, numboxes, numlevels) {
   }
   
   # find biotic variable names (step 1 of two steps)
-  # find variable names ending in _N
-  species.names <- var.names[grep(pattern = "(_N)*_N$", x = var.names)]
+  # find variable names ending in _N or _Nx
+  species.names <- var.names[grep(pattern = "(_N)*_N[0-9]*$", x = var.names)]
   for (i in 1:length(species.names)) {
     species.old <- species.names[i]
-    stringr::str_sub(species.old, start = str_length(species.old)-1,
+    str_sub(species.old, start = str_length(species.old)-1,
       end = str_length(species.old)) <- "" # remove _N
+    if (substr(species.old, nchar(species.old), nchar(species.old)) == "_") {
+      str_sub(species.old, start = str_length(species.old),
+        end = str_length(species.old)) <- "" # remove _N
+    }
     species.names[i] <- species.old # replace name with _N removed
   }
+  species.names <- unique(species.names) # remove duplicates from cohorts
   
   # find all abiotic variables
   i.species <- NA
@@ -968,6 +973,7 @@ make.init.data <- function(nc.file, numboxes, numlevels) {
   non.species[i.species] <- FALSE # remove all species
   i.nonspecies <- which(non.species == TRUE)
   nonspecies.names <- var.names[i.nonspecies]
+  # Light_Adaption variables are considered non-species (fix)
   
   # split abiotic variables into 2D and 3D groups
   nonspecies.2.d <- NA # number of dimensions
@@ -1015,7 +1021,6 @@ make.init.data <- function(nc.file, numboxes, numlevels) {
   for (i in 1:nonspecies.2.n) {
     tmp <- ncvar_get(nc.out, nonspecies.2.names[i]) # get all variable data
     # add the fill value to the missing values
-    tmp[is.na(tmp)] <- nc.out$var[[which(var.names == nonspecies.2.names[i])]]$missval
     tmp.dim <- length(dim(tmp))
     if (nonspecies.2.d[i] == 2) {
       # expect to be stored as a 2D array
@@ -1056,7 +1061,6 @@ make.init.data <- function(nc.file, numboxes, numlevels) {
   for (i in 1:nonspecies.3.n) {
     tmp <- ncvar_get(nc.out, nonspecies.3.names[i]) # get all variable data
     # add the fill value to the missing values
-    tmp[is.na(tmp)] <- nc.out$var[[which(var.names == nonspecies.3.names[i])]]$missval
     tmp.dim <- length(dim(tmp))
     if (nonspecies.3.d[i] == 2) {
       # expect to be stored as a 2D array
@@ -1106,11 +1110,20 @@ make.init.data <- function(nc.file, numboxes, numlevels) {
   species.n <- length(species.names)
   species.2.N <- rep(0, species.n) # number of subgroups per species group (2D)
   species.3.N <- rep(0, species.n) # number of subgroups per species group (2D)
-  for (i in 1:species.n) { # gp through each species
+  for (i in 1:species.n) { # go through each species
     sp <- species.names[i] # extract the species group name
-    rgexprn <- paste("^", sp, sep="")
+    rgexprn <- paste("^", sp, sep="") # what if superset names (see below)?
     j <- grep(rgexprn, var.names) # indices associated with species group
-    for (k in j) {
+    tmp.names <- gsub(sp, "", var.names[j]) # remove species name
+    j2 <- NULL
+    for (k in 1:length(j)) {
+      if (substr(tmp.names[k], 1, 1) == "_" |
+          substr(tmp.names[k], 1, 1) %in% as.character(1:9)) { # valid variable 
+        j2 <- c(j2, j[k])        
+      } 
+    }
+    
+    for (k in j2) {
       tmp <- ncvar_get(nc.out, var.names[k]) # get the associated data set
       tmp.dims <- length(dim(tmp)) # dimensions of the associated data
       # TO DO: check that these assumptions about dimensions are correct
@@ -1151,6 +1164,7 @@ make.init.data <- function(nc.file, numboxes, numlevels) {
   species.2.names <- species.2.names[-1] # remove starting NA
   species.3.names <- species.3.names[-1] # remove starting NA
   
+  # 2D species
   species.2.n <- length(species.2.names)
   species.2.all.n <- sum(species.2.N)
   species.2.groups <- rep(0, species.2.n) # number of subgroups per species group (2D)
@@ -1167,7 +1181,6 @@ make.init.data <- function(nc.file, numboxes, numlevels) {
   for (sp in species.2.names.full) {
     i <- i + 1
     tmp <- ncvar_get(nc.out, sp) # get the associated data set
-    tmp[is.na(tmp)] <- nc.out$var[[which(var.names == sp)]]$missval # add missval
     tmp.dims <- length(dim(tmp)) # dimensions of the associated data
     if (tmp.dims == 1) {
       # 2D species distribution with no time replicates
@@ -1185,7 +1198,7 @@ make.init.data <- function(nc.file, numboxes, numlevels) {
       txt.tmp <- paste(tmp.names[k], ": ", as.character(tmp[k]), sep = "")
       txt <- paste(txt, txt.tmp, sep = "<br/>")
     }
-    species.2.att[i] <- txt
+    species.2.att[i] <- txt # add 2D species attribure info
   }
   
   species.3.n <- length(species.3.names)
@@ -1204,7 +1217,6 @@ make.init.data <- function(nc.file, numboxes, numlevels) {
   for (sp in species.3.names.full) {
     i <- i + 1
     tmp <- ncvar_get(nc.out, sp) # get the associated data set
-    tmp[is.na(tmp)] <- nc.out$var[[which(var.names == sp)]]$missval # add missval
     tmp.dims <- length(dim(tmp)) # dimensions of the associated data
     if (tmp.dims == 2) {
       # 3D species distribution with no time replicates
@@ -1235,7 +1247,7 @@ make.init.data <- function(nc.file, numboxes, numlevels) {
   N.Type <- NA  # structural or reserve
   N.Value <- NA # mg N
   for (sp in species.3.names) {
-    for (i in 1:10) { # only consider up to 10 cohorts
+    for (i in 1:30) { # only consider up to 30 cohorts
       # look for structural data
       txt.find <- paste(sp, as.character(i), "_ResN", sep = "")
       j <- grep(txt.find, species.3.names.full)
@@ -1250,16 +1262,14 @@ make.init.data <- function(nc.file, numboxes, numlevels) {
           if (sum(!is.na(tmp)) > 0) {
             N.val <- max(tmp[ , ], na.rm = TRUE)
           } else {
-            N.val <- nc.out$var[[which(var.names == txt.find)]]$missval
-            if (is.null(N.val) | is.na(N.val)) N.val <- 0.0
+            N.val <- 0.0 # No data provided
           }  
         } else {
           # 3D with time replicates
           if (sum(!is.na(tmp)) > 0) {
             N.val <- max(tmp[ , ,1], na.rm = TRUE) # only consider the first time point
           } else {
-            N.val <- nc.out$var[[which(var.names == txt.find)]]$missval
-            if (is.null(N.val) | is.na(N.val)) N.val <- 0.0
+            N.val <- 0.0 # No data provided
           }
         }
         N.Value <- c(N.Value, N.val)
@@ -1279,16 +1289,14 @@ make.init.data <- function(nc.file, numboxes, numlevels) {
           if (sum(!is.na(tmp)) > 0) {
             N.val <- max(tmp[ , ], na.rm = TRUE)
           } else {
-            N.val <- nc.out$var[[which(var.names == txt.find)]]$missval
-            if (is.null(N.val) | is.na(N.val)) N.val <- 0.0
+            N.val <- 0.0 # No data provided
           }  
         } else {
           # 3D with time replicates
           if (sum(!is.na(tmp)) > 0) {
             N.val <- max(tmp[ , ,1], na.rm = TRUE) # only consider the first time point
           } else {
-            N.val <- nc.out$var[[which(var.names == txt.find)]]$missval
-            if (is.null(N.val) | is.na(N.val)) N.val <- 0.0
+            N.val <- 0.0 # No data provided
           }
         }
         N.Value <- c(N.Value, N.val)
