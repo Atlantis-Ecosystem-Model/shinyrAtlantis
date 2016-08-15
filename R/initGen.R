@@ -573,7 +573,9 @@ get.init.nc <- function(nc.file, output.file) {
     data.all <- ncvar_get(nc.out, var.names.all[i]) # get the data
     indx <- which(dim(data.all) == numboxes) # which index has the data?
     data.out <- rep(0, numboxes) # reset vector where data is read in
-    if (length(dim(data.all)) == 2) { # 2-D array, data in indx 
+    if (length(dim(data.all)) == 1) { 
+      data.out <- data.all
+    } else if (length(dim(data.all)) == 2) { # 2-D array, data in indx 
       if (indx == 1) {
         data.out <- data.all[ ,1]  
       } else {
