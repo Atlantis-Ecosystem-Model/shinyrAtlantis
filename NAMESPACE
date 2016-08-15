@@ -3,6 +3,7 @@
 export(DisplayInitializationExample)
 export(DisplayParametersExample)
 export(SpatialDistributionsExample)
+export(get.init.nc)
 export(make.init.csv)
 export(make.init.nc)
 export(make.sh.dist.object)

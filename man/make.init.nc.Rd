@@ -21,7 +21,7 @@ make.init.nc(bgm.file, cum.depths, init.file, horiz.file, nc.file)
 Null (always). Produces a NetCDF file with the name \code{nc.file}.
 }
 \description{
-Takes data from two .csv files and and generates an Atlantis initial conditions NetCDF file.
+Takes data from two .csv files and generates an Atlantis initial conditions NetCDF file.
 The .csv files should be generated using \code{\link[shinyrAtlantis]{make.init.csv}}.
 \code{init.file} contains all variable names to be included in the NetCDF file and their attributes.
 This file also contains initial conditions and their spatial distribution (e.g., surface only, uniformly distributed in the vertical) if they are not box-specific.

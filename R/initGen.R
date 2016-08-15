@@ -1,8 +1,9 @@
 # Functions =====================================================================
 # make.map.data.init: creates a data frame of box data from bgm and cummulative depths
 # generate.vars.init: creates a data frame of all biological variables  
-# make.init.csv: creates csv files for editing to then produce NetCDF files
-# make.init.nc : create a NetCDF file based on csv files
+# make.init.csv     : creates csv files for editing to then produce NetCDF files
+# make.init.nc      : create a NetCDF file based on csv files
+# get.init.nc       : generate a csv file of initial conditions from netCDF file 
 
 # ==============================================================================
 # make.map.data.init
@@ -297,7 +298,7 @@ make.init.csv <- function(grp.file, bgm.file, cum.depths, csv.name) {
 #' @title Function that generates a NetCDF files of initial conditions 
 #'
 #' @description
-#' Takes data from two .csv files and and generates an Atlantis initial conditions NetCDF file. 
+#' Takes data from two .csv files and generates an Atlantis initial conditions NetCDF file. 
 #' The .csv files should be generated using \code{\link[shinyrAtlantis]{make.init.csv}}.
 #' \code{init.file} contains all variable names to be included in the NetCDF file and their attributes. 
 #' This file also contains initial conditions and their spatial distribution (e.g., surface only, uniformly distributed in the vertical) if they are not box-specific.
@@ -531,4 +532,69 @@ make.init.nc <- function(bgm.file, cum.depths, init.file, horiz.file, nc.file) {
   nc_close(outnc)
   
   return (NULL)
+}
+
+# ==============================================================================
+# get.init.nc : read the initial conditions of all variables in a NetCDF
+#               file into a .csv file.
+# ==============================================================================
+#' @title Function that generates a csv file of NetCDF values
+#'
+#' @description
+#' Takes data from a NetCDF file and generates a .csv file containing the box-specific values.
+#'
+#' @param nc.file Name of the NetCDF file containing the initial conditions.
+#' @param output.file Name of the .csv file where data is written.
+#'
+#' @return Null (always). Produces a .csv file with the name \code{ouput.file}.
+#'
+#' @examples
+#' \dontrun{
+#' nc.file <- "~/Atlantis/RunFiles/SEAP/params/initSEAPaquacult_pH.nc"
+#' output.file <- "oldData.csv" # where to write the data
+#' get.init.nc(nc.file, output.file) # extract the data from NetCDF file
+#' }
+#' @export
+get.init.nc <- function(nc.file, output.file) {
+  nc.out <- nc_open(nc.file) # open the NetCDF file
+  n.vars <- nc.out$nvars     # number of variables in the NetCDF file
+  var.names.all <- rep(NA, n.vars) # variable names
+  for (i in 1:n.vars) { # find all variable names
+    var.names.all[i] <- nc.out$var[[i]]$name # add variable name
+  }
+  
+  max.cols <- 0 # maximum number of data per variable
+  numboxes <- max(dim(ncvar_get(nc.out, "reef"))) # should be present
+  
+  numvars <- length(var.names.all)
+  # first, store all initial data into a matrix
+  m.data <- matrix(data = NA, nrow = numvars, ncol = numboxes)
+  for (i in 1:length(var.names.all)) {
+    data.all <- ncvar_get(nc.out, var.names.all[i]) # get the data
+    indx <- which(dim(data.all) == numboxes) # which index has the data?
+    data.out <- rep(0, numboxes) # reset vector where data is read in
+    if (length(dim(data.all)) == 2) { # 2-D array, data in indx 
+      if (indx == 1) {
+        data.out <- data.all[ ,1]  
+      } else {
+        data.out <- data.all[1, ]
+      }
+    } else if (length(dim(data.all)) == 3) { # 3-D array, data in indx 
+      if (indx == 1) {
+        data.out <- data.all[ ,1,1]
+      } else if (indx == 2) {
+        data.out <- data.all[1, ,1]
+      } else {
+        data.out <- data.all[1,1, ]
+      }
+    }
+    
+    m.data[i,1:numboxes] <- data.out[1:numboxes] # transfer data to matrix
+  }
+  df.out <- data.frame(Variable = var.names.all, m.data) # make a data frame
+  names(df.out) <- c("Variable", 
+    paste("box", as.character(0:(numboxes-1)), sep = "")) # name columns
+  write.csv(df.out, output.file) # write all the data to a .csv file
+  
+  return(NULL)
 }
