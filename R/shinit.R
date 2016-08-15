@@ -1456,8 +1456,9 @@ make.init.data <- function(nc.file, numboxes, numlevels) {
 #' @export
 #' @importFrom magrittr %>%
 #' @importFrom dplyr group_by
-#' @importFrom stringr str_sub str_length
+#' @importFrom stringr str_sub 
 #' @importFrom ncdf4 ncatt_get
+#' @importFrom stringr str_length
 make.sh.init.object <- function(bgm.file, nc.file) {
   cat("-- Extracting map data\n")
   map.object <- make.init.map(bgm.file)
