@@ -1434,6 +1434,12 @@ make.prm.groups <- function(grp.file){
     names(df)[tmp] <- "Long.Name"
   }
   
+  # check that column title is not InvertType: convert to GroupType
+  tmp <- which(names(df) == "InvertType")
+  if (!is.null(tmp)) {
+    names(df)[tmp] <- "GroupTYpe"
+  }
+
   return (list(grp.vals = df, habitat.types = habitat.types))
 }  
 
@@ -2028,6 +2034,9 @@ make.prm.clearance <- function(prm.file, grp.object) {
 # +=========================================================+
 make.prm.refuges <- function(grp.vals, gen.prm, grp.att) {
   j <- which(gen.prm$Parameter == "flag_refuge_model", arr.ind = TRUE)
+  if (is.na(gen.prm$Value[j])) {
+    gen.prm$Value[j] <- 0 # set no refuge as the default
+  }
   flag_refuge_model <- gen.prm$Value[j]
   
   j <- which(gen.prm$Parameter == "flag_rel_cover", arr.ind = TRUE)
