@@ -2,7 +2,7 @@
 % Please edit documentation in R/initGen.R
 \name{make.init.csv}
 \alias{make.init.csv}
-\title{Function that generates two .csv initial condition templates}
+\title{Function that generates two csv initial condition templates}
 \usage{
 make.init.csv(grp.file, bgm.file, cum.depths, csv.name)
 }
@@ -13,13 +13,13 @@ make.init.csv(grp.file, bgm.file, cum.depths, csv.name)
 
 \item{cum.depths}{vector of cumulative depths (starting with zero).}
 
-\item{csv.name}{String that is used to identify the two output .csv files.}
+\item{csv.name}{String that is used to identify the two output csv files.}
 }
 \value{
-Null (always). Produces two .csv files with the names \code{[csv.name]_init.csv} and \code{[csv.name]_horiz.csv}.
+Null (always). Produces two csv files with the names \code{[csv.name]_init.csv} and \code{[csv.name]_horiz.csv}.
 }
 \description{
-Takes data from group file and box geometry file and generates two .csv files that should be copied and modified.
+Takes data from group file and box geometry file and generates two csv files that should be copied and modified.
 The two files generated are called [csv.name]_init.csv and [csv.name]_horiz.csv.
 Also required is the vector of cumulative depths, whos first element is 0.
 [csv.name]_init.csv provides all the variables required in the .nc initial conditions file and their default attributes.
@@ -33,6 +33,19 @@ bgm.file   <- "gbr_test.bgm"
 cum.depths <- c(0,5,10,20,50,100,200,3000)
 csv.name   <- "GBRtemplate"
 make.init.csv(grp.file, bgm.file, cum.depths, csv.name)
+
+# copy GBRtemplate_init.csv to GBR_init.csv
+# copy GBRtemplate_horiz.csv to GBR_horiz.csv
+# edit files GBR_init.csv and GBR_horiz.csv by entering initial conditions
+
+init.file  <- "GBR_init.csv"
+horiz.file <- "GBR_horiz.csv"
+nc.file    <- "GBRtemplate.nc"
+make.init.nc(bgm.file, cum.depths, init.file, horiz.file, nc.file)
+
+# view the initial conditions file
+init.obj <- make.sh.init.object(bgm.file, nc.file)
+sh.init(init.obj)
 }
 }
 

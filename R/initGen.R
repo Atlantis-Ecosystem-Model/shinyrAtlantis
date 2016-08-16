@@ -88,7 +88,7 @@ make.map.data.init <- function(bgm.file, cum.depths){
 # generate.vars.init
 # ==============================================================================
 generate.vars.init <- function(grp.file, cum.depths) {
-  # read in group data from group .csv file
+  # read in group data from group csv file
   df.grp <- read.csv(file = grp.file, header = TRUE, stringsAsFactors = FALSE)
   # make sure GroupType column title exists
   col.titles <- names(df.grp)
@@ -125,7 +125,7 @@ generate.vars.init <- function(grp.file, cum.depths) {
   
   # create data frame for invert biological variables (ignores multiple stocks)
   Variable  <- NULL # variable name
-  long_name <- NULL # Long name
+  long_name <- NULL # long name
   att.index <- NULL # corresponding row of df.atts 
   for (grp in 1:length(df.grp$Name)) {
     if (!df.grp$needsNums[grp]) {
@@ -216,10 +216,10 @@ generate.vars.init <- function(grp.file, cum.depths) {
   df.return <- rbind(df.invert, df.vert)
 }
 
-#' @title Function that generates two .csv initial condition templates
+#' @title Function that generates two csv initial condition templates
 #'
 #' @description
-#' Takes data from group file and box geometry file and generates two .csv files that should be copied and modified.
+#' Takes data from group file and box geometry file and generates two csv files that should be copied and modified.
 #' The two files generated are called [csv.name]_init.csv and [csv.name]_horiz.csv.
 #' Also required is the vector of cumulative depths, whos first element is 0.
 #' [csv.name]_init.csv provides all the variables required in the .nc initial conditions file and their default attributes.
@@ -229,9 +229,9 @@ generate.vars.init <- function(grp.file, cum.depths) {
 #' @param grp.file Atlantis group (.bgm) file that defines groups.
 #' @param bgm.file Box geometry model (.bgm) file used by Atlantis that defines box boundaries and depths.
 #' @param cum.depths vector of cumulative depths (starting with zero).
-#' @param csv.name String that is used to identify the two output .csv files.
+#' @param csv.name String that is used to identify the two output csv files.
 #'
-#' @return Null (always). Produces two .csv files with the names \code{[csv.name]_init.csv} and \code{[csv.name]_horiz.csv}.
+#' @return Null (always). Produces two csv files with the names \code{[csv.name]_init.csv} and \code{[csv.name]_horiz.csv}.
 #'
 #' @examples
 #' \dontrun{
@@ -240,6 +240,19 @@ generate.vars.init <- function(grp.file, cum.depths) {
 #' cum.depths <- c(0,5,10,20,50,100,200,3000)
 #' csv.name   <- "GBRtemplate"
 #' make.init.csv(grp.file, bgm.file, cum.depths, csv.name)
+#' 
+#' # copy GBRtemplate_init.csv to GBR_init.csv
+#' # copy GBRtemplate_horiz.csv to GBR_horiz.csv
+#' # edit files GBR_init.csv and GBR_horiz.csv by entering initial conditions
+#' 
+#' init.file  <- "GBR_init.csv"
+#' horiz.file <- "GBR_horiz.csv"
+#' nc.file    <- "GBRtemplate.nc"
+#' make.init.nc(bgm.file, cum.depths, init.file, horiz.file, nc.file)
+#' 
+#' # view the initial conditions file
+#' init.obj <- make.sh.init.object(bgm.file, nc.file)
+#' sh.init(init.obj)
 #' }
 #' @export
 make.init.csv <- function(grp.file, bgm.file, cum.depths, csv.name) {
@@ -295,20 +308,20 @@ make.init.csv <- function(grp.file, bgm.file, cum.depths, csv.name) {
 # ==============================================================================
 # make.init.nc
 # ==============================================================================
-#' @title Function that generates a NetCDF files of initial conditions 
+#' @title Function that generates a NetCDF file of initial conditions 
 #'
 #' @description
-#' Takes data from two .csv files and generates an Atlantis initial conditions NetCDF file. 
-#' The .csv files should be generated using \code{\link[shinyrAtlantis]{make.init.csv}}.
+#' Takes data from two csv files and generates an Atlantis initial conditions NetCDF file. 
+#' The csv files should be generated using \code{\link[shinyrAtlantis]{make.init.csv}}.
 #' \code{init.file} contains all variable names to be included in the NetCDF file and their attributes. 
 #' This file also contains initial conditions and their spatial distribution (e.g., surface only, uniformly distributed in the vertical) if they are not box-specific.
 #' Box-specific values are specified in \code{horiz.file} and must be labelled as custom in \code{init.file}.
 #'
 #' @param bgm.file Box geometry model (.bgm) file used by Atlantis that defines box boundaries and depths.
-#' @param cum.depths Vector of cumulative depths (starting with zero).
-#' @param init.file .csv file containing all variable names and their attributes. 
-#' @param horiz.file .csv file containing box-defined values if customised flag is set. 
-#' @param nc.file Name of NetCDF file generated containing the initial conditions.
+#' @param cum.depths Vector of cumulative depths (starting with value zero).
+#' @param init.file csv file containing all variable names and their attributes. Also includes how the values are distributed in space and the vertical.
+#' @param horiz.file csv file containing box-defined values if customised flag is set for the horizontal distribution in \code{init.file}. 
+#' @param nc.file Name of the NetCDF file generated which contains the initial conditions. This file can be used as input to Atlantis.
 #'
 #' @return Null (always). Produces a NetCDF file with the name \code{nc.file}.
 #'
@@ -319,13 +332,19 @@ make.init.csv <- function(grp.file, bgm.file, cum.depths, csv.name) {
 #' cum.depths <- c(0,5,10,20,50,100,200,3000)
 #' csv.name   <- "GBRtemplate"
 #' make.init.csv(grp.file, bgm.file, cum.depths, csv.name)
+#' 
 #' # copy GBRtemplate_init.csv to GBR_init.csv
 #' # copy GBRtemplate_horiz.csv to GBR_horiz.csv
-#' # edit files GBR_init.csv and GBR_horiz.csv
+#' # edit files GBR_init.csv and GBR_horiz.csv by entering initial conditions
+#' 
 #' init.file  <- "GBR_init.csv"
 #' horiz.file <- "GBR_horiz.csv"
 #' nc.file    <- "GBRtemplate.nc"
 #' make.init.nc(bgm.file, cum.depths, init.file, horiz.file, nc.file)
+#' 
+#' # view the initial conditions file
+#' init.obj <- make.sh.init.object(bgm.file, nc.file)
+#' sh.init(init.obj)
 #' }
 #' @export
 make.init.nc <- function(bgm.file, cum.depths, init.file, horiz.file, nc.file) {
@@ -484,12 +503,7 @@ make.init.nc <- function(bgm.file, cum.depths, init.file, horiz.file, nc.file) {
         j <- which(df.horiz$Variable == df.init$name[idx])
         var.data <- df.horiz[j,2:(numboxes+1)]
       }
-      # txt <- paste(as.character(idx), df.init$name[idx],
-      #   as.character(var.data[1]), sep = " ")
       ncvar_put(outnc, varid = df.init$name[idx], vals = var.data)
-      # v <- ncvar_get(outnc, df.init$name[idx])[1]
-      # txt <- paste(txt, "=", as.character(v), "\n", sep = " ")
-      # cat(txt)
     } else {
       var.data <- matrix(data = 1e30, nrow = numlayers+1, ncol = numboxes)
       hor.data <- rep(df.init$wc.hor.scalar[idx], numboxes) # default values
@@ -522,8 +536,6 @@ make.init.nc <- function(bgm.file, cum.depths, init.file, horiz.file, nc.file) {
           }
         }  
       }
-      # cat(paste(as.character(idx), df.init$name[idx],
-      #   as.character(var.data[1]),"\n", sep = " "))
       ncvar_put(outnc, varid = as.character(df.init$name[idx]), vals = var.data)
     }
   }
@@ -536,28 +548,32 @@ make.init.nc <- function(bgm.file, cum.depths, init.file, horiz.file, nc.file) {
 
 # ==============================================================================
 # get.init.nc : read the initial conditions of all variables in a NetCDF
-#               file into a .csv file.
+#               file into a csv file.
 # ==============================================================================
 #' @title Function that generates a csv file of NetCDF values
 #'
 #' @description
-#' Takes data from a NetCDF file and generates a .csv file containing the box-specific values.
+#' Takes data from a NetCDF file and generates a csv file containing the box-specific values.
+#' If the variable is distributed in the vertical then the value on the bottom water layer is returned.
+#' This function is useful when collecting data from Atlantis models in order to parameterise new Atlantis models.
+#' Incorrect output may be produced if the number of boxes equals the number of time steps or water layers.
 #'
 #' @param nc.file Name of the NetCDF file containing the initial conditions.
-#' @param output.file Name of the .csv file where data is written.
+#' @param output.file Name of the csv file where data is written.
 #'
-#' @return Null (always). Produces a .csv file with the name \code{ouput.file}.
+#' @return Null (always). Produces a csv file with the name \code{ouput.file}.
 #'
 #' @examples
 #' \dontrun{
 #' nc.file <- "~/Atlantis/RunFiles/SEAP/params/initSEAPaquacult_pH.nc"
 #' output.file <- "oldData.csv" # where to write the data
-#' get.init.nc(nc.file, output.file) # extract the data from NetCDF file
+#' 
+#' get.init.nc(nc.file, output.file) # extract data from the NetCDF file
 #' }
 #' @export
 get.init.nc <- function(nc.file, output.file) {
-  nc.out <- nc_open(nc.file) # open the NetCDF file
-  n.vars <- nc.out$nvars     # number of variables in the NetCDF file
+  nc.out <- nc_open(nc.file)       # open the NetCDF file
+  n.vars <- nc.out$nvars           # number of variables in the NetCDF file
   var.names.all <- rep(NA, n.vars) # variable names
   for (i in 1:n.vars) { # find all variable names
     var.names.all[i] <- nc.out$var[[i]]$name # add variable name
@@ -573,7 +589,7 @@ get.init.nc <- function(nc.file, output.file) {
     data.all <- ncvar_get(nc.out, var.names.all[i]) # get the data
     indx <- which(dim(data.all) == numboxes) # which index has the data?
     data.out <- rep(0, numboxes) # reset vector where data is read in
-    if (length(dim(data.all)) == 1) { 
+    if (length(dim(data.all)) == 1) { # 1-D array
       data.out <- data.all
     } else if (length(dim(data.all)) == 2) { # 2-D array, data in indx 
       if (indx == 1) {
@@ -595,8 +611,8 @@ get.init.nc <- function(nc.file, output.file) {
   }
   df.out <- data.frame(Variable = var.names.all, m.data) # make a data frame
   names(df.out) <- c("Variable", 
-    paste("box", as.character(0:(numboxes-1)), sep = "")) # name columns
-  write.csv(df.out, output.file) # write all the data to a .csv file
+    paste("box", as.character(0:(numboxes-1)), sep = "")) # name the columns
+  write.csv(df.out, output.file) # write all the data to a csv file
   
   return(NULL)
 }

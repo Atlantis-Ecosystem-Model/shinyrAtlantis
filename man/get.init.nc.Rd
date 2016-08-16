@@ -9,19 +9,23 @@ get.init.nc(nc.file, output.file)
 \arguments{
 \item{nc.file}{Name of the NetCDF file containing the initial conditions.}
 
-\item{output.file}{Name of the .csv file where data is written.}
+\item{output.file}{Name of the csv file where data is written.}
 }
 \value{
-Null (always). Produces a .csv file with the name \code{ouput.file}.
+Null (always). Produces a csv file with the name \code{ouput.file}.
 }
 \description{
-Takes data from a NetCDF file and generates a .csv file containing the box-specific values.
+Takes data from a NetCDF file and generates a csv file containing the box-specific values.
+If the variable is distributed in the vertical then the value on the bottom water layer is returned.
+This function is useful when collecting data from Atlantis models in order to parameterise new Atlantis models.
+Incorrect output may be produced if the number of boxes equals the number of time steps or water layers.
 }
 \examples{
 \dontrun{
 nc.file <- "~/Atlantis/RunFiles/SEAP/params/initSEAPaquacult_pH.nc"
 output.file <- "oldData.csv" # where to write the data
-get.init.nc(nc.file, output.file) # extract the data from NetCDF file
+
+get.init.nc(nc.file, output.file) # extract data from the NetCDF file
 }
 }
 

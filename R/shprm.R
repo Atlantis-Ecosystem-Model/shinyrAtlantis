@@ -1900,10 +1900,12 @@ make.prm.growth <- function(prm.file, grp.object) {
           coh.txt[k] <- prm[j[jj]+1] # collect the clearance text
         }
       }  
+    } else {
+      coh.classes[k] <- 1 # not found so assume a single value
     }  
   }
   
-  max.classes <- max(coh.classes, na.rm = TRUE) # max size of array
+  max.classes <- max(coh.classes, na.rm = TRUE) # max size of array (>= 1)
   growth.data <- array(NA, dim=c(codes, max.classes))
   dimnames(growth.data)[[1]]  <- Code # name rows and columns
   dimnames(growth.data)[[2]]  <- paste(rep("co", max.classes), 1:max.classes, sep = "-")
@@ -1980,10 +1982,12 @@ make.prm.clearance <- function(prm.file, grp.object) {
           coh.txt[k] <- prm[j[jj]+1] # collect the clearance text
         }
       }  
+    } else {
+      coh.classes[k] <- 1 # group is not found so assume a single cohort
     }  
   }
   
-  max.classes <- max(coh.classes, na.rm = TRUE) # max size of array
+  max.classes <- max(coh.classes, na.rm = TRUE) # max size of array (>= 1)
   clearance.data <- array(NA, dim=c(codes, max.classes))
   dimnames(clearance.data)[[1]]  <- Code # name rows and columns
   dimnames(clearance.data)[[2]]  <- paste(rep("co", max.classes), 1:max.classes, sep = "-")
@@ -2040,6 +2044,9 @@ make.prm.refuges <- function(grp.vals, gen.prm, grp.att) {
   flag_refuge_model <- gen.prm$Value[j]
   
   j <- which(gen.prm$Parameter == "flag_rel_cover", arr.ind = TRUE)
+  if (is.na(gen.prm$Value[j])) {
+    gen.prm$Value[j] <- 0 # set cumulative as the default
+  }
   flag_rel_cover <- gen.prm$Value[j]
   
   if (flag_refuge_model == 2) {
@@ -2048,11 +2055,11 @@ make.prm.refuges <- function(grp.vals, gen.prm, grp.att) {
     j <- which(gen.prm$Parameter == "RugCover_Const", arr.ind = TRUE)
     Rconst <- gen.prm$Value[j]
     j <- which(gen.prm$Parameter == "RugCover_Cap", arr.ind = TRUE)
-    Rcap<- gen.prm$Value[j]
+    Rcap <- gen.prm$Value[j]
     j <- which(gen.prm$Parameter == "min_rugosity", arr.ind = TRUE)
-    minR<- gen.prm$Value[j]
+    minR <- gen.prm$Value[j]
     j <- which(gen.prm$Parameter == "max_rugosity", arr.ind = TRUE)
-    maxR<- gen.prm$Value[j]
+    maxR <- gen.prm$Value[j]
   }
   
   model.1 <- data.frame(Code = "xxx", Stage = "xxx", Cover = -1, refuge_status = -1)
@@ -2097,9 +2104,9 @@ make.prm.refuges <- function(grp.vals, gen.prm, grp.att) {
       model.2 <- data.frame(Code, Rugosity, refuge_status)
     }
   }
-  model.1 <- model.1[-1,]# remove the first row
+  model.1 <- model.1[-1,] # remove the first row
   model.1$Stage <- factor(model.1$Stage)
-  model.2 <- model.2[-1,]# remove the first row
+  model.2 <- model.2[-1,] # remove the first row
   
   return(list(model.1 = model.1, model.2 = model.2))
 }
