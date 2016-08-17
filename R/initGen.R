@@ -255,6 +255,7 @@ generate.vars.init <- function(grp.file, cum.depths) {
 #' sh.init(init.obj)
 #' }
 #' @export
+#' @importFrom ncdf4 ncdim_def
 make.init.csv <- function(grp.file, bgm.file, cum.depths, csv.name) {
   def.att.file <- system.file("extdata", "AttributeTemplate.csv", package = "shinyrAtlantis")
   df.atts <- read.csv(file = def.att.file, header = TRUE, stringsAsFactors = FALSE)

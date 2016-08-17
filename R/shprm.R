@@ -1437,7 +1437,7 @@ make.prm.groups <- function(grp.file){
   # check that column title is not InvertType: convert to GroupType
   tmp <- which(names(df) == "InvertType")
   if (!is.null(tmp)) {
-    names(df)[tmp] <- "GroupTYpe"
+    names(df)[tmp] <- "GroupType"
   }
 
   return (list(grp.vals = df, habitat.types = habitat.types))
