@@ -413,7 +413,7 @@ make.init.nc <- function(bgm.file, cum.depths, init.file, horiz.file, nc.file) {
   
   # writing to file will blow up if file already exists so make a copy
   if (file.exists(nc.file)) {
-    file.rename(from = nc.file, to = paste("old_", nc.file, sep = ""))
+    file.remove(nc.file)
   }  
   
   # create a NetCDF file
