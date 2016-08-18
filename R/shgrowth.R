@@ -573,11 +573,10 @@ GenerateFeedingData <- function(grp.file, prm.file, nc.file) {
       G    <- Rate.mum[i,j]   # maximum growth rate [mg N d-1]
       FSPB <- Pr.FSPB[i,j]    # spawning fraction
       E    <- df.grp$ELive[i] # uptake efficiency
-      if (is.null(df.grp$NumAgeClassSize)) {
-        tau <- 365.0 # must assume single year cohorts for all groups
-      } else {
-        tau  <- 365*df.grp$NumAgeClassSize[i] # days per cohort
+      if (is.null(df.grp$NumAgeClassSize)) { # add column and set to 1
+        df.grp <- mutate(df.grp, NumAgeClassSize = 1.0)
       }
+      tau  <- 365*df.grp$NumAgeClassSize[i] # days per cohort
       
       # Calculate some growth 
       Predator.G <- c(Predator.G, xxx) # predator
