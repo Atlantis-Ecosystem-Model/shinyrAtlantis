@@ -18,7 +18,7 @@ Object of class 'shiny.appobj' see \code{\link[shiny]{shinyApp}}.
 }
 \description{
 Takes data from an Atlantis group file (.csv), biology parameter file (.prm),
-and initial conditions file (.nc) and produces a visualisation of the vertebrate feeding data in the form of a shiny application.
+and initial conditions file (.nc) and produces visualisations of the vertebrate feeding data in the form of a shiny application.
 }
 \examples{
 \dontrun{
