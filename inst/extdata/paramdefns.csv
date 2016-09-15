@@ -1,246 +1,245 @@
-Parameter,Units,Required,Suggested,Definition
-availflag,,Yes,1,"Switch to filter flows based on active groups. The typical setting is 1. 0 = all groups in Groups.csv file are reported even if isTurnedOn = 0, 1 = only active groups (isTurnedOn = 1) are reported."
-BBdamp,,Yes,,Damping coefficient for BB fluxes
-BBthresh,N m-2 s-1,No,,Threshold BB flux level where damping starts mg 
-Bmaxdepth,m,No,,Maximum depth shallow benthic groups found at
-Bmindepth,m,No,,Minimum depth deep benthic groups found at
-Box_degraded,,No,,Boxes affected by coastal degradation [# entries]
-Dmax,,Yes,0.25,Maximum rate of denitrification
-ecotest,,Yes,2,"This (along with verbose in rum.prm) dictates how many messages are sent to the screen as Atlantis does its calculations. The typical setting is 2 (which is major events and the timestep counter). Messages: 0 = no, 1 = part, 2 = more, 3 = all, 4 = fluxs, 5 = do 1 iter only."
-eddy_scale,,Yes,,Coefficient scaling eddy strength impact on phytoplankton growth
-Enviro_turb,,Yes,0.000002,Background level of bioturbation (physcial mixing)
-evol_stdev_range,,No,,Range of genotypes in terms of stdev [1-2]
-FBB_DON,,Yes,,DON contrib from sediment bacteria
-FBB_DR,,Yes,,Detrit contrib from sediment bacteria
-Fben_den,,No,0.5-0.7,Fraction of NH release from OB and BD used in nitrification calculations.
-FDL_benth,,Yes,0.0-1.0,Split between DL and DR for benthos
-FDL_fish,,Yes,0.0-1.0,Split between DL and DR for fish
-FDL_top,,Yes,0.0-1.0,Split between DL and DR for top predators
-FDL_wc,,Yes,0.0-1.0,Split between DL and DR for pelagic invertebrates
-FDON_D,,Yes,0.05,Fraction of DON breakdown that becomes detritus
-FDR_DC,,Yes,0.1,Fraction of carrion that breaks down to refractory detrit
-FDR_DL,,Yes,0.2,Fraction of lab detrit that breaks down to refractory detrit
-FFDDR,,Yes,,Proportion of static demersal fish's planktivore prey that is lost.
-flag_benthos_sediment_link,,Yes,,Flag indicating whether growth of benthos is scaled based on bottom types (1) or not (0).
-flag_bound_change,,No,0,"Whether evolution is effecting the bound or the impact - for the for temperature, pH and salinity effects traits. 0 = bound, 1 = impact."
-flag_competing_epiff,,Yes,,"Flag indicating whether corals, filter feeders and macrophytes compete for space."
-flag_do_evolution,,Yes,0,"Flag indicating whether to allow for evolution of some parameters. 0 = off, 1 = on."
-flag_do_var_express,,No,0,"Flag indicating whether to allow for variable phenotypic expression (if evolution is on). 0 = off, 1 = on."
-flag_evolvar_capped,,No,,"Flag indicating whether the breadth of variability across genotypes has a minimum threshold or not. 0 = no, 1 = yes."
-flag_fine_ontogenetic_diets,,Yes,,"Flag indicating whether want to use diets per age cohort or just for juveniles and adults. 0 = only juvenile and adult diets, 1 = diets defined per age cohort."
-flag_georugosity,,No,,Flag showing whether there is a geological component to rugosity - assumed to be what is read in on initalisation
-flag_inheritance,,No,1,"Flag indicating what kind of inheritance and evolutionary model is being used. 0 = explicit mechanisms (complex), 1 = simple, 2 = straight (1:1) inheritance model."
-flag_invert_biohab,,Yes,,Flag indicating whether inverebrates use dynamic biohabitat to condition growth.
-flag_macro_model,,Yes,,"Flag indicating which seagrass model to use. 0 = simple biomass pool encompassing all parts of the plant, 1 = three part model (roots, leaves and epiphytes)."
-flag_move_habdepend,,No,,"Flag indicating whether vertebrate movement is habitat dependent: 0 = no, 1 = yes."
-flag_mult_grow_curves,,No,,"Flag indicating whether to use multiple growth curves (parameterisations) rather than a single set of parameters per age class (it uses a spread of parameterisations across ""genotypes"" within each age class and phenotypic expression, but with no evolution of parameters through time). 0 = off, 1 = on."
-flag_olddiet,,Yes,1,"Flag indicating whether to use the original or updated diet calculations. 0 = new diet calculations, 1 = original calculations."
-flag_refuge_model,,Yes,,"Flag indicating which refugia model to use: 0 = none, 1 = original, 2 is rugosity related."
-flag_rel_cover,,Yes,,Flag to show either using cumulative habitat (0) or average relative cover (1) when interacting with predators.
-flag_report_water_detritus,,Yes,0,Flag indicating whether to report (in BiomIndx.txt output files) the detritus in the water column as well as in the sediment. Traditionally Atlantis has only reported detritus in the sediment. Typically set to 0. 0=do not include water column detritus in reporting. 1=do include detritus in the water column.
-flag_rugosity_model,,Yes,,"Flag indicating which rugosity calculation to use: 0 = none, 1 = mechanistic, 2 is an empirical relationship from Blackwood."
-flagagestruct,,Yes,1,"Flag indicating whether to track individual year classes within age cohorts or not. Typically set to 1. 0 = homogeneous cohorts (no tracking of individual year classes), 1 = track year classes within cohorts."
-flagavgmig,,Yes,1,"Switch to turn averaging of migrant sizes on/off. Typically set to 1. 0=size of migrating species are set to the size of any animals inside the dynamic model domain, 1 = size of entering migrants is retained and then the new average size calculated from these migrants and any animals already in the model domain."
-flagbactstim,,Yes,0,"Switch to turn stimulation of bacterial growth by benthic activity on/off. Typically set to 0. 0=no extract scaling, growth is based on available dettitus, 1=benthos stimulate bacteria via bioturbation levels and sediment porosity effect, the porosity effect is from Fig 7 (bottom plot) in Blackburn, 1987. Microbial food webs in sediments. In: Sleigh (ed), Microbes in the sea. Ellis Horwood:New York. pp 39."
-flagBFlim,,Yes,0,"Switch to identify filter feeding crowding used: simple=0, ERSEM = 1"
-flagdegrade,,Yes,0,"Flag to indicate whether want to change the seabed types to represent the effects of coastal or industrial developments. 0 = no, 1 = yes."
-flagfishrates,,Yes,,"Switch to show whether clearance and growth rates are absolute=0, or as proportion of body mass=1  "
-flaghabdepend,,Yes,0,"General vertebrate demersal habitat dependency: 0 = no, 1 = yes"
-flaghomog_sp,,Yes,0,"Flag indicating whether to homogenise age structured body condition across the entire area (i.e. assume perfect mixing or not). 0 = no, 1 = yes."
-flagIsEstuary,,No,,NA
-flagkdrop,,Yes,0,"Switch to turn cubic bacterial growth on/off. Typically set to 0. 1=cubic form of bacterial colonisation of detritus equation used, 0=simple asymptotic used."
-flaglight,,Yes,0,"Flag indicating whether light adaptation is on/off for phytoplankton. Typically set to 0. 0=off, 1=on."
-flaglightopt,,Yes,,"Flag indicating which light model is used. 0 = Original PPBIM light model, 1 = Light is calculated at the bottom of each depth layer, 2 = Light is calculated at the top of each light layer, 3 = Light is calculated at the midpoint of each light layer."
-flagmicro,,Yes,0,"Flag indicating whether there is micronutrient limitation or not. Typically set to 0. 0 = off, 1 = on."
-flagmodelArag,,Yes,,"Flag indicating whether not interested in aragonite saturation (0), whether saturation values will be read in (1) or will be calculated from pH using an empirical proxy (2) "
-flagmodelpH,,Yes,,"Flag indicating whether to calculate model pH off temperature, salinity and atmospheric CO2. 0 = off (for cases where you do not want to consider pH effects), 1 = on (for models looking at climate scenarios)."
-flagmodeltemp,,Yes,0,"Flag indicating which temperature model is to be used. Typically set to 0 (should always be set to 0 if you are generating data in a ROMS model etc as it is better have to have environmental conditions consistent with your current flow). 0 = from data (read in from files specified in the force.prm file), 1 = based on a CARS regression algorithm (using depth and latitude), 2 = fixed value."
-flagnut,,Yes,0,"Flag indicating the nutrient limitation formulation used. 0 = Leibig's law - most limiting nutrient sets the limitation level, 1 = The limitation effect of each nutrient is multiplied together, 2 = WQI formulation, 3 = Monod representation based on the major nutrient."
-flagO2depend,,Yes,,"Vertebrate density dependent movement related flags. 0 = off, 1 = oxygen preferences used."
-flagpHchange,,Yes,,"Whether the pH values change through time following a forced trend. yes = 1, no = 0."
-flagPHmortcase,,No,,"Which mortality case to use - 0 - none, 1 = sigmoid mortality, 2 = McElhany and Bush style."
-flagq10,,Yes,1,"Flag indicating whether metabolic rates are sensitive to environmental conditions or not. Typically set to 1. 0 = no, 1 = yes."
-flagrandom,,Yes,,"Flag indicating whether add random wobble in aging and spawning dates (i.e. data +/- x days, where x is up to 14). Typically set to users preference (ie,e, whether desire complete determinism or not). 0=no random wobble, 1=random noise (of up to a fortnight) added."
-flagresp,,Yes,1,"Switch to turn fish respiration on/off. off = 0 (simple growth only with no explicit metabolic costs so E_XXX parameters need to be lower to account for metabolic costs), on = 1 (so explicit respiration and metabolic costs are calculated, so E_XXX will need to be at full value to leave for those costs)."
-flagroc,,Yes,0,"Flag indicating which density dependent option to use with the forage and density dependent movement option (i.e. whether use ideal free prey-based spatial distribution or a more steep drop off based on local population densities). 0 = No drop off (basic calculation), 1 = Ratio drop off, 2= Exponential decline."
-flagsaltchange,,Yes,0,"Flag indicating whether to force a trend in the baseline salinity levels. Typically set to 0 now (as often read in via salinity files listed in force.prm, generated by GCM). 0 = no, 1 = yes."
-flagsaltdepend,,Yes,,"Vertebrate density dependent movement related flags: 0 = off, 1 = salinity preferences used"
-flagseason,,Yes,1,"Flag of seasonal change in environmental drivers and light. Typical value is 1 (in fact I always recommend this to be 1). 0 = no, 1 = yes."
-flagsenesce,,Yes,1,"Flag indicating whether the oldest year class within the final age cohort senesces or not. Typically set to 1. 0 = no, 1 = yes."
-flagstarve,,Yes,1,"Flag to indicate whether to record starvation notices in log.txt. Typically set to 1. 0 = no, 1 = yes."
-flagtempchange,,Yes,0,"Flag indicating whether to force a trend in the baseline temperature levels. Typically set to 0 now (as often read in via temperature files listed in force.prm, generated by GCM). 0 = no, 1 = yes."
-flagtempdepend,,Yes,,"Vertebrate density dependent movement related flags: 0 = off, 1 = temperature preferences used"
-flagtrackpops,,Yes,1,"Flag to indicate whether yearly stock value required. Typical value is 1 (in fact I always recommend this to be 1). 0 = no, 1 = yes output overall sock sizes at the frequency of tsumout (from run.prm)."
-flagtrecruitdistrib,,Yes,1,"0 = humped recruitment arrival distribution, 1 = flat distribution of recruits."
-flagtsforcerecruit,,Yes,0,"Flag indicating whether forcing recruitment with an environmental signal read in from a time series file. 0 = no, 1 = yes."
-FLATchange_max_num,,No,,Human induced degredation that affects bottom groups. Number of changes in area of available flat bottom per coastal cell.
-FLATchange_mult,,No,,Proportional change in available habitat
-FLATchange_period,,No,,Period of change of available habitat
-FLATchange_start,,No,,Start of change in available habitat
-Flux_tol,mg N m-3,Yes,0.1,Tolerance of mass balance assumption per cell
-FPB_DON,,Yes,,DON contrib from pelagic bacteria
-FPB_DR,,Yes,,Detrit contrib from pelagic bacteria
-InvaderEndDay,,No,,Day of run invasion ends
-InvaderEntryBox,,No,,Which box invader entering first
-InvaderIndex,,No,,Guild that is invading
-InvaderMaxDepth,,No,,Maximum depth invader tolerates
-InvaderMinDepth,,No,,Minimum depth invader tolerates
-InvaderScalar,,No,,Proportional scalar to represent drip feed of invaders to existing population
-InvaderSpeed,m hr-1,No,,Rate of spread of front of the invading species
-InvaderStartDay,,No,,Day of run invasion begins
-invading_sp_model,,Yes,,"Invading species model: 0 = not used, 1 = simple drip feed model, 2 - more complex (not implemented yet)"
-K_addepth,,Yes,10,Depth down to which adaptation occurs
-k_BB,,Yes,,"Shape of BB growth equation. 1 = linear, 3 = drop before max, 5 = drop at max."
-K_conc,mg N m-3,Yes,2000,Half concentration level for nitrification by PFB
-k_DL,,Yes,0.0038,Coefficient of light absorption due to labile detritus
-k_DON,,Yes,0.0009,Coefficient of light absorption due to DON
-K_IRR,,Yes,,Half saturation of bioirrigation
-k_IS,,Yes,0.05,Basic coefficient of light absorption
-K_Ks,,No,,Aragonite parameterisation (Zeebe & Wolf Ocean Chem encyclopedia)
-K_MAX_IRR,,Yes,10,Maximum contributions to bioirrigation
-K_max_num_DHW,,No,,Size of degree heat weeks record queue for calculating bleaching triggers for corals
-K_MAX_TUR,,Yes,,Maximum contributions to bioturbation
-k_migslow,,Yes,,"0 = all migrators leave at once, 1 = migrators leave gradually"
-K_MIN_IRR,,Yes,2,Minimum contributions to bioirrigation
-K_nit_T15,,Yes,0.01,Rate of nitrification by free bacteria
-K_num_invmig,,Yes,9,Maximum number of vertically migrating invertebrate groups
-k_PB,,Yes,,"Shape of PB growth eq'n, 1 = linear, 3 = drop before max, 5 = drop at max"
-k_PN,,Yes,0.0035,Coefficient of light absorption due to particulate matter
-k_refDL,,Yes,,Reference labile detrit. level in water column (if higher availability to omnivores reduced)
-k_refDR,,Yes,,Reference refract. detrit. level in water column (if higher availability to omnivores reduced)
-k_refsDL,,Yes,,Reference labile detrit. level in sediments (if higher availability to omnivores reduced)
-k_roc_food,,Yes,0.5,Percent of body mass needed as food before disperse (ddepend move on)
-k_SED,,Yes,,Coefficient of light absoption due to sediment. Only used if flagIsEstuary is on.
-K_TUR,,Yes,116,Half saturation of bioturbation
-K_TUR_DEP,mg N m-3,Yes,,Bioturbation depth
-k_w_cdepth,m,Yes,205,Bottom depth marking coastal from oceanic water (for light absorp)
-k_w_deep,,Yes,0.005-0.016,Coefficient of background light absorption due to oceanic water
-k_w_depth,m,Yes,55,Bottom depth marking estuarine vs oceanic water (for light absorp)
-k_w_shallow,,Yes,0.016-0.078,Coefficient of background light absorption due to coastal water
-k_wetdry,,Yes,20,Ratio of Wet weight to AFDW
-Karag_A,,No,,Aragonite parameterisation (Zeebe & Wolf Ocean Chem encyclopedia)
-Karag_B,,No,,Aragonite parameterisation (Zeebe & Wolf Ocean Chem encyclopedia)
-Karag_C,,No,,Aragonite parameterisation (Zeebe & Wolf Ocean Chem encyclopedia)
-Karag_pH,,No,,Aragonite parameterisation (Zeebe & Wolf Ocean Chem encyclopedia)
-Kca_const,,No,,Aragonite parameterisation (Zeebe & Wolf Ocean Chem encyclopedia)
-KHTD,,No,0.5,Factor handling time reduced by for thresh2<relres<thesh1
-KHTI,,No,1.5,Factor handling time increased by for relres<thresh2# Availability of bacteria being cleaned from ingested detritus
-KI_avail,,Yes,0.5,Available light
-KIOP_min,,Yes,4,Minimum level of light adaptation
-KIOP_shift,,Yes,0.25,Minimum rate of shift under light adaptation
-KIRR_BC,,Yes,1,Bioirrigation contribution by infaunal carniv
-KIRR_BD,,Yes,1,Bioirrigation contribution by deposit feeders
-KIRR_BO,,Yes,0.2,Bioirrigation contribution by meiobenthos
-Ksmother_coefft,,No,,Sediment smothering (Wolanski et al 2003)
-Ksmother_const,,No,,Sediment smothering (Wolanski et al 2003)
-KST_bird,,Yes,,Factor respiration reduced by when seabirds are starved
-KST_fish,,yes,,Factor respiration reduced by when fish are starved
-KST_mammal,,Yes,,Factor respiration reduced by when mammals are starved
-KST_shark,,Yes,,Factor respiration reduced by when sharks are starved
-Kthresh1,,No,0.99,Threshhold rel. reserve when handling time is reduced
-Kthresh2,,No,0.92,Threshhold rel. reserve when costs reduce + handling time inc
-Kthreshm,,No,,Threshold starvation level when mort starts
-Ktmp_bird,,Yes,,Factor relating temperature to respiration for seabirds
-Ktmp_fish,,Yes,,Factor relating temperature to respiration for fish
-Ktmp_mammal,,Yes,,Factor relating temperature to respiration for mammals
-Ktmp_shark,,Yes,,Factor relating temperature to respiration for sharks
-lim_sun_hours,,Yes,0,"Flag indicating whether to dynamically calculate light levels at different latitudes and times of the year or not. 0 = simple day and night cycle, 1 = dynamic calculation of light."
-lognorm_mu,,No,,Log-normal random recruitment (Centre)
-lognorm_sigma,,No,,Log-normal random recruitment (Variation)
-max_rate_evol,,No,,Maximum evolutionary shift at any one point in time
-max_rugosity,,Yes,,Rugosity related parameters
-maxInvaderAge,,No,,Maximum age class invading
-MB_wc,,Yes,0.01,Scalar for microphytoben. growth in wc (reduced as not on substrate)
-min_channel_depth,,Yes,,Minimum depth of estuarine channels
-min_dens,,Yes,0.0001,Minimum density of top predators and fish
-min_pool,,Yes,0.00000001,Minimum pool size
-min_rugosity,,Yes,,Rugosity related parameters
-minInvaderAge,,No,,Minimum age class invading
-mL3_SG_T15,d-1,No,,"Linear mortality of seagrass epiphytes, 15 deg C"
-mS_MA_T15,d-1,Yes,120-180,Scour (bottom stress) macroalgae mortality
-mS_SG_T15,d-1,Yes,0.0-0.0002,Excessive DIN seagrass  mortality
-mT_CEP,,No,,Terminal (senescence mortality) for biomass pools (proportion of terminal age group dying)
-mT_PWN,,No,,Terminal (senescence mortality) for biomass pools (proportion of terminal age group dying)
-O2case,,Yes,3,"Flag indicating which Oxygen limitation formulation is used. 0 = Apply a Michelis-Menten formulation using ambient oxygen levels, 1 = Based on O2depth not the variable oxygen, 2 = The formulation used in IGBEM and ERSEM (simple asymptotic), 3 = Maximum of limitation found using a Michelis-Mentin and depth based formulation."
-p_BBben,,Yes,0.6-1.0,Prop. of sed. bacteria taken when detrit eaten by benthos
-p_BBfish,,Yes,0.3-1.0,Prop. of sed. bacteria taken when detrit eaten by vertebrates
-p_NH_anad,,Yes,3,Proportion of NH4 adsorped to NH4 dissolved
-p_PBben,,Yes,0.6-1.0,Prop. of pelag. bact. taken when detrit eaten by benthos
-p_PBwc,,Yes,0.6-1.0,Prop. of pelag. bacteria taken when detrit eaten in wc
-pH_deep_coefft_O,,Yes,,Oxygen term coefficient for deep waters
-pH_deep_coefft_S,,Yes,,Salinity term coefficient for deep waters 
-pH_deep_coefft_T,,Yes,,Temperature term coefficient for deep waters
-pH_deep_const,,Yes,,Constant term coefficient for deep waters
-pH_mid_coefft_O,,Yes,,Oxygen term coefficient for mid-level waters
-pH_mid_coefft_S,,Yes,,Salinity term coefficient for mid-level waters 
-pH_mid_coefft_T,,Yes,,Temperature term coefficient for mid-level waters
-pH_mid_const,,Yes,,Constant term coefficient for mid-level waters
-pH_mid_depth,,Yes,,Depth of midwater layer
-pH_sensitivity_model,,Yes,,Whether using monod (0) or nonlinear model (1)
-pH_surface_coefft_O,,Yes,,Oxygen term coefficient for surface waters
-pH_surface_coefft_S,,Yes,,Salinity term coefficient for surface waters       
-pH_surface_coefft_T,,Yes,,Temperature term coefficient for surface waters
-pH_surface_const,,Yes,,Constant term coefficient for surface waters
-pH_surface_depth,,Yes,,Depth of surface layer: empirical pH model
-pHchange_max_num,,Yes,,Number of changes in average base pH
-pHchange_mult,,Yes,,Differential scaling with depth[# entries]
-pHchange_period,,Yes,,Period of time changes in base pH take [# entries]
-pHchange_start,,Yes,,Day changes in base pH begins [# entries]
-,,,,
-Q10,,Yes,2,Exponent in temperature effect on rate parameters
-R_0_T15,,Yes,200-500,Minimum rate of sediment respiration that supports nitrification
-R_D_T15,,Yes,,Peak of nitrification-denitrification curve
-r_DC_T15,d-1,Yes,0.5,Rate of carrion breakdown to detritus at 15 deg C
-r_DL_T15,d-1,Yes,0.1,Rate of labile detrital breakdown at 15 deg C (not used if bacteria groups are on)
-r_DON_T15,d-1,Yes,0.00176,Rate of DON breakdown at 15 deg C
-r_DR_T15,d-1,Yes,0.008,Rate of ref detrital breakdown at 15 deg C (not used if bacteria groups are on)
-r_DSi_T15,d-1,Yes,0.05,Rate of detrital Si breakdown at 15 deg C
-readin_popratio,,Yes,0,"Switch to indicate whether loading pre-existing age distributions or no. Typically set to 0 for new models. 0=uniform age distributions with ageclasses (i.e. all ages within ageclass assumed of equal strength at model start), 1= read in age structures within age class (popratio parameter), this is used for fully conditioned models that are using previous model output as the new input file."
-rec_m,,Yes,,Distribution of recruits within recruitment period
-rec_sigma,,Yes,,Distribution of recruits within recruitment period
-recover_span,,No,,Number of days from initial trigger until recover_mult used
-recover_subseq,,No,,Number of years in a row where get increased recruitment
-recover_trigger,,No,,Prop. of init. Stock remaining that triggers encourage recovery 
-recruitRange,,Yes,,max relative cohort strength (multiplicative) for groups with strong year classes
-recruitRangeFlat,,Yes,,max relative cohort strength (multiplicative) for groups without strong year classes
-REEFchange_max_num,,No,,Human induced degredation that affects bottom groups. Number of changes in area of available flat bottom per coastal cell
-REEFchange_mult,,No,,Proportional change in available habitat
-REEFchange_period,,No,,Period of change of available habitat
-REEFchange_start,,No,,Start of change in available habitat
-ref_chl,mg Chla m-3,Yes,,Reference level of Chla
-RelTol,,Yes,0.1,Relative tolerance of the adaptive differentiation scheme
-roc_wgt,,Yes,10000,Wgt factor for density dependent fish move
-RugCover_Cap,,Yes,,Rugosity related parameters
-RugCover_Coefft,,Yes,,Rugosity related parameters
-RugCover_Const,,Yes,,Rugosity related parameters
-rugosity_const,,No,,Bozec model for rugosity
-Schange_max_num,,Yes,,Number of changes in average base temperature
-Schange_mult,,Yes,,Scale of change in base salinity [# entries]
-Schange_period,,Yes,,Period of time changes in base salinity take [# entries]
-Schange_start,,Yes,,Day changes in base salinity begins [# entries]
-SOFTchange_max_num,,No,,Human induced degredation that affects bottom groups. Number of changes in area of available flat bottom per coastal cell
-SOFTchange_mult,,No,,Proportional change in available habitat
-SOFTchange_period,,No,,Period of change of available habitat
-SOFTchange_start,,No,,Start of change in available habitat
-swr_scalar,,Yes,,Proportion of shortwave radiation available to photosynthesis
-Tchange_max_num,,Yes,1,Number of changes in average base temperature
-Tchange_mult,,Yes,,Scale of change in base temperature [# entries]
-Tchange_period,,Yes,,Period of time changes in base temperature take [# entries]
-Tchange_start,,Yes,,Day changes in base temperature begins [# entries]
-temp_coefftB,,Yes,,Coefficient B in Gary Griffith temperature function
-temp_coefftC,,Yes,,Coefficient C in Gary Griffith temperature function
-temp_exp,,Yes,,Exponent in Gary Griffith temperature function
-UseHardFeedingWindow,,Yes,1,Whether to use Heaviside based feeding window (1) or smoother curve (0)
-vertpHchange_mult,,Yes,,Differential scaling with depth [# entries]
-vertSchange_mult,,yes,,Differential scaling with depth [# entries]
-vertTchange_mult,,Yes,,Differential scaling with depth [# entries]
-X_CHLN,ratio XXX:N,Yes,7,Ratio of chla to N
-X_CN,ratio XXX:N,Yes,5.7,Redfield ratio of C:N
-X_FeN,ratio XXX:N,Yes,30000,Redfield ratio of Fe:N
-X_ON,ratio XXX:N,Yes,16,Redfield ratio of O:N
-X_RS,,Yes,2.2-2.7,Ratio reserve to structure tissue in well fed vertebrates
-X_SiN,ratio XXX:N,Yes,3,Redfield ratio of Si:N
-XBB_DL,ratio BB:DL,Yes,0.15-0.2,Maximum ratio of BB to DL biomass
-XBB_DR,ratio BB:DR,Yes,0.005-0.01,Maximum ratio of BB to DR biomass
-XPB_DL,ratio PB:DL,Yes,0.3-0.4,Maximum ratio of PB to DL biomass
-XPB_DR,ratio PB:DR,Yes,0.01-0.015,Maximum ratio of PB to DR biomass
+Parameter,Units,Suggested,Vector,Definition
+availflag,,1,,"Switch to filter flows based on active groups. The typical setting is 1. 0 = all groups in Groups.csv file are reported even if isTurnedOn = 0, 1 = only active groups (isTurnedOn = 1) are reported."
+BBdamp,,,,Damping coefficient for BB fluxes
+BBthresh,N m-2 s-1,,,Threshold BB flux level where damping starts mg 
+Bmaxdepth,m,,,Maximum depth shallow benthic groups found at
+Bmindepth,m,,,Minimum depth deep benthic groups found at
+Box_degraded,,,,Boxes affected by coastal degradation [# entries]
+Dmax,,0.25,,Maximum rate of denitrification
+ecotest,,2,,"This (along with verbose in rum.prm) dictates how many messages are sent to the screen as Atlantis does its calculations. The typical setting is 2 (which is major events and the timestep counter). Messages: 0 = no, 1 = part, 2 = more, 3 = all, 4 = fluxs, 5 = do 1 iter only."
+eddy_scale,,,,Coefficient scaling eddy strength impact on phytoplankton growth
+Enviro_turb,,0.000002,,Background level of bioturbation (physcial mixing)
+evol_stdev_range,,,,Range of genotypes in terms of stdev [1-2]
+FBB_DON,,,,DON contrib from sediment bacteria
+FBB_DR,,,,Detrit contrib from sediment bacteria
+Fben_den,,0.5-0.7,,Fraction of NH release from OB and BD used in nitrification calculations.
+FDL_benth,,0.0-1.0,,Split between DL and DR for benthos
+FDL_fish,,0.0-1.0,,Split between DL and DR for fish
+FDL_top,,0.0-1.0,,Split between DL and DR for top predators
+FDL_wc,,0.0-1.0,,Split between DL and DR for pelagic invertebrates
+FDON_D,,0.05,,Fraction of DON breakdown that becomes detritus
+FDR_DC,,0.1,,Fraction of carrion that breaks down to refractory detrit
+FDR_DL,,0.2,,Fraction of lab detrit that breaks down to refractory detrit
+FFDDR,,,,Proportion of static demersal fish's planktivore prey that is lost.
+flag_benthos_sediment_link,,,,Flag indicating whether growth of benthos is scaled based on bottom types (1) or not (0).
+flag_bound_change,,0,,"Whether evolution is effecting the bound or the impact - for the for temperature, pH and salinity effects traits. 0 = bound, 1 = impact."
+flag_competing_epiff,,,,"Flag indicating whether corals, filter feeders and macrophytes compete for space."
+flag_do_evolution,,0,,"Flag indicating whether to allow for evolution of some parameters. 0 = off, 1 = on."
+flag_do_var_express,,0,,"Flag indicating whether to allow for variable phenotypic expression (if evolution is on). 0 = off, 1 = on."
+flag_evolvar_capped,,,,"Flag indicating whether the breadth of variability across genotypes has a minimum threshold or not. 0 = no, 1 = yes."
+flag_fine_ontogenetic_diets,,,,"Flag indicating whether want to use diets per age cohort or just for juveniles and adults. 0 = only juvenile and adult diets, 1 = diets defined per age cohort."
+flag_georugosity,,,,Flag showing whether there is a geological component to rugosity - assumed to be what is read in on initalisation
+flag_inheritance,,1,,"Flag indicating what kind of inheritance and evolutionary model is being used. 0 = explicit mechanisms (complex), 1 = simple, 2 = straight (1:1) inheritance model."
+flag_invert_biohab,,,,Flag indicating whether inverebrates use dynamic biohabitat to condition growth.
+flag_macro_model,,,,"Flag indicating which seagrass model to use. 0 = simple biomass pool encompassing all parts of the plant, 1 = three part model (roots, leaves and epiphytes)."
+flag_move_habdepend,,,,"Flag indicating whether vertebrate movement is habitat dependent: 0 = no, 1 = yes."
+flag_mult_grow_curves,,,,"Flag indicating whether to use multiple growth curves (parameterisations) rather than a single set of parameters per age class (it uses a spread of parameterisations across ""genotypes"" within each age class and phenotypic expression, but with no evolution of parameters through time). 0 = off, 1 = on."
+flag_olddiet,,1,,"Flag indicating whether to use the original or updated diet calculations. 0 = new diet calculations, 1 = original calculations."
+flag_refuge_model,,,,"Flag indicating which refugia model to use: 0 = none, 1 = original, 2 is rugosity related."
+flag_rel_cover,,,,Flag to show either using cumulative habitat (0) or average relative cover (1) when interacting with predators.
+flag_report_water_detritus,,0,,Flag indicating whether to report (in BiomIndx.txt output files) the detritus in the water column as well as in the sediment. Traditionally Atlantis has only reported detritus in the sediment. Typically set to 0. 0=do not include water column detritus in reporting. 1=do include detritus in the water column.
+flag_rugosity_model,,,,"Flag indicating which rugosity calculation to use: 0 = none, 1 = mechanistic, 2 is an empirical relationship from Blackwood."
+flagagestruct,,1,,"Flag indicating whether to track individual year classes within age cohorts or not. Typically set to 1. 0 = homogeneous cohorts (no tracking of individual year classes), 1 = track year classes within cohorts."
+flagavgmig,,1,,"Switch to turn averaging of migrant sizes on/off. Typically set to 1. 0=size of migrating species are set to the size of any animals inside the dynamic model domain, 1 = size of entering migrants is retained and then the new average size calculated from these migrants and any animals already in the model domain."
+flagbactstim,,0,,"Switch to turn stimulation of bacterial growth by benthic activity on/off. Typically set to 0. 0=no extract scaling, growth is based on available dettitus, 1=benthos stimulate bacteria via bioturbation levels and sediment porosity effect, the porosity effect is from Fig 7 (bottom plot) in Blackburn, 1987. Microbial food webs in sediments. In: Sleigh (ed), Microbes in the sea. Ellis Horwood:New York. pp 39."
+flagBFlim,,0,,"Switch to identify filter feeding crowding used: simple=0, ERSEM = 1"
+flagdegrade,,0,,"Flag to indicate whether want to change the seabed types to represent the effects of coastal or industrial developments. 0 = no, 1 = yes."
+flagfishrates,,,,"Switch to show whether clearance and growth rates are absolute=0, or as proportion of body mass=1  "
+flaghabdepend,,0,,"General vertebrate demersal habitat dependency: 0 = no, 1 = yes"
+flaghomog_sp,,0,,"Flag indicating whether to homogenise age structured body condition across the entire area (i.e. assume perfect mixing or not). 0 = no, 1 = yes."
+flagIsEstuary,,,,NA
+flagkdrop,,0,,"Switch to turn cubic bacterial growth on/off. Typically set to 0. 1=cubic form of bacterial colonisation of detritus equation used, 0=simple asymptotic used."
+flaglight,,0,,"Flag indicating whether light adaptation is on/off for phytoplankton. Typically set to 0. 0=off, 1=on."
+flaglightopt,,,,"Flag indicating which light model is used. 0 = Original PPBIM light model, 1 = Light is calculated at the bottom of each depth layer, 2 = Light is calculated at the top of each light layer, 3 = Light is calculated at the midpoint of each light layer."
+flagmicro,,0,,"Flag indicating whether there is micronutrient limitation or not. Typically set to 0. 0 = off, 1 = on."
+flagmodelArag,,,,"Flag indicating whether not interested in aragonite saturation (0), whether saturation values will be read in (1) or will be calculated from pH using an empirical proxy (2) "
+flagmodelpH,,,,"Flag indicating whether to calculate model pH off temperature, salinity and atmospheric CO2. 0 = off (for cases where you do not want to consider pH effects), 1 = on (for models looking at climate scenarios)."
+flagmodeltemp,,0,,"Flag indicating which temperature model is to be used. Typically set to 0 (should always be set to 0 if you are generating data in a ROMS model etc as it is better have to have environmental conditions consistent with your current flow). 0 = from data (read in from files specified in the force.prm file), 1 = based on a CARS regression algorithm (using depth and latitude), 2 = fixed value."
+flagnut,,0,,"Flag indicating the nutrient limitation formulation used. 0 = Leibig's law - most limiting nutrient sets the limitation level, 1 = The limitation effect of each nutrient is multiplied together, 2 = WQI formulation, 3 = Monod representation based on the major nutrient."
+flagO2depend,,,,"Vertebrate density dependent movement related flags. 0 = off, 1 = oxygen preferences used."
+flagpHchange,,,,"Whether the pH values change through time following a forced trend. yes = 1, no = 0."
+flagPHmortcase,,,,"Which mortality case to use - 0 - none, 1 = sigmoid mortality, 2 = McElhany and Bush style."
+flagq10,,1,,"Flag indicating whether metabolic rates are sensitive to environmental conditions or not. Typically set to 1. 0 = no, 1 = yes."
+flagrandom,,,,"Flag indicating whether add random wobble in aging and spawning dates (i.e. data +/- x days, where x is up to 14). Typically set to users preference (ie,e, whether desire complete determinism or not). 0=no random wobble, 1=random noise (of up to a fortnight) added."
+flagresp,,1,,"Switch to turn fish respiration on/off. off = 0 (simple growth only with no explicit metabolic costs so E_XXX parameters need to be lower to account for metabolic costs), on = 1 (so explicit respiration and metabolic costs are calculated, so E_XXX will need to be at full value to leave for those costs)."
+flagroc,,0,,"Flag indicating which density dependent option to use with the forage and density dependent movement option (i.e. whether use ideal free prey-based spatial distribution or a more steep drop off based on local population densities). 0 = No drop off (basic calculation), 1 = Ratio drop off, 2= Exponential decline."
+flagsaltchange,,0,,"Flag indicating whether to force a trend in the baseline salinity levels. Typically set to 0 now (as often read in via salinity files listed in force.prm, generated by GCM). 0 = no, 1 = yes."
+flagsaltdepend,,,,"Vertebrate density dependent movement related flags: 0 = off, 1 = salinity preferences used"
+flagseason,,1,,"Flag of seasonal change in environmental drivers and light. Typical value is 1 (in fact I always recommend this to be 1). 0 = no, 1 = yes."
+flagsenesce,,1,,"Flag indicating whether the oldest year class within the final age cohort senesces or not. Typically set to 1. 0 = no, 1 = yes."
+flagstarve,,1,,"Flag to indicate whether to record starvation notices in log.txt. Typically set to 1. 0 = no, 1 = yes."
+flagtempchange,,0,,"Flag indicating whether to force a trend in the baseline temperature levels. Typically set to 0 now (as often read in via temperature files listed in force.prm, generated by GCM). 0 = no, 1 = yes."
+flagtempdepend,,,,"Vertebrate density dependent movement related flags: 0 = off, 1 = temperature preferences used"
+flagtrackpops,,1,,"Flag to indicate whether yearly stock value required. Typical value is 1 (in fact I always recommend this to be 1). 0 = no, 1 = yes output overall sock sizes at the frequency of tsumout (from run.prm)."
+flagtrecruitdistrib,,1,,"0 = humped recruitment arrival distribution, 1 = flat distribution of recruits."
+flagtsforcerecruit,,0,,"Flag indicating whether forcing recruitment with an environmental signal read in from a time series file. 0 = no, 1 = yes."
+FLATchange_max_num,,,,Human induced degredation that affects bottom groups. Number of changes in area of available flat bottom per coastal cell.
+FLATchange_mult,,,,Proportional change in available habitat
+FLATchange_period,,,,Period of change of available habitat
+FLATchange_start,,,,Start of change in available habitat
+Flux_tol,mg N m-3,0.1,,Tolerance of mass balance assumption per cell
+FPB_DON,,,,DON contrib from pelagic bacteria
+FPB_DR,,,,Detrit contrib from pelagic bacteria
+InvaderEndDay,,,,Day of run invasion ends
+InvaderEntryBox,,,,Which box invader entering first
+InvaderIndex,,,,Guild that is invading
+InvaderMaxDepth,,,,Maximum depth invader tolerates
+InvaderMinDepth,,,,Minimum depth invader tolerates
+InvaderScalar,,,,Proportional scalar to represent drip feed of invaders to existing population
+InvaderSpeed,m hr-1,,,Rate of spread of front of the invading species
+InvaderStartDay,,,,Day of run invasion begins
+invading_sp_model,,,,"Invading species model: 0 = not used, 1 = simple drip feed model, 2 - more complex (not implemented yet)"
+K_addepth,,10,,Depth down to which adaptation occurs
+k_BB,,,,"Shape of BB growth equation. 1 = linear, 3 = drop before max, 5 = drop at max."
+K_conc,mg N m-3,2000,,Half concentration level for nitrification by PFB
+k_DL,,0.0038,,Coefficient of light absorption due to labile detritus
+k_DON,,0.0009,,Coefficient of light absorption due to DON
+K_IRR,,,,Half saturation of bioirrigation
+k_IS,,0.05,,Basic coefficient of light absorption
+K_Ks,,,,Aragonite parameterisation (Zeebe & Wolf Ocean Chem encyclopedia)
+K_MAX_IRR,,10,,Maximum contributions to bioirrigation
+K_max_num_DHW,,,,Size of degree heat weeks record queue for calculating bleaching triggers for corals
+K_MAX_TUR,,,,Maximum contributions to bioturbation
+k_migslow,,,,"0 = all migrators leave at once, 1 = migrators leave gradually"
+K_MIN_IRR,,2,,Minimum contributions to bioirrigation
+K_nit_T15,,0.01,,Rate of nitrification by free bacteria
+K_num_invmig,,9,,Maximum number of vertically migrating invertebrate groups
+k_PB,,,,"Shape of PB growth eq'n, 1 = linear, 3 = drop before max, 5 = drop at max"
+k_PN,,0.0035,,Coefficient of light absorption due to particulate matter
+k_refDL,,,,Reference labile detrit. level in water column (if higher availability to omnivores reduced)
+k_refDR,,,,Reference refract. detrit. level in water column (if higher availability to omnivores reduced)
+k_refsDL,,,,Reference labile detrit. level in sediments (if higher availability to omnivores reduced)
+k_roc_food,,0.5,,Percent of body mass needed as food before disperse (ddepend move on)
+k_SED,,,,Coefficient of light absoption due to sediment. Only used if flagIsEstuary is on.
+K_TUR,,116,,Half saturation of bioturbation
+K_TUR_DEP,mg N m-3,,,Bioturbation depth
+k_w_cdepth,m,205,,Bottom depth marking coastal from oceanic water (for light absorp)
+k_w_deep,,0.005-0.016,,Coefficient of background light absorption due to oceanic water
+k_w_depth,m,55,,Bottom depth marking estuarine vs oceanic water (for light absorp)
+k_w_shallow,,0.016-0.078,,Coefficient of background light absorption due to coastal water
+k_wetdry,,20,,Ratio of Wet weight to AFDW
+Karag_A,,,,Aragonite parameterisation (Zeebe & Wolf Ocean Chem encyclopedia)
+Karag_B,,,,Aragonite parameterisation (Zeebe & Wolf Ocean Chem encyclopedia)
+Karag_C,,,,Aragonite parameterisation (Zeebe & Wolf Ocean Chem encyclopedia)
+Karag_pH,,,,Aragonite parameterisation (Zeebe & Wolf Ocean Chem encyclopedia)
+Kca_const,,,,Aragonite parameterisation (Zeebe & Wolf Ocean Chem encyclopedia)
+KHTD,,0.5,,Factor handling time reduced by for thresh2<relres<thesh1
+KHTI,,1.5,,Factor handling time increased by for relres<thresh2# Availability of bacteria being cleaned from ingested detritus
+KI_avail,,0.5,,Available light
+KIOP_min,,4,,Minimum level of light adaptation
+KIOP_shift,,0.25,,Minimum rate of shift under light adaptation
+KIRR_BC,,1,,Bioirrigation contribution by infaunal carniv
+KIRR_BD,,1,,Bioirrigation contribution by deposit feeders
+KIRR_BO,,0.2,,Bioirrigation contribution by meiobenthos
+Ksmother_coefft,,,,Sediment smothering (Wolanski et al 2003)
+Ksmother_const,,,,Sediment smothering (Wolanski et al 2003)
+KST_bird,,,,Factor respiration reduced by when seabirds are starved
+KST_fish,,,,Factor respiration reduced by when fish are starved
+KST_mammal,,,,Factor respiration reduced by when mammals are starved
+KST_shark,,,,Factor respiration reduced by when sharks are starved
+Kthresh1,,0.99,,Threshhold rel. reserve when handling time is reduced
+Kthresh2,,0.92,,Threshhold rel. reserve when costs reduce + handling time inc
+Kthreshm,,,,Threshold starvation level when mort starts
+Ktmp_bird,,,,Factor relating temperature to respiration for seabirds
+Ktmp_fish,,,,Factor relating temperature to respiration for fish
+Ktmp_mammal,,,,Factor relating temperature to respiration for mammals
+Ktmp_shark,,,,Factor relating temperature to respiration for sharks
+lim_sun_hours,,0,,"Flag indicating whether to dynamically calculate light levels at different latitudes and times of the year or not. 0 = simple day and night cycle, 1 = dynamic calculation of light."
+lognorm_mu,,,,Log-normal random recruitment (Centre)
+lognorm_sigma,,,,Log-normal random recruitment (Variation)
+max_rate_evol,,,,Maximum evolutionary shift at any one point in time
+max_rugosity,,,,Rugosity related parameters
+maxInvaderAge,,,,Maximum age class invading
+MB_wc,,0.01,,Scalar for microphytoben. growth in wc (reduced as not on substrate)
+min_channel_depth,,,,Minimum depth of estuarine channels
+min_dens,,0.0001,,Minimum density of top predators and fish
+min_pool,,0.00000001,,Minimum pool size
+min_rugosity,,,,Rugosity related parameters
+minInvaderAge,,,,Minimum age class invading
+mL3_SG_T15,d-1,,,"Linear mortality of seagrass epiphytes, 15 deg C"
+mS_MA_T15,d-1,120-180,,Scour (bottom stress) macroalgae mortality
+mS_SG_T15,d-1,0.0-0.0002,,Excessive DIN seagrass  mortality
+mT_CEP,,,,Terminal (senescence mortality) for biomass pools (proportion of terminal age group dying)
+mT_PWN,,,,Terminal (senescence mortality) for biomass pools (proportion of terminal age group dying)
+O2case,,3,,"Flag indicating which Oxygen limitation formulation is used. 0 = Apply a Michelis-Menten formulation using ambient oxygen levels, 1 = Based on O2depth not the variable oxygen, 2 = The formulation used in IGBEM and ERSEM (simple asymptotic), 3 = Maximum of limitation found using a Michelis-Mentin and depth based formulation."
+p_BBben,,0.6-1.0,,Prop. of sed. bacteria taken when detrit eaten by benthos
+p_BBfish,,0.3-1.0,,Prop. of sed. bacteria taken when detrit eaten by vertebrates
+p_NH_anad,,3,,Proportion of NH4 adsorped to NH4 dissolved
+p_PBben,,0.6-1.0,,Prop. of pelag. bact. taken when detrit eaten by benthos
+p_PBwc,,0.6-1.0,,Prop. of pelag. bacteria taken when detrit eaten in wc
+pH_deep_coefft_O,,,,Oxygen term coefficient for deep waters
+pH_deep_coefft_S,,,,Salinity term coefficient for deep waters 
+pH_deep_coefft_T,,,,Temperature term coefficient for deep waters
+pH_deep_const,,,,Constant term coefficient for deep waters
+pH_mid_coefft_O,,,,Oxygen term coefficient for mid-level waters
+pH_mid_coefft_S,,,,Salinity term coefficient for mid-level waters 
+pH_mid_coefft_T,,,,Temperature term coefficient for mid-level waters
+pH_mid_const,,,,Constant term coefficient for mid-level waters
+pH_mid_depth,,,,Depth of midwater layer
+pH_sensitivity_model,,,,Whether using monod (0) or nonlinear model (1)
+pH_surface_coefft_O,,,,Oxygen term coefficient for surface waters
+pH_surface_coefft_S,,,,Salinity term coefficient for surface waters       
+pH_surface_coefft_T,,,,Temperature term coefficient for surface waters
+pH_surface_const,,,,Constant term coefficient for surface waters
+pH_surface_depth,,,,Depth of surface layer: empirical pH model
+pHchange_max_num,,,,Number of changes in average base pH
+pHchange_mult,,,,Differential scaling with depth[# entries]
+pHchange_period,,,,Period of time changes in base pH take [# entries]
+pHchange_start,,,,Day changes in base pH begins [# entries]
+Q10,,2,,Exponent in temperature effect on rate parameters
+R_0_T15,,200-500,,Minimum rate of sediment respiration that supports nitrification
+R_D_T15,,,,Peak of nitrification-denitrification curve
+r_DC_T15,d-1,0.5,,Rate of carrion breakdown to detritus at 15 deg C
+r_DL_T15,d-1,0.1,,Rate of labile detrital breakdown at 15 deg C (not used if bacteria groups are on)
+r_DON_T15,d-1,0.00176,,Rate of DON breakdown at 15 deg C
+r_DR_T15,d-1,0.008,,Rate of ref detrital breakdown at 15 deg C (not used if bacteria groups are on)
+r_DSi_T15,d-1,0.05,,Rate of detrital Si breakdown at 15 deg C
+readin_popratio,,0,,"Switch to indicate whether loading pre-existing age distributions or no. Typically set to 0 for new models. 0=uniform age distributions with ageclasses (i.e. all ages within ageclass assumed of equal strength at model start), 1= read in age structures within age class (popratio parameter), this is used for fully conditioned models that are using previous model output as the new input file."
+rec_m,,,,Distribution of recruits within recruitment period
+rec_sigma,,,,Distribution of recruits within recruitment period
+recover_span,,,,Number of days from initial trigger until recover_mult used
+recover_subseq,,,,Number of years in a row where get increased recruitment
+recover_trigger,,,,Prop. of init. Stock remaining that triggers encourage recovery 
+recruitRange,,,,max relative cohort strength (multiplicative) for groups with strong year classes
+recruitRangeFlat,,,,max relative cohort strength (multiplicative) for groups without strong year classes
+REEFchange_max_num,,,,Human induced degredation that affects bottom groups. Number of changes in area of available flat bottom per coastal cell
+REEFchange_mult,,,,Proportional change in available habitat
+REEFchange_period,,,,Period of change of available habitat
+REEFchange_start,,,,Start of change in available habitat
+ref_chl,mg Chla m-3,,,Reference level of Chla
+RelTol,,0.1,,Relative tolerance of the adaptive differentiation scheme
+roc_wgt,,10000,,Wgt factor for density dependent fish move
+RugCover_Cap,,,,Rugosity related parameters
+RugCover_Coefft,,,,Rugosity related parameters
+RugCover_Const,,,,Rugosity related parameters
+rugosity_const,,,,Bozec model for rugosity
+Schange_max_num,,,No,Number of changes in average base temperature
+Schange_mult,,,Yes,Scale of change in base salinity [# entries]
+Schange_period,,,Yes,Period of time changes in base salinity take [# entries]
+Schange_start,,,Yes,Day changes in base salinity begins [# entries]
+SOFTchange_max_num,,,,Human induced degredation that affects bottom groups. Number of changes in area of available flat bottom per coastal cell
+SOFTchange_mult,,,,Proportional change in available habitat
+SOFTchange_period,,,,Period of change of available habitat
+SOFTchange_start,,,,Start of change in available habitat
+swr_scalar,,,,Proportion of shortwave radiation available to photosynthesis
+Tchange_max_num,,1,,Number of changes in average base temperature
+Tchange_mult,,,,Scale of change in base temperature [# entries]
+Tchange_period,,,,Period of time changes in base temperature take [# entries]
+Tchange_start,,,,Day changes in base temperature begins [# entries]
+temp_coefftB,,,,Coefficient B in Gary Griffith temperature function
+temp_coefftC,,,,Coefficient C in Gary Griffith temperature function
+temp_exp,,,,Exponent in Gary Griffith temperature function
+UseHardFeedingWindow,,1,,Whether to use Heaviside based feeding window (1) or smoother curve (0)
+vertpHchange_mult,,,,Differential scaling with depth [# entries]
+vertSchange_mult,,,Yes,Differential scaling with depth [# entries]
+vertTchange_mult,,,,Differential scaling with depth [# entries]
+X_CHLN,ratio XXX:N,7,,Ratio of chla to N
+X_CN,ratio XXX:N,5.7,,Redfield ratio of C:N
+X_FeN,ratio XXX:N,30000,,Redfield ratio of Fe:N
+X_ON,ratio XXX:N,16,,Redfield ratio of O:N
+X_RS,,2.2-2.7,,Ratio reserve to structure tissue in well fed vertebrates
+X_SiN,ratio XXX:N,3,,Redfield ratio of Si:N
+XBB_DL,ratio BB:DL,0.15-0.2,,Maximum ratio of BB to DL biomass
+XBB_DR,ratio BB:DR,0.005-0.01,,Maximum ratio of BB to DR biomass
+XPB_DL,ratio PB:DL,0.3-0.4,,Maximum ratio of PB to DL biomass
+XPB_DR,ratio PB:DR,0.01-0.015,,Maximum ratio of PB to DR biomass

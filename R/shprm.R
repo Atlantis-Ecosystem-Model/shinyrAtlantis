@@ -1454,7 +1454,7 @@ make.prm.attributes <- function(prm.file, grp.vals){
   df.prms.all <- read.csv(file = def.grp.file, header = TRUE)
   tmplts <- df.prms.all$Template # group templates to search for
   Codes <- grp.att$Code # groups to search for
-  
+
   for(tmplt in tmplts) { # look for each template
     cat("-")
     p.vals <- rep(NA, length(Codes))
@@ -1468,7 +1468,7 @@ make.prm.attributes <- function(prm.file, grp.vals){
         for (jj in 1:length(j)) {
           # Valid row is when tmplt is the first entry and second is a number
           text.split <- unlist(str_split(
-            gsub(pattern = "[ ]+", x = prm[j[jj]], replacement = " "), " "))
+            gsub(pattern = "[ \t]+", x = prm[j[jj]], replacement = " "), " "))
           if (text.split[1] == txt.find) {
             jnew <- c(jnew,j[jj]) # add the row that satisfies the criteria
           }

@@ -1,259 +1,259 @@
-Template,Units,Required,Suggested,Vector,Topic,Description
-Acov_ad_XXX,,,,No,Habitat,Coefft of refuge relationship with biogenic habitat for adult XXX
-Acov_juv_XXX,,,,No,Habitat,Coefft of refuge relationship with biogenic habitat for juv XXX
-age_structured_prey_XXX,,,,No,Diet,Flag to indicate that the group uses age structured prey
-Bcov_ad_XXX,,,0.01-0.6,No,Habitat,Coefft of refuge relationship with biogenic habitat for adult XXX
-Bcov_juv_XXX,,,0.5-0.6,No,Habitat,Coefft of refuge relationship with biogenic habitat for juv XXX
-Beta_D_XXX,,,,No,Primary producer,NA
-BHalpha_XXX,,,,No,Recruitment,Alpha in Beverton-Holt for XXX
-BHbeta_XXX,,,,No,Recruitment,Beta in Beverton-Holt for XXX
-C_concp_XXX,,,,No,Carbon,Internal concentration factor
-C_min_XXX,moles mg-1,,,No,Carbon,Min quota of carbon in phytoplankton cells in moles/mg dry weight
-C_scale_uptake_XXX,,,,No,Carbon,Affinity coefficient for carbon uptake mechanism
-C_uptake_XXX,,,,No,Carbon,Maximum carbon uptake rate per day
-C_XXX,mg3 (mg N)-1 d-1,,,"Yes, age-classes",Diet,"Clearance rate of vertebrate group, per age-class"
-C_XXX_T15,mg3 (mg N)-1 d-1,,,No,Diet,"Clearance rate for consumers - this is used by Holling type feeding (predcase 0, 1, 2)"
-contract_tol_XXX,,,,No,pH,Correction scalar pH for nonlinear pH impact function
-crit_mum_XX,,,,No,Overwinter,Overwintering and Encystment
-crit_nut_XXX,,,,No,Overwinter,Overwintering and Encystment
-crit_temp_XXX,,,,No,Overwinter,Overwintering and Encystment
-E_XXX,,,0.01-0.9,No,Assimilation,Assimilation efficiency of invertebrate consumers on live food and carrion
-EDL_XXX,,,0-0.5,No,Assimilation,Assimilation efficiency of invertebrate consumers on labile detritus
-EDR_XXX,,,0.001-0.25,No,Assimilation,Assimilation efficiency of invertebrate consumers on refractory detritus
-encyst_period_XXX,,,,NO,Overwinter,Overwintering and Encystment
-encyst_rate_XXX,,,,No,Overwinter,Overwintering and Encystment
-EPlant_XXX,,,,No,Assimilation,Assimilation efficiency of XXX on plants
-FDG_XXX,,,,No,Detritus,Detrit contrib from unassim material ingested by XXX (fraction)
-FDGDL_XXX,,,,No,Detritus,Detrit contrib from unassim lab detrit ingested by XXX (fraction)
-FDGDR_XXX,,,,No,Detritus,Detrit contrib from unassim ref detrit ingested by XXX (fraction)
-FDM_XXX,,,,No,Detritus,Detrit contrib from mortality of XXX (fraction)
-feed_while_spawnXXX,,Yes,0,No,Recruitment,"Flag indicating whether feed during the spawning period (0 = no, 1 = yes)    "
-flagbearliveXXX,,Yes,0,No,Recruitment,"Flag indicating whether the vertebrate group bearslive young (0 = no, 1 = yes)"
-flagchannelXXX,,No,0,No,Movement,Identifier indicating whether vertebrate group seeks channels during low tide - in tidal models
-flagcontract_tol_XXX,,Yes,,No,pH,Whether the species growth or non predation mortality is sensitive to pH
-flagdemXXX,,Yes,1,No,Functional group,"Preferred location trend (whether to weight vertical distributions towards surface or bottom layers when in depths where there were less than complete set of depth layers) 1 = demersal, 0 = pelagic "
-flagencyst_XXX,,,,No,Overwinter,Overwintering and Encystment
-flagfecundsensitive_XXX,,Yes,,No,Temperature,Whether the species fecundity is sensitive to pH
-flagjXXXMigrate,,No,0,No,Migration,"0 = always in the model domain, 1+ = migrate in/out of the domain (see flagseperateXXX)"
-flaglocalrecruitXXX,,Yes,0,No,Recruitment,"Local recruitment (1 = demersal and piscivorous fish recruit at parental locations, 0 = independent distribution, 2 = external reproduction)"
-flagmotherXXX,,Yes,0,No,Recruitment,"Flag indicating whether the vertebrate group provides parental care for young until maturity (0 = no, 1 = yes, -1 = semelparous so die after reproduction)"
-flagnutvaleffect_XXX,,Yes,,No,pH,Whether the species' nutritional value is sensitive to salinity or pH (mainly an issue for phytoplankton)
-flagpHsensitive_XXX,,Yes,,No,pH,Whether the species growth or non-predation mortality is sensitive to pH
-flagplankfishXXX,,Yes,1,No,Functional group,"Whether or not the vertebrate is a planktivore (1 = yes, 0 = no)"
-flagpredavaileffect_XXX,,Yes,,No,pH,Whether the species availability to predators is sensitive to pH (mainly behaviour in fish)
-flagq10effXXX,,Yes,1,No,Assimilation,"Switch indicating whether efficiency of assimilation is temperature dependent; 0 = no, 1 = poorer when cooler, 2 = poorer when warmer"
-flagrecpeakXXX,,Yes,1,No,Recruitment,"Vertebrate recruitment strength: 1 = very strong year class possible, relative strength set using recruitRange, 0 = moderate variation in year class strength mainly used for top predators with few young per reproductive event, relative strength set using recruitRangeFlat"
-flagrecruitXXX,,Yes,3,No,Recruitment,"Recruitment function: 1 = const, 2 = dependent on prim prod (Chla), 3 = Beverton-Holt, 4 = lognormal, 5 = dependnet on all plankton groups, 6 = Beverton-Holt with log-normal variation, 7 = Beverton-Holt with encouragement recruitment, 8 = Beverton-Holt with prescribed recovery, 9 = Ricker, 10 = Beverton-Holt (no explicit use of spawn), 11 = pupping/calving linearly depend on maternal condition, 12 = pupping/calving a fixed number per adult, 13 = forced time-series of recruitment"
-flagSaltSensitive_XXX,,,,No,Salinity,Whether the species is sensitive to salinity
-flagseperateXXX,,No,,No,Functional group,"1 = separate groups (or single pool), 0 = age structured single group"
-flagstockingXXX,,No,0,No,Recruitment,"Flag indicating where functional group XX has input time series of stocking. 0 = off, 1 = on. f set to 1 it triggers the same code as if flagrecruit is set to option 18. This stocking will happen in addition to any natural recruitment (i.e. you can have flagrecruit set to any option you want other than 18 and that will happen, but in addition to that stocking will happen using time series files defined in force.prm."
-flagtempsensitiveXXX,,Yes,0,No,Temperature,"Temperature sensitivity of vertebrates (and CEP, PWN) (0 = no, 1 = yes)"
-flagXXX,,Yes,1,No,Functional group,"Group is functioning (1 = on, 0 = off)"
-flagXXXday,,Yes,2,No,Diet,"Period of activity: 0 = night, 1 = day , 2 = no preference"
-flagXXXlim,,Yes,,No,Primary producer,"Switch to turn XXX population limitation on/off: 0 = off, 1 = on"
-flagXXXMigrate,,Yes,,No,Migration,"0 = always in the model domain, 1+ = migrate in/out of the domain"
-FSBDR_XXX,,,,No,Mortality,Seabird sloppy feeding
-FSP_XXX,,,,No,Recruitment,Fraction used in spawning formulation
-FSPB_XXX,,,,Yes,Recruitment,Proportion of the population (per age) spawning
-hatch_rate_XXX,,,,No,Overwinter,Overwintering and Encystment
-ht_XXX,d,,,No,Diet,Handling time for XXX - used by size specific Holling type III
-hta_XXX,,,,No,Diet,Coefficient of handling time
-hta_XXX_T15,,,,No,Diet,Coefficient of handling time
-htb_XXX,,,0.1-0.63,No,Diet,Exponent for handling time relation
-inheritance_XXX,,,,No,Evolution,Level of inheritance
-intersp_depend_recruit_XXX,,,,No,Recruitment,"Defines whether the group's recruitment is scaled by the biomass of another species (0 = no, 1 = linear, 2 = inverse)"
-intersp_depend_scale_XXX,,,,No,Recruitment,The scalar applied
-intersp_depend_sp_XXX,,,,No,Recruitment,Id of the species that recruitment is dependent on
-isbirdXXX,,No,0,No,Functional group,"Is the vertebrate group a bird? (1 = yes, 0 = no)"
-ismammalXXX,,No,0,No,Functional group,"Is the vertebrate group a mammal? (1 = yes, 0 = no)"
-issharkXXX,,No,0,No,Functional group,"Is the vertebrate group a shark? (1 = yes, 0 = no)"
-jack_a_XXX,,,,No,Recruitment,Jack-knife recruitment relationship parameter
-jack_b_XXX,,,,No,Recruitment,Jack-knife recruitment relationship parameter
-jXXX_FSM,,,1,Yes,Migration,Juvenile external/migration survivorship - proportion of migrating biomass that returns to the model domain
-jXXX_FSMG,,,0,Yes,Migration,Proportional increase in juvenile size while outside model domain. If on seasonal feeding grounds reproduction reserves are recovered and FSMG = FBGU
-jXXX_Migrate_Period,,,,Yes,Migration,Juvenile migration periods - period of time migrating juvenile stages exit/enter over
-jXXX_Migrate_Return,,,,Yes,Migration,Juvenile return times - days of the year juvenile stages of group return to the model domain
-jXXX_Migrate_Time,,,,Yes,Migration,Juvenile migration times - days of the year juvenile stages leave the model domain
-jXXX_ReturnStock,,,,Yes,Migration,Juvenile migration return stock. Integer identifying the stock individuals enter. 0 implies individuals are spread uniformly across all stocks.
-k_trans_XXX,,,,No,Detritus,Detritus deep demersal parameter 
-KA_XXX,,,,No,Recruitment,Scaling coefficient in allometry of resp vs weight
-KB_XXX,,,,No,Recruitment,Exponent in respiration vs weight versus weight
-Kcov_ad_XXX,,,3,No,Habitat,Exponent of refuge relationship with biogenic hiobitat for adults
-Kcov_juv_XXX,,,3,No,Habitat,Exponent of refuge relationship with biogenic hiobitat for juveniles
-KDENR_XXX,,,,No,Recruitment,Total number of new recruits for the year (used if recruit flag is set to 1 or 12) number per individual (not per female)
-KDEP_XXX,m,,,No,Diet,"Depth consumers can dig into, are found down in the sediment"
-Kext_XXX,,,,No,Primary producer,NA
-KF_XXX,mg Fe m-3,,,No,Primary producer,Half-saturation constant of XXX growth on micro-nutrient
-KI_XXX_T15,W m-2,,,No,Primary producer,Primary producer light requirements
-KIRR_XXX,,,,No,Primary producer,Bioirrigation contribution
-KL_XXX,mg N m-3,,,No,Diet,Consumer intake refuge: if available food is below threshold then feeding stops.
-KLP_XXX,,,,No,Diet,"Gape size (lower) for vertebrates, to determine available prey fish groups."
-KLYS_XXX,,,,No,Mortality,Lysis rates
-Kmax_coefft_XXX,,,,No,Diet,NA
-KMIGa_INVERT_XXX,,,,Yes,Migration,Biomass beginning outside the model domain
-KMIGa_XXX,,,0,Yes,Migration,Numbers per age group beginning outside the model domain
-KMIGa_XXXrn,,,0,Yes,Migration,Reserve weights for each age group
-KMIGa_XXXsn,,,0,Yes,Migration,Structural weights for each age group
-KN_epi_XXX,,,,No,Primary producer,NA
-KN_pH_XXX,,,,No,pH,Monod inflection point for pH impact function
-KN_XXX,mg N m-3,,,No,Primary producer,Half-saturation constant of XXX growth on DIN
-KO2_XXX,,,,No,Mortality,Lethal oxygen level.
-KO2LIM_XXX,,,,No,Mortality,Limiting oxygen level.
-KP_XXX,,,,No,Phosphorus,Half-sat const for phytoplankton growth on P
-KS_XXX,mg Si m-3,,,No,Primary producer,Half-saturation constant of XXX growth on Si
-KSPA_XXX,,,,No,Recruitment,Constant in spawning formulation
-Ksub_XXX,,,,No,Primary producer,NA
-KsubEpi_XXX,,,,No,Primary producer,NA
-Ktrans_XXX,,,,No,Primary producer,NA
-KTUR_XXX,,No,,No,Primary producer,Bioturbation contribution by XXX
-KU_XXX,mg N m-3,,,No,Diet,Half saturation for uptake by XXX
-KUP_XXX,,,,No,Diet,"Gape size (upper) for vertebrates, to determine available prey fish groups."
-KWRR_XXX,mg N,,,No,Recruitment,Reserve weight of recruits
-KWSR_XXX,mg N,,,No,Recruitment,Structural weight of recruits
-L_KI_XXX_T15,,,,No,Primary producer,NA
-li_a_XXX,,,,No,Diet,Coefficient of allometric length-weight relation
-li_b_XXX,,,3,No,Diet,Eponent in allometric length-weight relation
-max_pH_XXX,,,,No,pH,NA
-max_prop_shift_XXX,,,,No,Evolution,Maximum proportional shift in phenotypes with aging
-mD_XXX,,,,No,Mortality,Oxygen mortality. Half oxygen mortality depth.
-MigIOBox_XXX,,,0,Yes,Migration,Proportion from each box that exit when group migrates out of the model domain. Default is zero except boundary boxes.
-MigIOBox_XXXad,,,0,Yes,Migration,Proportion of adults from each box that exit when group migrates out of the model domain. Default is zero except boundary boxes.
-MigIOBox_XXXjuv,,,0,Yes,Migration,Proportion of juveniles from each box that exit when group migrates out of the model domain. Default is zero except boundary boxes.
-min_li_mat_XXX,,,,No,Diet,NA
-min_pH_XXX,,,,No,pH,NA
-min_trait_variance_XXX,,,,No,Evolution,Minimum level of trait variance (i.e. what the variance can decline to as evolution occurs dynamically)
-mO_XXX,,,,No,Mortality,Oxygen mortality based on ambient oxygen
-mS_FDXXX,d-1,,,Yes,Mortality,"Mortality rate of fish group due to the implicit fish (not explicit in the model), per quarter."
-mS_SBXXX,d-1,,,Yes,Mortality,"Static seabird and mammal induced mortality of fish group XXX, per quarter."
-ms_XXX_T15,,,,No,Mortality,NA
-mStarve_XXX,,,,No,Mortality,Starvation mortality for fish (based on condition)
-mT_XXX,,,,No,Mortality,NA
-mum_XXX,mg N d-1,,,Yes,Growth,Vertebrate growth rates per age class
-mum_XXX_T15,mg N d-1,,,No,Growth,"Consumer growth - this is used by Holling type feeding (predcase 0, 1, 2)"
-optimal_pH_XXX,,,,No,pH,Optimal pH for nonlinear pH impact function
-overwinterEndTemp_XXX,,,,No,Overwinter,Overwintering and Encystment
-overwinterEndTofY_XXX,,,,No,Overwinter,Overwintering and Encystment
-overwinterStartTemp_XXX,,,,No,Overwinter,Overwintering and Encystment
-overwinterStartTofY_XXX,,,,No,Overwinter,Overwintering and Encystment
-P_concp_XXX,,,,No,Phosphorus,NA
-p_lineXXX,,,0.1-1,No,Fishing,Prop. of line catch exploitable by XXX
-P_max_internal_XXX,,,,No,Phosphorus,NA
-P_min_internal_XXX,,,,No,Phosphorus,NA
-p_mtrawlXXX,,,0.1-1,No,Fishing,Prop. of midwater trawl catch exploitable by XXX
-p_netXXX,,,0.01-1,No,Fishing,Prop. of gillnet catch exploitable by XXX
-P_scale_uptake_XXX,,,,No,Phosphorus,NA
-p_split_XXX,,,,No,Diet,NA
-p_trawlXXX,,,0.1-1,No,Fishing,Prop. of trawl catch exploitable by XXX
-P_uptake_XXX,,,,No,Phosphorus,NA
-PBmax_D_XXX,,,,No,Primary producer,NA
-pH_constA_XXX,,,,No,pH,Coefficient pH for nonlinear pH impact function
-pH_constB_XXX,,,,No,pH,Base coefficient pH for nonlinear pH impact function
-pH_correction_XXX,,,,No,pH,Correction scalar pH for nonlinear pH impact function
-pHmortA_XXX,,,,No,pH,Scalar in pH related mortality relationship
-pHmortB_XXX,,,,No,pH,Constant in pH related mortality relationship
-pHmortmid_XXX,,,,No,pH,pH at midpoint of mortality sigmoid effects curve
-pHmortstart_XXX,,,,No,pH,pH at which extra mortality effects begin
-pHsensitive_model_XXX,,No,,No,pH,"Form of the pH effects model: 0 = no effect, 1 = monod, 2 = nonlinear (humped form as of Hinga 2002), 3 = linear"
-Phyto_Resp_Rate_XXX,,,,No,Respiriation,Phytoplankton respiration rate
-PP_XXX,,,,No,Recruitment,Primary production dependent recruitment
-pR_XXX,,,Feb-20,No,Diet,Vertebrate preference for rebuilding reserves over structure
-predcase_XXX,,Yes,0,No,Diet,"Predation formulation. 0 = Holling type II, 1 = Holling type I, 2 = Holling type III, 3 = ECOSIM, 4 = min-max, 5 = size-specific Holling type III"
-prop_spawn_lost_XXX,,,,No,Recruitment,Proportion lost?
-PSA_min_XXX,moles mg-1,,,No,Phosphorus,Minimum quota of phosphorus in phytoplankton cells in moles/mg dry weight
-pStock_XXX,,,,Yes,Recruitment,Stock specific avilability scalars (stock entries = 1 if no stock differences). 
-q10_correction_XXX,,,,No,Temperature,NA
-q10_method_XXX,,Yes,,No,Temperature,"Method of calculating Q10 - normal way (0),  Climate change method of Gary Griffith (1)"
-q10_optimaltemp_XXX,,,,No,Temperature,NA
-q10_XXX,,,,No,Temperature,NA
-Ralpha_XXX,,,,No,Recruitment,Alpha in Ricker recruitment 
-Rbeta_XXX,,,,No,Recruitment,Beta in Ricker recruitment
-recover_mult_XXX,,,,No,Recruitment,Recruitment multiplier (to encourage recovery of stocks)
-recover_start_XXX,,,,No,Recruitment,Starting time of recruitment recovery
-Recruit_Period_XXX,d,,,No,Recruitment,Length of time recruits arrive over
-recSTOCK_XXX,,,,Yes,Recruitment,Stock specific recruitment scalars.
-salt_correction_XXX,,,,No,Salinity,Correction scalar salt for nonlinear salt impact function (correct?)
-Speed_XXX,m hr-1,,,No,Movement,Swimming speed
-temp_coefftA_XXX,,No,0.851,No,Temperature,Coefficient A in Gary Griffith temperature function
-trait_active_XXX,,,,Yes,Evolution,NA
-trait_variance_XXX,,,,No,Evolution,Level of trait variance
-vl_XXX,m3 d-1,,,No,Diet,Search volume - used by size specific Holling type III (predcase 5)
-vla_XXX_T15,,,1-May,No,Diet,Coefficient of search volume
-vlb_XXX,,,0.25-0.55,No,Diet,Exponent for search volume relation
-XXX_age_mat,,,,No,Recruitment,First mature age class
-XXX_AgeClassSize,,,,No,Functional group,Number of years represented in each age class.
-XXX_aquacult_feed,,,,No,Diet,NA
-XXX_aquacult_fry,,No,,No,Recruitment,Amount of fry (in tonnes) added per day (for vertebrates use KDENR instead)
-XXX_aquacult_hdistribution,,No,,Yes,Movement,Aquaculture stocking distribution - overwrites hdistrib
-XXX_bleach_growshift,,,,No,Bleaching,Coral bleaching parameter
-XXX_bleach_periodA,,,,No,Bleaching,Coral bleaching parameter
-XXX_bleach_periodB,,,,No,Bleaching,Coral bleaching parameter
-XXX_bleach_recovery_rate,,,,No,Bleaching,Coral bleaching parameter
-XXX_bleach_temp,,,,No,Bleaching,Coral bleaching parameter
-XXX_bleach_tempshift,,,,No,Bleaching,Coral bleaching parameter
-XXX_bleaching_rates,,,,No,Bleaching,Coral bleaching parameter
-XXX_calcifLambda,,,,No,Coral,Coral parameter
-XXX_calcifRefBaseline,,,,No,Coral,Coral parameter
-XXX_calcifTcoefft,,,,No,Coral,Coral parameter
-XXX_calcifTconst,,,,No,Coral,Coral parameter
-XXX_calcifTopt,,,,No,Coral,Coral parameter
-XXX_catcheater,,No,1,No,Diet,"XXX eat catch from nets: 1 = yes, 0 = no"
-XXX_colony_ha,,,,No,Coral,Coral rugosity parameter
-XXX_coral_compete,,,,No,Coral,Coral parameter
-XXX_coral_max_accelA,,,,No,Coral,Coral parameter
-XXX_coral_max_accelB,,,,No,Coral,Coral parameter
-XXX_coral_overgrow,,,,No,Coral,Coral parameter
-XXX_CrecruitA,,,,No,Coral,Coral parameter
-XXX_CrecruitB,,,,No,Coral,Coral parameter
-XXX_CrecruitC,,,,No,Coral,Coral parameter
-XXX_ddepend_move,,Yes,0,No,Movement,"Movement option: 0 = off, 1 = sedentary, 2 = on, 3 = sticky, 4 = no explicit movement"
-XXX_depmum_scalar,,,,No,Bleaching,Coral bleaching parameter
-XXX_DHW_thresh,,,,No,Bleaching,Coral bleaching parameter
-XXX_FeedLightThresh,,,,No,Coral,Coral parameter
-XXX_FSM,,,1,Yes,Migration,External/migration survivorship - proportion of migrating biomass that returns to the model domain
-XXX_FSMG,,,,Yes,Migration,Proportional increase in size while outside model domain. If on seasonal feeding grounds reproduction reserves are recovered and FSMG = FBGU.
-XXX_habdepend,,Yes,0,No,Functional group,"Dependent on demersal habitat: 0 = no, 1 = yes"
-XXX_homerangerad,m,,,No,Home range,Home range radius
-XXX_HostRemin,,,,No,Coral,Coral parameter
-XXX_log_mult,,,,No,Recruitment,Multiplier converting distribution to number of recruits
-XXX_low,mg N m-2,,,No,Spatial thresholds,Little space limitation (pop too small)
-XXX_max_move_salt,,No,40,No,Movement,Maximum tolerated salinity
-XXX_max_move_temp,,No,30,No,Movement,Maximum tolerated temperature
-XXX_max_spawn_salt,,,40,No,Recruitment,Maximum spawning salinity
-XXX_max_spawn_temp,,,25,No,Recruitment,Maximum spawning temperature
-XXX_maxdepth,m,,,No,Spatial thresholds,Maximum depth for group XXX
-XXX_mBleach,,,,No,Bleaching,Coral bleaching parameter
-XXX_Migrate_Period,,,1,Yes,Migration,Period of time migrating group exit/enter over
-XXX_Migrate_Return,,,364,Yes,Migration,Specifies the day on which a group re-enters the model. Multiple values if the group does multiple migrations per year
-XXX_Migrate_Time,,,0,Yes,Migration,Specifies the day on which a group leaves the model if they migrate. Multiple values if the group does multiple migrations per year.
-XXX_min_move_salt,,No,0,No,Movement,Minimum tolerated salinity
-XXX_min_move_temp,,No,4,No,Movement,Minimum tolerated temperature
-XXX_min_O2,,,,No,Mortality,Minimum tolerated oxygen level for age structured groups.
-XXX_min_spawn_salt,,,0,No,Recruitment,Minimum spawning salinity
-XXX_min_spawn_temp,,,4,No,Recruitment,Minimum spawning temperature
-XXX_mindepth,m,,,No,Spatial thresholds,Minimum depth (used with home range movement)
-XXX_mL,d-1,,,Yes,Mortality,Linear mortality biomass groups calculated as a weighted average rate for 15 deg C
-XXX_mQ,d-1,,,Yes,Mortality,Quadratic mortality biomass groups calculated as a weighted average rate for 15 deg C
-XXX_overlap,,,,No,Home range,Whether homeranges overlap for the group
-XXX_prop_zooxanth,,,,No,Bleaching,Coral bleaching parameter
-XXX_PropLightFeed,,,,No,Coral,Coral parameter
-XXX_rec_HabDepend,,Yes,,No,Functional group,"Recruitment dependent on demersal habitat (0 = no, 1 = yes?)"
-XXX_recruit_hdistrib,,,,Yes,Recruitment,Recruit local horizontal distributions
-XXX_Recruit_Time,d,,,No,Recruitment,Length of larval/gestation period
-XXX_Recruit_vdistrib,,,,Yes,Recruitment,Recruit local vertical distributions
-XXX_remin_contrib,,,,No,Diet,Remineralisation contribution
-XXX_ReturnStock,,,0,Yes,Migration,Adult migration return stock. Integer identifying the stock individuals enter. 0 implies individuals are spread uniformly across all stocks.
-XXX_rug_bleacherode,,,,No,Bleaching,Coral bleaching parameter
-XXX_rug_erode,,,,No,Rugosity,Background erosion rates due to implicit boring
-XXX_rug_factor,,,,No,Coral,Coral rugosity parameter
-XXX_RugCover_scalar,,,,No,Rugosity,Rugosity refuge model parameter
-XXX_rugFeedScalar,,,,No,Coral,Coral rugosity parameter
-XXX_rugosity_inc,,,,No,Rugosity,Rugosity increases due to size-specific coral growth
-XXX_sat,mg N m-2,,,No,Spatial thresholds,Interference to uptake due to shading
-XXX_sn,,,,No,Diet,Ref. AFDW for XXX so can determine avail fish groups.
-XXX_spawn_period,d,,,No,Recruitment,Period of spawning
-XXX_stock_struct,,,,Yes,Movement,Horizontal stock structure
-XXX_threshdepth,,,,No,Bleaching,Coral bleaching parameter
-XXX_Time_Spawn,d,,,No,Recruitment,Time of year XXX spawns
-XXX_vert_stock_struct,,,,Yes,Movement,Vertical stock structure
-XXXmax,mg N m-2,,,No,Spatial thresholds,Maximum biomass for epibenthic and some infauna groups
-XXXthresh,mg N m-2 s-1,,,No,Spatial thresholds,Threshold flux level where damping starts
+Template,Units,Suggested,Vector,Groups,Topic,Description
+Acov_ad_XXX,,,No,SP_VERTS,Refuge,flag_refuge_model = 1: refuge_status = Acov_ad * (exp(-Kcov_ad * cover + Bcov_ad) + 1.0 / Kcov_ad)
+Acov_juv_XXX,,,No,SP_VERTS,Refuge,flag_refuge_model = 1: refuge_status = Acov_juv * (exp(-Kcov_juv * cover + Bcov_juv) + 1.0 / Kcov_juv)
+age_structured_prey_XXX,,,No,SP_VERTS,Diet,Flag to indicate that the group uses age structured prey. Used to represent ontogenetic diet shifts so age-specific diets should be given.
+Bcov_ad_XXX,,0.01-0.6,No,SP_VERTS,Refuge,flag_refuge_model = 1: refuge_status = Acov_ad * (exp(-Kcov_ad * cover + Bcov_ad) + 1.0 / Kcov_ad)
+Bcov_juv_XXX,,0.5-0.6,No,SP_VERTS,Refuge,flag_refuge_model = 1: refuge_status = Acov_juv * (exp(-Kcov_juv * cover + Bcov_juv) + 1.0 / Kcov_juv)
+Beta_D_XXX,,"0.285, 0.44",No,SP_PP,"Ice, primary-producer",light_case = irr_ice. 
+BHalpha_XXX,,,No,SP_AGE_STRUCTURED,Recruitment,Beverton-Holt recruitment (and variants): spawned_biomass = (stock_scalar1 * BHalpha_sp * spawning_biomass) / (BHbeta_sp + pop_spawning_biomass)
+BHbeta_XXX,,,No,SP_AGE_STRUCTURED,Recruitment,Beverton-Holt recruitment (and variants): spawned_biomass = (stock_scalar1 * BHalpha_sp * spawning_biomass) / (BHbeta_sp + pop_spawning_biomass)
+C_concp_XXX,,,No,SP_PP,Carbon,Internal concentration factor. Used?
+C_min_XXX,moles mg-1,,No,SP_PP,Carbon,Min quota of carbon in phytoplankton cells in moles/mg dry weight. Code in Calculate_Carbon_Respiration: resp += (biomass * (PSA - PSAMIN) * RRESP * Tcorr) * 1 / 1000.0; PSAMIN = C_min.
+C_scale_uptake_XXX,,,No,SP_PP,Carbon,Affinity coefficient for carbon uptake mechanism
+C_uptake_XXX,d-1,,No,SP_PP,Carbon,Maximum carbon uptake rate per day
+C_XXX,mg3 (mg N)-1 d-1,,Cohorts,,Diet,"Clearance rate of vertebrate group, per age-class"
+C_XXX_T15,mg3 (mg N)-1 d-1,0.002-0.4,No,,Diet,"Invertebrate clearance rate for consumers - this is used by Holling type feeding (predcase 0, 1, 2)"
+contract_tol_XXX,,,No,SP_NOT_DET,pH,Correction scalar pH for nonlinear pH impact function
+crit_mum_XXX,,0.0-0.5,No,SP_OVERWINTER,Overwinter,"Critical growth rate, less than this and begin encystment"
+crit_nut_XXX,,0.0-20,No,SP_OVERWINTER,Overwinter,Critical nutrient level to trigger end of overwintering encystment.
+crit_temp_XXX,Celsius,0.0-10,No,SP_OVERWINTER,Overwinter,Critical temperature to trigger end of overwintering encystment
+E_XXX,,0.01-0.9,No,SP_PREDATOR,Assimilation,Assimilation efficiency of consumers on live food and carrion
+EDL_XXX,,0-0.5,No,SP_PREDATOR_OR_BACT,Assimilation,Assimilation efficiency of consumers on labile detritus
+EDR_XXX,,0.001-0.25,No,SP_PREDATOR_OR_BACT,Assimilation,Assimilation efficiency of consumers on refractory detritus
+encyst_period_XXX,,10-120,No,SP_OVERWINTER,Overwinter,Period of time remain encysted (if date driven)
+encyst_rate_XXX,,0-1,No,SP_OVERWINTER,Overwinter,Rate of encystment (as begin overwintering)
+EPlant_XXX,,,No,SP_PREDATOR,Assimilation,Assimilation efficiency of consumers on plants
+FDG_XXX,,,No,SP_PREDATOR,Detritus,Detrit contrib from unassim material ingested by XXX (fraction)
+FDGDL_XXX,,,No,,Detritus,Detrit contrib from unassim lab detrit ingested by XXX (fraction)
+FDGDR_XXX,,,No,,Detritus,Detrit contrib from unassim ref detrit ingested by XXX (fraction)
+FDM_XXX,,,No,,Detritus,Detrit contrib from mortality of XXX (fraction)
+feed_while_spawnXXX,,0,No,,Recruitment,"Flag indicating whether feed during the spawning period (0 = no, 1 = yes)    "
+flagbearliveXXX,,0,No,,Recruitment,"Flag indicating whether the vertebrate group bearslive young (0 = no, 1 = yes)"
+flagchannelXXX,,0,No,,Movement,Identifier indicating whether vertebrate group seeks channels during low tide - in tidal models
+flagcontract_tol_XXX,,,No,SP_NOT_DET,pH,Whether the species growth or non predation mortality is sensitive to pH
+flagdemXXX,,1,No,,Functional group,"Preferred location trend (whether to weight vertical distributions towards surface or bottom layers when in depths where there were less than complete set of depth layers) 1 = demersal, 0 = pelagic "
+flagencyst_XXX,,,No,,Overwinter,Overwintering and Encystment
+flagfecundsensitive_XXX,,,No,,Temperature,Whether the species fecundity is sensitive to pH
+flagjXXXMigrate,,0,No,,Migration,"0 = always in the model domain, 1+ = migrate in/out of the domain (see flagseperateXXX)"
+flaglocalrecruitXXX,,0,No,,Recruitment,"Local recruitment (1 = demersal and piscivorous fish recruit at parental locations, 0 = independent distribution, 2 = external reproduction)"
+flagmotherXXX,,0,No,,Recruitment,"Flag indicating whether the vertebrate group provides parental care for young until maturity (0 = no, 1 = yes, -1 = semelparous so die after reproduction)"
+flagnutvaleffect_XXX,,,No,,pH,Whether the species' nutritional value is sensitive to salinity or pH (mainly an issue for phytoplankton)
+flagpHsensitive_XXX,,,No,,pH,Whether the species growth or non-predation mortality is sensitive to pH
+flagplankfishXXX,,1,No,,Functional group,"Whether or not the vertebrate is a planktivore (1 = yes, 0 = no)"
+flagpredavaileffect_XXX,,,No,,pH,Whether the species availability to predators is sensitive to pH (mainly behaviour in fish)
+flagq10effXXX,,1,No,,Assimilation,"Switch indicating whether efficiency of assimilation is temperature dependent; 0 = no, 1 = poorer when cooler, 2 = poorer when warmer"
+flagrecpeakXXX,,1,No,,Recruitment,"Vertebrate recruitment strength: 1 = very strong year class possible, relative strength set using recruitRange, 0 = moderate variation in year class strength mainly used for top predators with few young per reproductive event, relative strength set using recruitRangeFlat"
+flagrecruitXXX,,3,No,,Recruitment,"Recruitment function: 1 = const, 2 = dependent on prim prod (Chla), 3 = Beverton-Holt, 4 = lognormal, 5 = dependnet on all plankton groups, 6 = Beverton-Holt with log-normal variation, 7 = Beverton-Holt with encouragement recruitment, 8 = Beverton-Holt with prescribed recovery, 9 = Ricker, 10 = Beverton-Holt (no explicit use of spawn), 11 = pupping/calving linearly depend on maternal condition, 12 = pupping/calving a fixed number per adult, 13 = forced time-series of recruitment"
+flagSaltSensitive_XXX,,,No,,Salinity,Whether the species is sensitive to salinity
+flagseperateXXX,,,No,,Functional group,"1 = separate groups (or single pool), 0 = age structured single group"
+flagstockingXXX,,0,No,,Recruitment,"Flag indicating where functional group XX has input time series of stocking. 0 = off, 1 = on. f set to 1 it triggers the same code as if flagrecruit is set to option 18. This stocking will happen in addition to any natural recruitment (i.e. you can have flagrecruit set to any option you want other than 18 and that will happen, but in addition to that stocking will happen using time series files defined in force.prm."
+flagtempsensitiveXXX,,0,No,,Temperature,"Temperature sensitivity of vertebrates (and CEP, PWN) (0 = no, 1 = yes)"
+flagXXX,,1,No,,Functional group,"Group is functioning (1 = on, 0 = off)"
+flagXXXday,,2,No,,Diet,"Period of activity: 0 = night, 1 = day , 2 = no preference"
+flagXXXlim,,,No,,Primary producer,"Switch to turn XXX population limitation on/off: 0 = off, 1 = on"
+flagXXXMigrate,,,No,,Migration,"0 = always in the model domain, 1+ = migrate in/out of the domain"
+FSBDR_XXX,,,No,,Mortality,Seabird sloppy feeding
+FSP_XXX,,,No,,Recruitment,Fraction used in spawning formulation
+FSPB_XXX,,,Yes,,Recruitment,Proportion of the population (per age) spawning
+hatch_rate_XXX,,,No,,Overwinter,Overwintering and Encystment
+ht_XXX,d,,No,,Diet,Handling time for XXX - used by size specific Holling type III
+hta_XXX,,,No,,Diet,Coefficient of handling time
+hta_XXX_T15,,,No,,Diet,Coefficient of handling time
+htb_XXX,,0.1-0.63,No,,Diet,Exponent for handling time relation
+inheritance_XXX,,,No,,Evolution,Level of inheritance
+intersp_depend_recruit_XXX,,,No,,Recruitment,"Defines whether the group's recruitment is scaled by the biomass of another species (0 = no, 1 = linear, 2 = inverse)"
+intersp_depend_scale_XXX,,,No,,Recruitment,The scalar applied
+intersp_depend_sp_XXX,,,No,,Recruitment,Id of the species that recruitment is dependent on
+isbirdXXX,,0,No,,Functional group,"Is the vertebrate group a bird? (1 = yes, 0 = no)"
+ismammalXXX,,0,No,,Functional group,"Is the vertebrate group a mammal? (1 = yes, 0 = no)"
+issharkXXX,,0,No,,Functional group,"Is the vertebrate group a shark? (1 = yes, 0 = no)"
+jack_a_XXX,,,No,,Recruitment,Jack-knife recruitment relationship parameter
+jack_b_XXX,,,No,,Recruitment,Jack-knife recruitment relationship parameter
+jXXX_FSM,,1,Yes,,Migration,Juvenile external/migration survivorship - proportion of migrating biomass that returns to the model domain
+jXXX_FSMG,,0,Yes,,Migration,Proportional increase in juvenile size while outside model domain. If on seasonal feeding grounds reproduction reserves are recovered and FSMG = FBGU
+jXXX_Migrate_Period,,,Yes,,Migration,Juvenile migration periods - period of time migrating juvenile stages exit/enter over
+jXXX_Migrate_Return,,,Yes,,Migration,Juvenile return times - days of the year juvenile stages of group return to the model domain
+jXXX_Migrate_Time,,,Yes,,Migration,Juvenile migration times - days of the year juvenile stages leave the model domain
+jXXX_ReturnStock,,,Yes,,Migration,Juvenile migration return stock. Integer identifying the stock individuals enter. 0 implies individuals are spread uniformly across all stocks.
+k_trans_XXX,,,No,,Detritus,Detritus deep demersal parameter 
+KA_XXX,,,No,,Recruitment,Scaling coefficient in allometry of resp vs weight
+KB_XXX,,,No,,Recruitment,Exponent in respiration vs weight versus weight
+Kcov_ad_XXX,,3,No,SP_VERTS,Refuge,flag_refuge_model = 1: refuge_status = Acov_ad * (exp(-Kcov_ad * cover + Bcov_ad) + 1.0 / Kcov_ad)
+Kcov_juv_XXX,,3,No,SP_VERTS,Refuge,flag_refuge_model = 1: refuge_status = Acov_juv * (exp(-Kcov_juv * cover + Bcov_juv) + 1.0 / Kcov_juv)
+KDENR_XXX,,,No,,Recruitment,Total number of new recruits for the year (used if recruit flag is set to 1 or 12) number per individual (not per female)
+KDEP_XXX,m,,No,,Diet,"Depth consumers can dig into, are found down in the sediment"
+Kext_XXX,,,No,,Primary producer,NA
+KF_XXX,mg Fe m-3,,No,,Primary producer,Half-saturation constant of XXX growth on micro-nutrient
+KI_XXX_T15,W m-2,,No,,Primary producer,Primary producer light requirements
+KIRR_XXX,,,No,,Primary producer,Bioirrigation contribution
+KL_XXX,mg N m-3,,No,,Diet,Consumer intake refuge: if available food is below threshold then feeding stops.
+KLP_XXX,,,No,,Diet,"Gape size (lower) for vertebrates, to determine available prey fish groups."
+KLYS_XXX,,,No,,Mortality,Lysis rates
+Kmax_coefft_XXX,,,No,,Diet,NA
+KMIGa_INVERT_XXX,,,Yes,,Migration,Biomass beginning outside the model domain
+KMIGa_XXX,,0,Yes,,Migration,Numbers per age group beginning outside the model domain
+KMIGa_XXXrn,,0,Yes,,Migration,Reserve weights for each age group
+KMIGa_XXXsn,,0,Yes,,Migration,Structural weights for each age group
+KN_epi_XXX,,,No,,Primary producer,NA
+KN_pH_XXX,,,No,,pH,Monod inflection point for pH impact function
+KN_XXX,mg N m-3,,No,,Primary producer,Half-saturation constant of XXX growth on DIN
+KO2_XXX,,,No,,Mortality,Lethal oxygen level.
+KO2LIM_XXX,,,No,,Mortality,Limiting oxygen level.
+KP_XXX,,,No,,Phosphorus,Half-sat const for phytoplankton growth on P
+KS_XXX,mg Si m-3,,No,,Primary producer,Half-saturation constant of XXX growth on Si
+KSPA_XXX,,,No,,Recruitment,Constant in spawning formulation
+Ksub_XXX,,,No,,Primary producer,NA
+KsubEpi_XXX,,,No,,Primary producer,NA
+Ktrans_XXX,,,No,,Primary producer,NA
+KTUR_XXX,,,No,,Primary producer,Bioturbation contribution by XXX
+KU_XXX,mg N m-3,,No,,Diet,Half saturation for uptake by XXX
+KUP_XXX,,,No,,Diet,"Gape size (upper) for vertebrates, to determine available prey fish groups."
+KWRR_XXX,mg N,,No,,Recruitment,Reserve weight of recruits
+KWSR_XXX,mg N,,No,,Recruitment,Structural weight of recruits
+L_KI_XXX_T15,,,No,,Primary producer,NA
+li_a_XXX,,,No,,Diet,Coefficient of allometric length-weight relation
+li_b_XXX,,3,No,,Diet,Eponent in allometric length-weight relation
+max_pH_XXX,,,No,,pH,NA
+max_prop_shift_XXX,,,No,,Evolution,Maximum proportional shift in phenotypes with aging
+mD_XXX,,,No,,Mortality,Oxygen mortality. Half oxygen mortality depth.
+MigIOBox_XXX,,0,Yes,,Migration,Proportion from each box that exit when group migrates out of the model domain. Default is zero except boundary boxes.
+MigIOBox_XXXad,,0,Yes,,Migration,Proportion of adults from each box that exit when group migrates out of the model domain. Default is zero except boundary boxes.
+MigIOBox_XXXjuv,,0,Yes,,Migration,Proportion of juveniles from each box that exit when group migrates out of the model domain. Default is zero except boundary boxes.
+min_li_mat_XXX,,,No,,Diet,NA
+min_pH_XXX,,,No,,pH,NA
+min_trait_variance_XXX,,,No,,Evolution,Minimum level of trait variance (i.e. what the variance can decline to as evolution occurs dynamically)
+mO_XXX,,,No,,Mortality,Oxygen mortality based on ambient oxygen
+mS_FDXXX,d-1,,Yes,,Mortality,"Mortality rate of fish group due to the implicit fish (not explicit in the model), per quarter."
+mS_SBXXX,d-1,,Yes,,Mortality,"Static seabird and mammal induced mortality of fish group XXX, per quarter."
+ms_XXX_T15,,,No,,Mortality,NA
+mStarve_XXX,,,No,,Mortality,Starvation mortality for fish (based on condition)
+mT_XXX,,,No,,Mortality,NA
+mum_XXX,mg N d-1,,Cohorts,,Growth,Vertebrate growth rates per age class. These are not corrected for temperature before use.
+mum_XXX_T15,mg N d-1,0.001-2.5,No,,Growth,"Invertebrate Growth Rate. These are corrected for temperature before use. Used by Holling type feeding (predcase 0, 1, 2)"
+optimal_pH_XXX,,,No,,pH,Optimal pH for nonlinear pH impact function
+overwinterEndTemp_XXX,,,No,,Overwinter,Overwintering and Encystment
+overwinterEndTofY_XXX,,,No,,Overwinter,Overwintering and Encystment
+overwinterStartTemp_XXX,,,No,,Overwinter,Overwintering and Encystment
+overwinterStartTofY_XXX,,,No,,Overwinter,Overwintering and Encystment
+P_concp_XXX,,,No,,Phosphorus,NA
+p_lineXXX,,0.1-1,No,,Fishing,Prop. of line catch exploitable by XXX
+P_max_internal_XXX,,,No,,Phosphorus,NA
+P_min_internal_XXX,,,No,,Phosphorus,NA
+p_mtrawlXXX,,0.1-1,No,,Fishing,Prop. of midwater trawl catch exploitable by XXX
+p_netXXX,,0.01-1,No,,Fishing,Prop. of gillnet catch exploitable by XXX
+P_scale_uptake_XXX,,,No,,Phosphorus,NA
+p_split_XXX,,,No,,Diet,NA
+p_trawlXXX,,0.1-1,No,,Fishing,Prop. of trawl catch exploitable by XXX
+P_uptake_XXX,,,No,,Phosphorus,NA
+PBmax_D_XXX,,,No,,Primary producer,NA
+pH_constA_XXX,,,No,,pH,Coefficient pH for nonlinear pH impact function
+pH_constB_XXX,,,No,,pH,Base coefficient pH for nonlinear pH impact function
+pH_correction_XXX,,,No,,pH,Correction scalar pH for nonlinear pH impact function
+pHmortA_XXX,,,No,,pH,Scalar in pH related mortality relationship
+pHmortB_XXX,,,No,,pH,Constant in pH related mortality relationship
+pHmortmid_XXX,,,No,,pH,pH at midpoint of mortality sigmoid effects curve
+pHmortstart_XXX,,,No,,pH,pH at which extra mortality effects begin
+pHsensitive_model_XXX,,,No,,pH,"Form of the pH effects model: 0 = no effect, 1 = monod, 2 = nonlinear (humped form as of Hinga 2002), 3 = linear"
+Phyto_Resp_Rate_XXX,,,No,,Respiriation,Phytoplankton respiration rate
+PP_XXX,,,No,,Recruitment,Primary production dependent recruitment
+pR_XXX,,Feb-20,No,,Diet,Vertebrate preference for rebuilding reserves over structure
+predcase_XXX,,0,No,,Diet,"Predation formulation. 0 = Holling type II, 1 = Holling type I, 2 = Holling type III, 3 = ECOSIM, 4 = min-max, 5 = size-specific Holling type III"
+prop_spawn_lost_XXX,,,No,,Recruitment,Proportion lost?
+PSA_min_XXX,moles mg-1,,No,,Phosphorus,Minimum quota of phosphorus in phytoplankton cells in moles/mg dry weight
+pStock_XXX,,,Yes,,Recruitment,Stock specific avilability scalars (stock entries = 1 if no stock differences). 
+q10_correction_XXX,,,No,,Temperature,NA
+q10_method_XXX,,,No,,Temperature,"Method of calculating Q10 - normal way (0),  Climate change method of Gary Griffith (1)"
+q10_optimaltemp_XXX,,,No,,Temperature,NA
+q10_XXX,,,No,,Temperature,NA
+Ralpha_XXX,,,No,,Recruitment,Alpha in Ricker recruitment 
+Rbeta_XXX,,,No,,Recruitment,Beta in Ricker recruitment
+recover_mult_XXX,,,No,,Recruitment,Recruitment multiplier (to encourage recovery of stocks)
+recover_start_XXX,,,No,,Recruitment,Starting time of recruitment recovery
+Recruit_Period_XXX,d,,No,,Recruitment,Length of time recruits arrive over
+recSTOCK_XXX,,,Yes,,Recruitment,Stock specific recruitment scalars.
+salt_correction_XXX,,,No,,Salinity,Correction scalar salt for nonlinear salt impact function (correct?)
+Speed_XXX,m hr-1,,No,,Movement,Swimming speed
+temp_coefftA_XXX,,0.851,No,,Temperature,Coefficient A in Gary Griffith temperature function
+trait_active_XXX,,,Yes,,Evolution,NA
+trait_variance_XXX,,,No,,Evolution,Level of trait variance
+vl_XXX,m3 d-1,,No,,Diet,Search volume - used by size specific Holling type III (predcase 5)
+vla_XXX_T15,,1-May,No,,Diet,Coefficient of search volume
+vlb_XXX,,0.25-0.55,No,,Diet,Exponent for search volume relation
+XXX_age_mat,,,No,,Recruitment,First mature age class
+XXX_AgeClassSize,,,No,,Functional group,Number of years represented in each age class.
+XXX_aquacult_feed,,,No,,Diet,NA
+XXX_aquacult_fry,,,No,,Recruitment,Amount of fry (in tonnes) added per day (for vertebrates use KDENR instead)
+XXX_aquacult_hdistribution,,,Yes,,Movement,Aquaculture stocking distribution - overwrites hdistrib
+XXX_bleach_growshift,,,No,,Bleaching,Coral bleaching parameter
+XXX_bleach_periodA,,,No,,Bleaching,Coral bleaching parameter
+XXX_bleach_periodB,,,No,,Bleaching,Coral bleaching parameter
+XXX_bleach_recovery_rate,,,No,,Bleaching,Coral bleaching parameter
+XXX_bleach_temp,,,No,,Bleaching,Coral bleaching parameter
+XXX_bleach_tempshift,,,No,,Bleaching,Coral bleaching parameter
+XXX_bleaching_rates,,,No,,Bleaching,Coral bleaching parameter
+XXX_calcifLambda,,,No,,Coral,Coral parameter
+XXX_calcifRefBaseline,,,No,,Coral,Coral parameter
+XXX_calcifTcoefft,,,No,,Coral,Coral parameter
+XXX_calcifTconst,,,No,,Coral,Coral parameter
+XXX_calcifTopt,,,No,,Coral,Coral parameter
+XXX_catcheater,,1,No,,Diet,"XXX eat catch from nets: 1 = yes, 0 = no"
+XXX_colony_ha,,,No,,Coral,Coral rugosity parameter
+XXX_coral_compete,,,No,,Coral,Coral parameter
+XXX_coral_max_accelA,,,No,,Coral,Coral parameter
+XXX_coral_max_accelB,,,No,,Coral,Coral parameter
+XXX_coral_overgrow,,,No,,Coral,Coral parameter
+XXX_CrecruitA,,,No,,Coral,Coral parameter
+XXX_CrecruitB,,,No,,Coral,Coral parameter
+XXX_CrecruitC,,,No,,Coral,Coral parameter
+XXX_ddepend_move,,0,No,,Movement,"Movement option: 0 = off, 1 = sedentary, 2 = on, 3 = sticky, 4 = no explicit movement"
+XXX_depmum_scalar,,,No,,Bleaching,Coral bleaching parameter
+XXX_DHW_thresh,,,No,,Bleaching,Coral bleaching parameter
+XXX_FeedLightThresh,,,No,,Coral,Coral parameter
+XXX_FSM,,1,Yes,,Migration,External/migration survivorship - proportion of migrating biomass that returns to the model domain
+XXX_FSMG,,,Yes,,Migration,Proportional increase in size while outside model domain. If on seasonal feeding grounds reproduction reserves are recovered and FSMG = FBGU.
+XXX_habdepend,,0,No,Unrestricted,Refuge,"Dependent on demersal habitat: 0 = no, 1 = yes. If yes and flaghabdepend = 1, then refuge models can be applied."
+XXX_homerangerad,m,,No,,Home range,Home range radius
+XXX_HostRemin,,,No,,Coral,Coral parameter
+XXX_log_mult,,,No,,Recruitment,Multiplier converting distribution to number of recruits
+XXX_low,mg N m-2,,No,,Spatial thresholds,Little space limitation (pop too small)
+XXX_max_move_salt,,40,No,,Movement,Maximum tolerated salinity
+XXX_max_move_temp,,30,No,,Movement,Maximum tolerated temperature
+XXX_max_spawn_salt,,40,No,,Recruitment,Maximum spawning salinity
+XXX_max_spawn_temp,,25,No,,Recruitment,Maximum spawning temperature
+XXX_maxdepth,m,,No,,Spatial thresholds,Maximum depth for group XXX
+XXX_mBleach,,,No,,Bleaching,Coral bleaching parameter
+XXX_Migrate_Period,,1,Yes,,Migration,Period of time migrating group exit/enter over
+XXX_Migrate_Return,,364,Yes,,Migration,Specifies the day on which a group re-enters the model. Multiple values if the group does multiple migrations per year
+XXX_Migrate_Time,,0,Yes,,Migration,Specifies the day on which a group leaves the model if they migrate. Multiple values if the group does multiple migrations per year.
+XXX_min_move_salt,,0,No,,Movement,Minimum tolerated salinity
+XXX_min_move_temp,,4,No,,Movement,Minimum tolerated temperature
+XXX_min_O2,,,No,,Mortality,Minimum tolerated oxygen level for age structured groups.
+XXX_min_spawn_salt,,0,No,,Recruitment,Minimum spawning salinity
+XXX_min_spawn_temp,,4,No,,Recruitment,Minimum spawning temperature
+XXX_mindepth,m,,No,,Spatial thresholds,Minimum depth (used with home range movement)
+XXX_mL,d-1,,Yes,,Mortality,Linear mortality biomass groups calculated as a weighted average rate for 15 deg C
+XXX_mQ,d-1,,Yes,,Mortality,Quadratic mortality biomass groups calculated as a weighted average rate for 15 deg C
+XXX_overlap,,,No,,Home range,Whether homeranges overlap for the group
+XXX_prop_zooxanth,,,No,,Bleaching,Coral bleaching parameter
+XXX_PropLightFeed,,,No,,Coral,Coral parameter
+XXX_rec_HabDepend,,,No,,Functional group,"Recruitment dependent on demersal habitat (0 = no, 1 = yes?)"
+XXX_recruit_hdistrib,,,Yes,,Recruitment,Recruit local horizontal distributions
+XXX_Recruit_Time,d,,No,,Recruitment,Length of larval/gestation period
+XXX_Recruit_vdistrib,,,Yes,,Recruitment,Recruit local vertical distributions
+XXX_remin_contrib,,,No,,Diet,Remineralisation contribution
+XXX_ReturnStock,,0,Yes,,Migration,Adult migration return stock. Integer identifying the stock individuals enter. 0 implies individuals are spread uniformly across all stocks.
+XXX_rug_bleacherode,,,No,,Bleaching,Coral bleaching parameter
+XXX_rug_erode,,,No,,Rugosity,Background erosion rates due to implicit boring
+XXX_rug_factor,,,No,,Coral,Coral rugosity parameter
+XXX_RugCover_scalar,,,No,,Rugosity,Rugosity refuge model parameter
+XXX_rugFeedScalar,,,No,,Coral,Coral rugosity parameter
+XXX_rugosity_inc,,,No,,Rugosity,Rugosity increases due to size-specific coral growth
+XXX_sat,mg N m-2,,No,,Spatial thresholds,Interference to uptake due to shading
+XXX_sn,,,No,,Diet,Ref. AFDW for XXX so can determine avail fish groups.
+XXX_spawn_period,d,,No,,Recruitment,Period of spawning
+XXX_stock_struct,,,Yes,,Movement,Horizontal stock structure
+XXX_threshdepth,,,No,,Bleaching,Coral bleaching parameter
+XXX_Time_Spawn,d,,No,,Recruitment,Time of year XXX spawns
+XXX_vert_stock_struct,,,Yes,,Movement,Vertical stock structure
+XXXmax,mg N m-2,,No,,Spatial thresholds,Maximum biomass for epibenthic and some infauna groups
+XXXthresh,mg N m-2 s-1,,No,,Spatial thresholds,Threshold flux level where damping starts
