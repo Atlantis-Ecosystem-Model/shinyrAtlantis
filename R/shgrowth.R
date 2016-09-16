@@ -250,7 +250,7 @@ GenerateFeedingData <- function(grp.file, prm.file, nc.file) {
       for (jj in 1:length(j)) {
         # Valid row is when txt.find is first entry and second is number
         text.split <- unlist(str_split(
-          gsub(pattern = "[ ]+", x = prm[j[jj]], replacement = " "), " "))
+          gsub(pattern = "[ \t]+", x = prm[j[jj]], replacement = " "), " "))
         if (text.split[1] == txt.find) {
           jnew <- c(jnew,j[jj]) # add the row that satisfies the criteria
         }
@@ -271,7 +271,7 @@ GenerateFeedingData <- function(grp.file, prm.file, nc.file) {
       for (jj in 1:length(j)) {
         # Valid row is when txt.find is first entry and second is number
         text.split <- unlist(str_split(
-          gsub(pattern = "[ ]+", x = prm[j[jj]], replacement = " "), " "))
+          gsub(pattern = "[ \t]+", x = prm[j[jj]], replacement = " "), " "))
         if (text.split[1] == txt.find) {
           jnew <- c(jnew,j[jj]) # add the row that satisfies the criteria
         }
@@ -292,7 +292,7 @@ GenerateFeedingData <- function(grp.file, prm.file, nc.file) {
       for (jj in 1:length(j)) {
         # Valid row is when txt.find is first entry and second is number
         text.split <- unlist(str_split(
-          gsub(pattern = "[ ]+", x = prm[j[jj]], replacement = " "), " "))
+          gsub(pattern = "[ \t]+", x = prm[j[jj]], replacement = " "), " "))
         if (text.split[1] == txt.find) {
           jnew <- c(jnew,j[jj]) # add the row that satisfies the criteria
         }
@@ -313,7 +313,7 @@ GenerateFeedingData <- function(grp.file, prm.file, nc.file) {
       for (jj in 1:length(j)) {
         # Valid row is when txt.find is first entry and second is number
         text.split <- unlist(str_split(
-          gsub(pattern = "[ ]+", x = prm[j[jj]], replacement = " "), " "))
+          gsub(pattern = "[ \t]+", x = prm[j[jj]], replacement = " "), " "))
         if (text.split[1] == txt.find) {
           jnew <- c(jnew,j[jj]) # add the row that satisfies the criteria
         }
@@ -335,7 +335,7 @@ GenerateFeedingData <- function(grp.file, prm.file, nc.file) {
       for (jj in 1:length(j)) {
         # Valid row is when txt.find is first entry and second is number
         text.split <- unlist(str_split(
-          gsub(pattern = "[ ]+", x = prm[j[jj]], replacement = " "), " "))
+          gsub(pattern = "[ \t]+", x = prm[j[jj]], replacement = " "), " "))
         if (text.split[1] == txt.find) {
           jnew <- c(jnew,j[jj]) # add the row that satisfies the criteria
         }
@@ -359,7 +359,7 @@ GenerateFeedingData <- function(grp.file, prm.file, nc.file) {
       for (jj in 1:length(j)) {
         # Valid row is when txt.find is first entry and second is number
         text.split <- unlist(str_split(
-          gsub(pattern = "[ ]+", x = prm[j[jj]], replacement = " "), " "))
+          gsub(pattern = "[ \t]+", x = prm[j[jj]], replacement = " "), " "))
         if (text.split[1] == txt.find) {
           jnew <- c(jnew,j[jj]) # add the row that satisfies the criteria
         }
@@ -380,7 +380,7 @@ GenerateFeedingData <- function(grp.file, prm.file, nc.file) {
       for (jj in 1:length(j)) {
         # Valid row is when txt.find is first entry and second is number
         text.split <- unlist(str_split(
-          gsub(pattern = "[ ]+", x = prm[j[jj]], replacement = " "), " "))
+          gsub(pattern = "[ \t]+", x = prm[j[jj]], replacement = " "), " "))
         if (text.split[1] == txt.find) {
           jnew <- c(jnew,j[jj]) # add the row that satisfies the criteria
         }
@@ -401,7 +401,7 @@ GenerateFeedingData <- function(grp.file, prm.file, nc.file) {
       for (jj in 1:length(j)) {
         # Valid row is when txt.find is first entry and second is number
         text.split <- unlist(str_split(
-          gsub(pattern = "[ ]+", x = prm[j[jj]], replacement = " "), " "))
+          gsub(pattern = "[ \t]+", x = prm[j[jj]], replacement = " "), " "))
         if (text.split[1] == txt.find) {
           jnew <- c(jnew,j[jj]) # add the row that satisfies the criteria
         }
@@ -423,7 +423,7 @@ GenerateFeedingData <- function(grp.file, prm.file, nc.file) {
       for (jj in 1:length(j)) {
         # Valid row is when txt.find is first entry and second is number
         text.split <- unlist(str_split(
-          gsub(pattern = "[ ]+", x = prm[j[jj]], replacement = " "), " "))
+          gsub(pattern = "[ \t]+", x = prm[j[jj]], replacement = " "), " "))
         if (text.split[1] == txt.find) {
           jnew <- c(jnew,j[jj]) # add the row that satisfies the criteria
         }
@@ -444,7 +444,7 @@ GenerateFeedingData <- function(grp.file, prm.file, nc.file) {
       for (jj in 1:length(j)) {
         # Valid row is when txt.find is first entry and second is number
         text.split <- unlist(str_split(
-          gsub(pattern = "[ ]+", x = prm[j[jj]], replacement = " "), " "))
+          gsub(pattern = "[ \t]+", x = prm[j[jj]], replacement = " "), " "))
         if (text.split[1] == txt.find) {
           jnew <- c(jnew,j[jj]) # add the row that satisfies the criteria
         }
@@ -465,7 +465,7 @@ GenerateFeedingData <- function(grp.file, prm.file, nc.file) {
       for (jj in 1:length(j)) {
         # Valid row is when txt.find is first entry and second is number
         text.split <- unlist(str_split(
-          gsub(pattern = "[ ]+", x = prm[j[jj]], replacement = " "), " "))
+          gsub(pattern = "[ \t]+", x = prm[j[jj]], replacement = " "), " "))
         if (text.split[1] == txt.find) {
           jnew <- c(jnew,j[jj]) # add the row that satisfies the criteria
         }
@@ -486,7 +486,7 @@ GenerateFeedingData <- function(grp.file, prm.file, nc.file) {
       for (jj in 1:length(j)) {
         # Valid row is when txt.find is first entry and second is number
         text.split <- unlist(str_split(
-          gsub(pattern = "[ ]+", x = prm[j[jj]], replacement = " "), " "))
+          gsub(pattern = "[ \t]+", x = prm[j[jj]], replacement = " "), " "))
         if (text.split[1] == txt.find) {
           jnew <- c(jnew,j[jj]) # add the row that satisfies the criteria
         }
