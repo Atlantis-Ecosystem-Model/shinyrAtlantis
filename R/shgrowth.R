@@ -23,13 +23,12 @@ sh.feeding <- function(grp.file, prm.file, nc.file){
   txtHelp <- "<p>This shiny application displays some important feeding and growth parameters for vertebrate predators.</p>"
   txtHelp <- paste(txtHelp, "<p>Predictions are based on the assumption that in Atlantis predator growth is governed by the <b>type II functional response</b>.</p>") 
   txtHelp <- paste(txtHelp, "<p>Predictions also assume that fish respiration has been turned off; <b>flagresp = 0</b>.</p>") 
-  txtHelp <- paste(txtHelp, "<p>The <i>Weight tab</i> shows minimum nitrogen weight needed for spawning to occur. It is calculated from the KSPA and FSP parameters (= KSPA/FSP).</p>") 
   txtHelp <- paste(txtHelp, "<p>Predicted growth curves assume that all cohorts are capable of spawning provided animals are above the minimal mass depicted in the <i>Weight tab</i>.</p>") 
   txtHelp <- paste(txtHelp, "<p>Inclusion of invertebrates may occur in the future.</p>") 
 
   dfs <- GenerateFeedingData(grp.file, prm.file, nc.file)
-  df.Weight <- dfs$df.Group %>% select(Predator, Cohort, Reserve:WghtTotal) %>%
-    gather(Type, Weight, Reserve:WghtTotal)
+  df.Weight <- dfs$df.Group %>% select(Predator, Cohort, Reserve:Spawn) %>%
+    gather(Type, Weight, Reserve:Spawn)
   df.Clearance <- dfs$df.Group %>% select(Predator, Cohort, Clearance)
   df.Growth <- dfs$df.Group %>% select(Predator, Cohort, mum, Require) %>%
     gather(Type, Rate, mum:Require)
@@ -43,7 +42,7 @@ sh.feeding <- function(grp.file, prm.file, nc.file){
       # Weight
       tabPanel("Weight", 
         fluidPage(
-          h5("Initial weight distribution. Horizontal line is minimum spawning weight."),
+          h5("Initial weight distribution: total (blue), reserve (red). Weight allocated to spawning is indicated in green."),
           plotOutput("plotWeight", height = "575px")
         )
       ),  
@@ -57,7 +56,7 @@ sh.feeding <- function(grp.file, prm.file, nc.file){
       # Growth
       tabPanel("Growth rates", 
         fluidPage(
-          h5("Net growth rates needed to maintain initial conditions (in the absence of spawning) and maximum growth rates (mum)."),
+          h5("Net growth rate needed to maintain initial condition mass (includes cost of spawning), and the maximum growth rate (mum)."),
           plotOutput("plotGrowth", height = "550px")
         )
       ),  
@@ -71,7 +70,7 @@ sh.feeding <- function(grp.file, prm.file, nc.file){
         ),
         mainPanel(
           fluidPage(
-            h5("Predicted growth curves when feeding solely on each prey type, for a range of prey densities [mg N m-3]."),
+            h5("Predicted growth curves when feeding solely on each prey type, for a range of prey densities [mg N m-3]. Includes the cost of spawning."),
             plotOutput("plotPredict", height = "575px")
           )
         )
@@ -124,21 +123,9 @@ sh.feeding <- function(grp.file, prm.file, nc.file){
       })
       
       output$plotWeight <- renderPlot({
-        Predator <- NULL
-        Cohort <- NULL
-        minWeight <- NULL
-        Type <- NULL
-        for (i in 1:length(dfs$df.grp$Name)) {
-          Predator <- c(Predator, dfs$df.grp$Name[i], dfs$df.grp$Name[i])
-          Cohort <- c(Cohort, 1, dfs$df.grp$NumCohorts[i])
-          minWeight <- c(minWeight, dfs$df.grp$minSpawnWt[i], dfs$df.grp$minSpawnWt[i])
-          Type <- c(Type, "WghtTotal", "WghtTotal")
-        }
-        df.minWeight <- data.frame(Predator, Cohort, minWeight, Type)
-        
-        ggplot(data = df.Weight, aes(x = Cohort, y = Weight, color = Type)) +
+        ggplot(data = filter(df.Weight, Type != "Structural"),
+            aes(x = Cohort, y = Weight, color = Type)) +
           geom_point() + geom_line() +
-          geom_line(data = df.minWeight, aes(x = Cohort, y = minWeight), inherit.aes = TRUE) +
           facet_wrap( ~ Predator, scales = "free_y") + ylim(0,NA) +
           xlab("Cohort") + ylab("Weight [mg N]") + 
           theme_bw()
@@ -541,6 +528,8 @@ GenerateFeedingData <- function(grp.file, prm.file, nc.file) {
   }  
   nc_close(nc.out)
   
+  X_RS <- df.prms$value[which(df.prms$param == "X_RS")] # usually 2.65
+  
   Predator <- NULL
   PreyGroup <- NULL
   Cohort <- NULL
@@ -553,6 +542,7 @@ GenerateFeedingData <- function(grp.file, prm.file, nc.file) {
   Clearance  <- NULL
   
   Frac.Spawn  <- NULL
+  Spawn     <- NULL
   
   NStruct <- NULL
   NRes    <- NULL
@@ -561,11 +551,11 @@ GenerateFeedingData <- function(grp.file, prm.file, nc.file) {
   W <- N.Struct + N.Res # Total nitrogen weight
   i <- 0
   # calculate required available biomass for each of the four groups
-  for (xxx in df.grp$Name) { # look for each Code
+  for (xxx in df.grp$Name) { # look for each Code (Predator)
     i <- i + 1 # xxx index
     # Live Prey
     # for (j in 1:(df.grp$NumCohorts[i]-1)) {
-    for (j in 1:df.grp$NumCohorts[i]) {
+    for (j in 1:df.grp$NumCohorts[i]) { # cohort
       Predator  <- c(Predator, xxx) 
       Cohort    <- c(Cohort, j)
       
@@ -590,16 +580,15 @@ GenerateFeedingData <- function(grp.file, prm.file, nc.file) {
         dW <- 0
       }
       # TO DO: calculate spawning cost Nr and incorporate into Require
-      # FSP     <- df.grp$FSP[i]
-      # KSPA    <- df.grp$KSPA[i]
-      # WIdeal  <- W[i,j] # ideal weight
-      # NR      <- WIdeal*???
-      # SR      <- WIdeal*???
-      # Nr      <- max(FSP*WIdeal - KSPA,0) # reserve nitrogen for spawning
-      # LowWghtCost <- max(0, WIdeal - NR - NS) # underweight loss in Res N
-      # Nr      <- fs*max(Nr - LowWghtCost, 0.0) # mean reserve loss per spawner
-      # Require <- (dW + Nr)/tau
-      Require <- c(Require, dW/tau) # required daily growth [mg N d-1]
+      FSP     <- df.grp$FSP[i]
+      KSPA    <- df.grp$KSPA[i]
+      WIdeal  <- (1.0 + X_RS) * N.Struct[i,j] # ideal weight
+      LowWghtCost <- min(0, WIdeal - W[i,j]) # underweight loss in Res N
+      spwn <- max(0.0, FSP*(WIdeal - KSPA/FSP) - LowWghtCost) # mean reserve loss per spawner
+      Spawn <- c(Spawn, spwn) 
+      
+      # calculate daily growth requirement with spawning fraction 
+      Require <- c(Require, (dW + FSPB*spwn)/tau) # required daily growth [mg N d-1]
       
       Frac.Spawn <- c(Frac.Spawn, FSPB) # fraction spawning
       
@@ -612,7 +601,7 @@ GenerateFeedingData <- function(grp.file, prm.file, nc.file) {
   df.Group <- data.frame(Predator = Predator.G, Cohort = Cohort.G,
     mum = mum, Clearance = Clearance, Require = Require,
     Frac.Spawn = Frac.Spawn, Reserve = NRes, Structural = NStruct,
-    WghtTotal = NTotal)
+    WghtTotal = NTotal, Spawn = Spawn)
   
   return(list(df.grp = df.grp, df.Group = df.Group, df.prms = df.prms))
 }
