@@ -1499,7 +1499,7 @@ make.prm.general <- function(prm.file){
   df.prm.defns <- read.csv(def.all.file, header = TRUE)
   df.prms <- df.prm.defns # data frame to return
   df.prms$Value <- NA # set initial values
-  df.prms <- df.prms[c("Parameter","Units", "Value", "Required", "Suggested", "Definition")] # name df columns
+  df.prms <- df.prms[c("Parameter","Units", "Value", "Suggested", "Definition")] # name df columns
   
   for(tmplt in df.prms$Parameter) { # look for each parameter
     j <- grep(pattern = tmplt, x = prm, value = FALSE) # file row(s)
