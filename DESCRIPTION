@@ -12,7 +12,8 @@ Imports: dplyr,
          DT,
          ggplot2,
          ncdf4,
-         stringr
+         stringr, 
+         tidyr
 License: GPL-3
 LazyData: true
 RoxygenNote: 5.0.1

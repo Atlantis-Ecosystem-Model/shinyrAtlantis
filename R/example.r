@@ -31,7 +31,7 @@ DisplayParametersExample <- function() {
   grp.file <- system.file("extdata", "AntarcticGroups.csv", package = "shinyrAtlantis")
   prm.file <- system.file("extdata", "SO90_biol.prm", package = "shinyrAtlantis")
   
-  obj <- make.prm.object(bgm.file, grp.file, prm.file, def.all.file, def.grp.file)
+  obj <- make.prm.object(bgm.file, grp.file, prm.file)
   sh.prm(obj, def.grp.file) # run the shiny App
 }
 

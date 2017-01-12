@@ -29,6 +29,7 @@
 #' }
 #' @export
 #' @importFrom ggplot2 guide_legend
+#' @import dplyr
 sh.init <- function(input.object){
   # set up layer indices when plotting 3D values  
   depth.layers <- matrix(NA, nrow = input.object$numlevels, 
@@ -768,6 +769,7 @@ make.init.map <- function(bgm.file){
 # +======================================================+
 #' @importFrom ncdf4 nc_open ncvar_get nc_close ncatt_get
 #' @importFrom dplyr %>% filter group_by summarise mutate
+#' @importFrom tidyr gather
 make.init.cover <- function(box.data, map.vertices, nc.file) {
   nc.out <- nc_open(nc.file) # open .nc file
   
@@ -895,7 +897,8 @@ make.init.cover <- function(box.data, map.vertices, nc.file) {
 # +======================================================+
 # |  make.init.data : collect remaining data to display  |
 # +======================================================+
-#' @importFrom stringr str_length str_split str_sub 
+#' @importFrom stringr str_length str_split str_sub  str_sub<- 
+#' @importFrom stats na.omit 
 make.init.data <- function(nc.file, numboxes, numlevels) {
   nc.out <- nc_open(nc.file) # open .nc file
   

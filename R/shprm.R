@@ -18,7 +18,7 @@
 #' which generates a list object that is the parameter to \code{sh.prm} (see Examples).
 #' 
 #' @param obj R list object generated from \code{make.prm.object}
-#'
+#' @param def.grp.file file
 #' @return object of class 'shiny.appobj' see \code{\link[shiny]{shinyApp}}
 #' 
 #' @examples
@@ -27,7 +27,11 @@
 #' sh.prm(prm.object)
 #' }
 #' @export
-sh.prm <- function(obj){
+#' @importFrom tidyr gather
+#' @importFrom stats setNames
+#' @importFrom utils read.csv
+#' @import ggplot2
+sh.prm <- function(obj, def.grp.file){
 # obj is a list: numboxes, map_base, box.data, grp.def, grp.att, 
   #   gen.prm, grp.hab, grp.dist
   
