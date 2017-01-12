@@ -1,19 +1,12 @@
-Shiny Atlantis
+shinyrAtlantis
 --------------
 
-Development
------------
+A package to help users of Atlantis investigate the parameters that are spread across multiple files (.csv, .nc) when constructing their ecosystem model.
 
-1.  Clone this repo in RStudio, New Project, Version Control, Git, "<https://github.com/shanearichards/shinyrAtlantis.git>"
-2.  Click Tools/Project Options/Build Tools/Generate documentation with roxygen - click all options ON.
-3.  Click Build & Reload in the Build Tab (or hit Ctrl-SHIFT-Enter).
-4.  Make edits, build/reload/test, commit.
-5.  Etc.
+Usage in R
+----------
 
-Usage
------
-
-Install dependencies.
+Install dependencies *if they are not already installed*. The complete list of packages used to develop the shinyrAtlantis package are provided below. Remove the package names that are already installed. 
 
 ``` r
 install.packages(c("shiny", 
@@ -41,63 +34,85 @@ library(shinyrAtlantis)
 #> Loading required package: shiny
 ```
 
-Spatial Distributions "sh.dist"
+Some example Atlantis files are provided in the package so that the shiny applications can be explored straight away. Note that some of the example Atlantis files are incomplete. The shiny application allows exploration of most incomplete Atlantis files. See the examples presented below for how to use the shiny applications. Also see the documentation provided by typing `?shinyrAtlantis`.
+
+The code assumes that in the group.csv file the header of the column that contains the group type is labeled **GroupType** (it is also commonly labelled InvertType, which is missleading and will cause my code to crash).
+
+**Additional functionality to the shiny applications provided in this package, and new shiny applications, are currently under development.**
+
+`sh.dist`
 -------------------------------
 
-Shiny application for generating spatial distributions with constant density (per unit area)
+**sh.dist**: A shiny application for generating spatial distributions with constant density (per unit area). Code is located in file `shdist.R`.
 
 ``` r
-
 library(shinyrAtlantis)
-# ====================================================================
-# code to choose the spatial data file (.bgm)
 
 bgm.file <- system.file("extdata", "BanzareAtlantis.bgm", package = "shinyrAtlantis")
 
-# ====================================================================
-# code to collect the spatial data and view
-
-map.object <- make.dist.object(bgm.file)
-sh.dist(map.object)
+obj <- make.sh.dist.object(bgm.file)
+sh.dist(obj)
 ```
 
-Shiny PRM Run `shprm.R`
+`sh.prm`
 -----------------------
+
+**sh.prm**: A shiny application for exploring the data in the bioloy parameter file. Code is located in file `shprm.R`.
 
 ``` r
 library(shinyrAtlantis)
 
-def.all.file <- system.file("extdata", "paramdefns.csv", package = "shinyrAtlantis")
-def.grp.file <- system.file("extdata", "grpTemplates.csv", package = "shinyrAtlantis")
 bgm.file <- system.file("extdata", "BanzareAtlantis.bgm", package = "shinyrAtlantis")
 grp.file <- system.file("extdata", "AntarcticGroups.csv", package = "shinyrAtlantis")
 prm.file <- system.file("extdata", "SO90_biol.prm", package = "shinyrAtlantis")
 
-## prior to packaging, the scope of these file names was a bit "global"
-obj <- make.prm.object(bgm.file, grp.file, prm.file, def.all.file, def.grp.file)
-## this def.grp.file contents should be included in object above??
-sh.prm(obj, def.grp.file)  # run the shiny App
+obj <- make.sh.prm.object(bgm.file, grp.file, prm.file)
+sh.prm(obj)
 ```
 
-Shiny INIT Run `shinit.R`
+`sh.init`
 -------------------------
+
+**sh.init**: A shiny application for exploring the initial conditions file. Code is located in file `shinit.R`.
 
 ``` r
 library(shinyrAtlantis)
 
-
 bgm.file <-system.file("extdata", "BanzareAtlantis.bgm", package = "shinyrAtlantis")
-
 nc.file <- system.file("extdata", "input.nc", package = "shinyrAtlantis")
 
-input.object <- make.init.object(bgm.file, nc.file)
-a <- sh.init(input.object)
+obj <- make.sh.init.object(bgm.file, nc.file)
+sh.init(obj)
+```
+
+`sh.forcings`
+-------------------------------
+
+**sh.forcings**: A shiny application for exploring the forcings data (time-series of salt and temperature). Code is located in file `shforce.R`.
+
+``` r
+library(shinyrAtlantis)
+
+salinity.file    <- "GBR108_salt.nc"       # this file is not included in the package
+temperature.file <- "GBR108_temp.nc"       # this file is not included in the package
+bgm.file         <- "gbr_box_03012012.bgm" # this file is not included in the package
+cum.depth <- c(0,5,10,20,50,100,200,3000)  # cumulative water layer depths
+
+input.object <- make.sh.forcings.object(
+  bgm.file         = bgm.file,
+  exchange.file    = exchange.file,
+  cum.depth        = cum.depth,
+  temperature.file = temperature.file,
+  salinity.file    = salinity.file
+)
+
+sh.forcings(input.object)
 ```
 
 One step launch
 ---------------
 
-To launch any the above apps in one step, run the these examples.
+Some of the above apps can be launched in one step.
 
 ``` r
 shinyrAtlantis::SpatialDistributionsExample()
@@ -110,3 +125,15 @@ shinyrAtlantis::DisplayParametersExample()
 ``` r
 shinyrAtlantis::DisplayInitializationExample()
 ```
+
+Package development
+--------------------
+
+If you wish to contribute to the development of this package then perform the following steps.
+
+1.  Clone this repo in RStudio, New Project, Version Control, Git, "<https://github.com/shanearichards/shinyrAtlantis.git>"
+2.  Click Tools/Project Options/Build Tools/Generate documentation with roxygen - click all options ON.
+3.  Click Build & Reload in the Build Tab (or hit Ctrl-SHIFT-Enter).
+4.  Make edits, build/reload/test, commit.
+5.  Etc.
+

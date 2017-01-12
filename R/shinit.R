@@ -1,35 +1,38 @@
-# shinit.R
-# 09/02/2016
-
-# rm(list = ls()) # clear memory
-
-# library(shiny)
-# library(dplyr)
-# library(ggplot2)
-# library(DT)
-# library(stringr)
-# library(ncdf4)
+# 10/06/2016
 
 #' @title Shiny application for viewing Atlantis initialisation data
 #'
 #' @description
-#' Takes data from a .bgm box geometry file and a .nc Atlantis input parameter file and provides
+#' Takes data from a .bgm box geometry file and a netCDF Atlantis input parameter file and provides
 #' a visualisation of the data in the form of a shiny application. The two data
-#' files must first be pre-processed by \code{make.init.object}, which generates a 
-#' list object that is the parameter to \code{sh.init} (see Examples).
-#' 
-#' @param input.object R list object generated from \code{make.init.object}
+#' files must first be pre-processed by \code{\link[shinyrAtlantis]{make.sh.init.object}}, 
+#' which generates a list object that is the parameter to \code{sh.init} 
+#' (see Examples).
 #'
-#' @return object of class 'shiny.appobj' see \code{\link[shiny]{shinyApp}}
+#' The \emph{Habitat} tab displays the number of water layers and the habitat
+#' cover for each box. Use this tab to check that reef + flat + soft cover sum to 1 for the interior boxes.
 #' 
+#' The \emph{Abiotic (2D)} and \emph{Abiotic (3D)} tabs display benthic and pelagic abiotic variables. 
+#' 
+#' The \emph{Biotic (2D)} and \emph{Biotic (3D)} tabs display benthic and pelagic biotic variables. 
+#' 
+#' The \emph{Nitrogen} tab displays the initial nitrogen content of biotic groups that are modelled using cohorts.
+#' 
+#' @param input.object R list object generated from \code{\link[shinyrAtlantis]{make.sh.init.object}}.
+#'
+#' @return Object of class 'shiny.appobj' see \code{\link[shiny]{shinyApp}}.
+#'
 #' @examples
 #' \dontrun{
-#' input.object <- make.init.object(bgm.file, nc.file)
+#' bgm.file <- "VMPA_setas.bgm"
+#' nc.file  <- "INIT_VMPA_Jan2015.nc"
+#' input.object <- make.sh.init.object(bgm.file, nc.file)
 #' sh.init(input.object)
 #' }
 #' @export
-#' @importFrom ggplot2 guide_legend
 #' @import dplyr
+#' @importFrom ggplot2 guide_legend ylim
+#' @importFrom ncdf4 nc_open nc_close ncvar_get
 sh.init <- function(input.object){
   # set up layer indices when plotting 3D values  
   depth.layers <- matrix(NA, nrow = input.object$numlevels, 
@@ -77,6 +80,9 @@ sh.init <- function(input.object){
   txtHelp <- paste(txtHelp, "<p>3D biotic data describing numbers (i.e., variable name contains _Nums) may be transformed by dividing by box area. This transformation shows 2D densities, which gives a better sense of whether a species is uniformly distributed throughout its horizontal range (assuming the depth range [m] is fixed throughout its horizontal range).</p>")
   
   plotHeight3D <- paste(as.character(350 * ((input.object$numlevels - 1) %/% 2 + 1)),
+    "px", sep = "") # calculate a reasonable overall plot size for 3D plots
+  
+  plotHeightNitrogen <- paste(as.character(125 * ((length(unique(input.object$df.nitrogen$Species)) - 1) %/% 6 + 1)),
     "px", sep = "") # calculate a reasonable overall plot size for 3D plots
   
   # set up consistent association between colours used to categorise cover check    
@@ -249,6 +255,18 @@ sh.init <- function(input.object){
           )
         )
       ),
+      # Nitrogen (structural and reserve)
+      tabPanel("Nitrogen", 
+        fluidPage(
+          plotOutput("plotNitrogen", height = plotHeightNitrogen)
+        )
+      ),  
+      # NUms
+      tabPanel("Nums", 
+        fluidPage(
+          plotOutput("plotNums", height = plotHeightNitrogen)
+        )
+      ),  
       tabPanel("Help", 
         fluidPage(
           HTML(txtHelp)
@@ -680,6 +698,28 @@ sh.init <- function(input.object){
         
         DT::datatable(df.plot, rownames = FALSE)
       })
+      
+      # display nitrogen
+      output$plotNitrogen <- renderPlot({
+        ggplot(data = input.object$df.nitrogen, 
+          aes(x = Cohort, y = N.Value, color = N.Type)) +
+          geom_point() +  geom_line() + ylim(0,NA) +         
+          facet_wrap( ~ Species, ncol=6, scales="free_y") +
+          labs(color = "Source") +
+          xlab("Cohort") + ylab("Nitrogen (mg N)") +
+          # theme(plot.background = element_blank()) +
+          theme_bw()
+      })
+      
+      # display Nums
+      output$plotNums <- renderPlot({
+        ggplot(data = input.object$df.nums, 
+          aes(x = Cohort, y = Nums.Value)) +
+          geom_point() +  geom_line() + ylim(0,NA) +         
+          facet_wrap( ~ Species, ncol=6, scales="free_y") +
+          xlab("Cohort") + ylab("Total numbers (individuals)") +
+          theme(plot.background = element_blank())
+      })
     }  
   )  
 }
@@ -848,8 +888,8 @@ make.init.cover <- function(box.data, map.vertices, nc.file) {
   # layers.total is based on non-zero nominal_dz values
   # this code assumes a single sediment layer
   df.box$lvl <- as.integer(df.box$lvl)
-  box.summary.2 <- df.box %>% dplyr::filter(lvl < max.z.levels) %>%
-    group_by(boxid) %>% 
+  box.summary.2 <- dplyr::filter(df.box, (lvl < max.z.levels)) %>%
+    dplyr::group_by(boxid) %>% 
     dplyr::summarise(depth.total = sum(dz, na.rm = TRUE)) 
   # limit water layers to not be less than zero
   box.summary <- dplyr::left_join(box.summary.1, box.summary.2, by = "boxid")
@@ -862,7 +902,7 @@ make.init.cover <- function(box.data, map.vertices, nc.file) {
   } else {
     depth.sediment <- 0
   }
-
+  
   # create a list of depths
   depths <- c(as.character(cumsum(dz[(max.z.levels-1):1])), "sediment")
   
@@ -895,10 +935,12 @@ make.init.cover <- function(box.data, map.vertices, nc.file) {
 }
 
 # +======================================================+
-# |  make.init.data : collect remaining data to display  |
+# |  make.init.data.ini : collect remaining data to display  |
 # +======================================================+
+
 #' @importFrom stringr str_length str_split str_sub  str_sub<- 
 #' @importFrom stats na.omit 
+
 make.init.data <- function(nc.file, numboxes, numlevels) {
   nc.out <- nc_open(nc.file) # open .nc file
   
@@ -909,14 +951,19 @@ make.init.data <- function(nc.file, numboxes, numlevels) {
   }
   
   # find biotic variable names (step 1 of two steps)
-  # find variable names ending in _N
-  species.names <- var.names[grep(pattern = "(_N)*_N$", x = var.names)]
+  # find variable names ending in _N or _Nx
+  species.names <- var.names[grep(pattern = "(_N)*_N[0-9]*$", x = var.names)]
   for (i in 1:length(species.names)) {
     species.old <- species.names[i]
-    stringr::str_sub(species.old, start = str_length(species.old)-1,
-      end = stringr::str_length(species.old)) <- "" # remove _N
+    str_sub(species.old, start = str_length(species.old)-1,
+      end = str_length(species.old)) <- "" # remove _N
+    if (substr(species.old, nchar(species.old), nchar(species.old)) == "_") {
+      str_sub(species.old, start = str_length(species.old),
+        end = str_length(species.old)) <- "" # remove _N
+    }
     species.names[i] <- species.old # replace name with _N removed
   }
+  species.names <- unique(species.names) # remove duplicates from cohorts
   
   # find all abiotic variables
   i.species <- NA
@@ -952,6 +999,7 @@ make.init.data <- function(nc.file, numboxes, numlevels) {
   non.species[i.species] <- FALSE # remove all species
   i.nonspecies <- which(non.species == TRUE)
   nonspecies.names <- var.names[i.nonspecies]
+  # Light_Adaption variables are considered non-species (fix)
   
   # split abiotic variables into 2D and 3D groups
   nonspecies.2.d <- NA # number of dimensions
@@ -992,6 +1040,24 @@ make.init.data <- function(nc.file, numboxes, numlevels) {
   nonspecies.3.b <- nonspecies.3.b[-1] # remove starting NA
   nonspecies.3.z <- nonspecies.3.z[-1] # remove starting NA
   
+  # create matrices identifying box-layers containing water
+  numlayers.all <- ncvar_get(nc.out, "numlayers")
+  numlayers.all[is.na(numlayers.all)] <- 0
+  max.numlayers <- dim(ncvar_get(nc.out, "volume"))[1] # includes sediment
+  # 2D
+  not.valid.2 <-rep(TRUE, numboxes)
+  not.valid.2[numlayers.all > 0] <- FALSE  
+  # 3D
+  not.valid.3 <- matrix(data = TRUE, nrow = numlevels, ncol = numboxes)
+  for (i in 1:numboxes) {
+    if (numlayers.all[i] > 0) { # some water layers
+      not.valid.3[max.numlayers,i] <- FALSE
+      for (j in 1:numlayers.all[i]) {
+        not.valid.3[j,i] <- FALSE
+      }
+    } 
+  }
+  
   # extract abiotic 2D data
   nonspecies.2.n <- length(nonspecies.2.names)
   nonspecies.2.data <- array(data = NA, dim = c(nonspecies.2.n, numboxes))
@@ -999,7 +1065,13 @@ make.init.data <- function(nc.file, numboxes, numlevels) {
   for (i in 1:nonspecies.2.n) {
     tmp <- ncvar_get(nc.out, nonspecies.2.names[i]) # get all variable data
     # add the fill value to the missing values
-    tmp[is.na(tmp)] <- nc.out$var[[which(var.names == nonspecies.2.names[i])]]$missval
+    if (ncatt_get(nc.out, varid = nonspecies.2.names[i], attname = "_FillValue")$hasatt) {
+      tmp[is.na(tmp)] <- ncatt_get(nc.out, varid = nonspecies.2.names[i], 
+        attname = "_FillValue")$value
+    } else {
+      tmp[is.na(tmp)] <- 0
+    }
+    tmp[not.valid.2] <- NA
     tmp.dim <- length(dim(tmp))
     if (nonspecies.2.d[i] == 2) {
       # expect to be stored as a 2D array
@@ -1020,7 +1092,7 @@ make.init.data <- function(nc.file, numboxes, numlevels) {
         nonspecies.2.data[i,] <- tmp[1, ,1] # spatial data is in first dimension
       }
     }
-
+    
     # get the attribute details and store as HTML text
     tmp <- ncatt_get(nc.out, nonspecies.2.names[i]) # attribute names
     tmp.n <- length(tmp) # number of attributes
@@ -1032,7 +1104,7 @@ make.init.data <- function(nc.file, numboxes, numlevels) {
     }
     nonspecies.2.att[i] <- txt
   }
-
+  
   # extract abiotic 3D data
   nonspecies.3.n <- length(nonspecies.3.names)
   nonspecies.3.data <- array(data = NA, dim = c(nonspecies.3.n, numboxes, numlevels))
@@ -1040,7 +1112,13 @@ make.init.data <- function(nc.file, numboxes, numlevels) {
   for (i in 1:nonspecies.3.n) {
     tmp <- ncvar_get(nc.out, nonspecies.3.names[i]) # get all variable data
     # add the fill value to the missing values
-    tmp[is.na(tmp)] <- nc.out$var[[which(var.names == nonspecies.3.names[i])]]$missval
+    if (ncatt_get(nc.out, varid = nonspecies.3.names[i], attname = "_FillValue")$hasatt) {
+      tmp[is.na(tmp)] <- ncatt_get(nc.out, varid = nonspecies.3.names[i], 
+        attname = "_FillValue")$value
+    } else {
+      tmp[is.na(tmp)] <- 0
+    }
+    tmp[not.valid.3] <- NA
     tmp.dim <- length(dim(tmp))
     if (nonspecies.3.d[i] == 2) {
       # expect to be stored as a 2D array
@@ -1083,18 +1161,27 @@ make.init.data <- function(nc.file, numboxes, numlevels) {
     }
     nonspecies.3.att[i] <- txt
   }
-
+  
   # split species into 2D and 3D groups
   species.2.names.full <- NA # full names (2D)
   species.3.names.full <- NA # full names (3D)
   species.n <- length(species.names)
   species.2.N <- rep(0, species.n) # number of subgroups per species group (2D)
   species.3.N <- rep(0, species.n) # number of subgroups per species group (2D)
-  for (i in 1:species.n) { # gp through each species
+  for (i in 1:species.n) { # go through each species
     sp <- species.names[i] # extract the species group name
-    rgexprn <- paste("^", sp, sep="")
+    rgexprn <- paste("^", sp, sep="") # what if superset names (see below)?
     j <- grep(rgexprn, var.names) # indices associated with species group
-    for (k in j) {
+    tmp.names <- gsub(sp, "", var.names[j]) # remove species name
+    j2 <- NULL
+    for (k in 1:length(j)) {
+      if (substr(tmp.names[k], 1, 1) == "_" |
+          substr(tmp.names[k], 1, 1) %in% as.character(1:9)) { # valid variable 
+        j2 <- c(j2, j[k])        
+      } 
+    }
+    
+    for (k in j2) {
       tmp <- ncvar_get(nc.out, var.names[k]) # get the associated data set
       tmp.dims <- length(dim(tmp)) # dimensions of the associated data
       # TO DO: check that these assumptions about dimensions are correct
@@ -1135,6 +1222,7 @@ make.init.data <- function(nc.file, numboxes, numlevels) {
   species.2.names <- species.2.names[-1] # remove starting NA
   species.3.names <- species.3.names[-1] # remove starting NA
   
+  # 2D species data
   species.2.n <- length(species.2.names)
   species.2.all.n <- sum(species.2.N)
   species.2.groups <- rep(0, species.2.n) # number of subgroups per species group (2D)
@@ -1151,7 +1239,14 @@ make.init.data <- function(nc.file, numboxes, numlevels) {
   for (sp in species.2.names.full) {
     i <- i + 1
     tmp <- ncvar_get(nc.out, sp) # get the associated data set
-    tmp[is.na(tmp)] <- nc.out$var[[which(var.names == sp)]]$missval # add missval
+    # add the fill value to the missing values
+    if (ncatt_get(nc.out, varid = sp, attname = "_FillValue")$hasatt) {
+      tmp[is.na(tmp)] <- ncatt_get(nc.out, varid = sp, attname = "_FillValue")$value
+    } else {
+      tmp[is.na(tmp)] <- 0
+    }
+    tmp[not.valid.2] <- NA # remove data from non-data boxes
+    
     tmp.dims <- length(dim(tmp)) # dimensions of the associated data
     if (tmp.dims == 1) {
       # 2D species distribution with no time replicates
@@ -1169,9 +1264,10 @@ make.init.data <- function(nc.file, numboxes, numlevels) {
       txt.tmp <- paste(tmp.names[k], ": ", as.character(tmp[k]), sep = "")
       txt <- paste(txt, txt.tmp, sep = "<br/>")
     }
-    species.2.att[i] <- txt
+    species.2.att[i] <- txt # add 2D species attribure info
   }
-
+  
+  # 3D species data
   species.3.n <- length(species.3.names)
   species.3.all.n <- sum(species.3.N)
   species.3.groups <- rep(0, species.3.n) # number of subgroups per species group (2D)
@@ -1188,7 +1284,13 @@ make.init.data <- function(nc.file, numboxes, numlevels) {
   for (sp in species.3.names.full) {
     i <- i + 1
     tmp <- ncvar_get(nc.out, sp) # get the associated data set
-    tmp[is.na(tmp)] <- nc.out$var[[which(var.names == sp)]]$missval # add missval
+    # add the fill value to the missing values
+    if (ncatt_get(nc.out, varid = sp, attname = "_FillValue")$hasatt) {
+      tmp[is.na(tmp)] <- ncatt_get(nc.out, varid = sp, attname = "_FillValue")$value
+    } else {
+      tmp[is.na(tmp)] <- 0
+    }
+    tmp[not.valid.3] <- NA
     tmp.dims <- length(dim(tmp)) # dimensions of the associated data
     if (tmp.dims == 2) {
       # 3D species distribution with no time replicates
@@ -1213,6 +1315,107 @@ make.init.data <- function(nc.file, numboxes, numlevels) {
     species.3.att[i] <- txt
   }
   
+  # get structural and reserve nitrogen weights across cohorts
+  Species <- NA # species name
+  Cohort <- NA  # cohort index
+  N.Type <- NA  # structural or reserve
+  N.Value <- NA # mg N
+  for (sp in species.3.names) {
+    for (i in 1:30) { # only consider up to 30 cohorts
+      # look for structural data
+      txt.find <- paste(sp, as.character(i), "_ResN", sep = "")
+      j <- grep(txt.find, species.3.names.full)
+      if (length(j) == 1) {
+        Species <- c(Species, sp)
+        Cohort <- c(Cohort, i)
+        N.Type <- c(N.Type, "Reserve")
+        tmp <- ncvar_get(nc.out, txt.find) # get the associated data set
+        tmp.dims <- length(dim(tmp)) # dimensions of the associated data
+        if (tmp.dims == 3) {
+          tmp <- tmp[ , ,1] # remove time dimension
+        }
+        if (ncatt_get(nc.out, varid = txt.find, attname = "_FillValue")$hasatt) {
+          tmp[is.na(tmp)] <- ncatt_get(nc.out, varid = txt.find, attname = "_FillValue")$value
+        } else {
+          tmp[is.na(tmp)] <- 0
+        }
+        tmp[not.valid.3] <- NA
+        if (sum(!is.na(tmp)) > 0) {
+          N.val <- max(tmp[ , ], na.rm = TRUE)
+        } else {
+          N.val <- 0.0 # No data provided
+        }  
+        N.Value <- c(N.Value, N.val)
+      }
+      
+      # look for reserve nitrogen
+      txt.find <- paste(sp, as.character(i), "_StructN", sep = "")
+      j <- grep(txt.find, species.3.names.full)
+      if (length(j) == 1) {
+        Species <- c(Species, sp)
+        Cohort <- c(Cohort, i)
+        N.Type <- c(N.Type, "Structural")
+        tmp <- ncvar_get(nc.out, txt.find) # get the associated data set
+        tmp.dims <- length(dim(tmp)) # dimensions of the associated data
+        if (tmp.dims == 3) {
+          tmp <- tmp[ , ,1] # remove time dimension
+        }
+        if (ncatt_get(nc.out, varid = txt.find, attname = "_FillValue")$hasatt) {
+          tmp[is.na(tmp)] <- ncatt_get(nc.out, varid = txt.find, attname = "_FillValue")$value
+        } else {
+          tmp[is.na(tmp)] <- 0
+        }
+        tmp[not.valid.3] <- NA
+        if (sum(!is.na(tmp)) > 0) {
+          N.val <- max(tmp[ , ], na.rm = TRUE)
+        } else {
+          N.val <- 0.0 # No data provided
+        }  
+        N.Value <- c(N.Value, N.val)
+      }
+    }  
+  }
+  
+  df.nitrogen <- data.frame(Species, Cohort, N.Type, N.Value)
+  df.nitrogen <- df.nitrogen[-1,] 
+  
+  # get numbers across cohorts
+  Species <- NA # species name
+  Cohort <- NA  # cohort index
+  Nums.Value <- NA # mg N
+  for (sp in species.3.names) {
+    for (i in 1:30) { # only consider up to 30 cohorts
+      # look for structural data
+      txt.find <- paste(sp, as.character(i), "_Nums", sep = "")
+      j <- grep(txt.find, species.3.names.full)
+      if (length(j) == 1) {
+        Species <- c(Species, sp)
+        Cohort <- c(Cohort, i)
+        N.Type <- c(N.Type, "Reserve")
+        tmp <- ncvar_get(nc.out, txt.find) # get the associated data set
+        tmp.dims <- length(dim(tmp)) # dimensions of the associated data
+        if (tmp.dims == 3) {
+          tmp <- tmp[ , ,1] # remove time dimension
+        }
+        if (ncatt_get(nc.out, varid = txt.find, attname = "_FillValue")$hasatt) {
+          tmp[is.na(tmp)] <- ncatt_get(nc.out, varid = txt.find, attname = "_FillValue")$value
+        } else {
+          tmp[is.na(tmp)] <- 0
+        }
+        tmp[not.valid.3] <- NA
+        if (sum(!is.na(tmp)) > 0) {
+          N.val <- sum(tmp[ , ], na.rm = TRUE)
+        } else {
+          N.val <- 0.0 # No data provided
+        }  
+        Nums.Value <- c(Nums.Value, N.val)
+      }
+    }  
+  }
+  
+  df.nums <- data.frame(Species, Cohort, Nums.Value)
+  df.nums <- df.nums[-1,] 
+
   nc_close(nc.out)
   
   return(list(
@@ -1231,28 +1434,40 @@ make.init.data <- function(nc.file, numboxes, numlevels) {
     species.2.data = species.2.data,
     species.3.data = species.3.data,
     species.2.att = species.2.att,
-    species.3.att = species.3.att
+    species.3.att = species.3.att,
+    df.nitrogen = df.nitrogen,
+    df.nums = df.nums
   ))
 }
 
-#' @title Function that generates an object used by sh.init
+# +=====================================================+
+# |  make.sh.init.object : collect all data to display  |
+# +=====================================================+
+#' @title Function that generates a list object used by sh.init
 #'
 #' @description
-#' Takes data from a box geometry .bgm and a .nc Atlantis input parameter file and generates a 
-#' list object that is the parameter to \code{sh.init} (see Examples).
-#' 
-#' @param bgm.file Box Geometry Model (.bgm) file used by Atlantis that defines box boundaries
-#' @param nc.file NetCDF (.nc) file used by Atlantis to set initial conditions
+#' Takes data from a box geometry model and a netCDF Atlantis input parameter file and generates a
+#' list object that is the parameter to \code{\link[shinyrAtlantis]{sh.init}} (see Examples).
 #'
-#' @return R list object
-#' 
+#' @param bgm.file Box geometry model (.bgm) file used by Atlantis that defines box boundaries and depths.
+#' @param nc.file NetCDF (.nc) file used by Atlantis to set initial conditions.
+#'
+#' @return R list object.
+#'
 #' @examples
 #' \dontrun{
-#' input.object <- make.init.object(bgm.file, nc.file)
+#' bgm.file <- "VMPA_setas.bgm"
+#' nc.file  <- "INIT_VMPA_Jan2015.nc"
+#' input.object <- make.sh.init.object(bgm.file, nc.file)
 #' sh.init(input.object)
 #' }
 #' @export
-make.init.object <- function(bgm.file, nc.file) {
+#' @importFrom magrittr %>%
+#' @importFrom dplyr group_by
+#' @importFrom stringr str_sub 
+#' @importFrom ncdf4 ncatt_get
+#' @importFrom stringr str_length
+make.sh.init.object <- function(bgm.file, nc.file) {
   cat("-- Extracting map data\n")
   map.object <- make.init.map(bgm.file)
   
@@ -1286,6 +1501,8 @@ make.init.object <- function(bgm.file, nc.file) {
     species.2.data = data.object$species.2.data,
     species.3.data = data.object$species.3.data,
     species.2.att = data.object$species.2.att,
-    species.3.att = data.object$species.3.att
+    species.3.att = data.object$species.3.att,
+    df.nitrogen = data.object$df.nitrogen,
+    df.nums = data.object$df.nums
   ))    
 }
