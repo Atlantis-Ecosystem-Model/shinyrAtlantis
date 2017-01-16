@@ -184,7 +184,7 @@ generate.vars.init <- function(grp.file, cum.depths, df.atts) {
         df.atts$long_name[indx], sep = " "))
       att.index <- c(att.index, indx)
       for (j in 1:df.grp$NumCohorts[grp]) {
-          Variable <- c(Variable, paste(df.grp$Name[grp], as.character(j),
+        Variable <- c(Variable, paste(df.grp$Name[grp], as.character(j),
           "_Nums", sep = ""))
         indx <- which(df.atts$name=="Nums3D")
         long_name <- c(long_name, paste("Numbers of", df.grp$Name[grp], "cohort",
@@ -256,8 +256,7 @@ generate.vars.init <- function(grp.file, cum.depths, df.atts) {
 #' @export
 #' @importFrom ncdf4 ncdim_def
 make.init.csv <- function(grp.file, bgm.file, cum.depths, csv.name) {
-  #def.att.file <- system.file("extdata", "AttributeTemplate.csv", package = "shinyrAtlantis")
-  def.att.file <- '/home/demiurgo/Documents/PhD/Atlantis_Model/tools/shiny-Shane/Fork_git/shinyrAtlantis/inst/extdata/AttributeTemplate.csv'
+  def.att.file <- system.file("extdata", "AttributeTemplate.csv", package = "shinyrAtlantis")
   df.atts <- read.csv(file = def.att.file, header = TRUE, stringsAsFactors = FALSE)
 
   numlayers <- length(cum.depths) - 1 # number of water layers
@@ -280,6 +279,7 @@ make.init.csv <- function(grp.file, bgm.file, cum.depths, csv.name) {
   df.return <- df.atts[df.atts$required, ]
 
   # add group-related variables
+  cat('attrib_tab_out_vars.init\n', head(as.matrix(df.atts), 3), '\n\n')
   grp.data <- generate.vars.init(grp.file, cum.depths, df.atts)
   num.vars <- dim(df.return)[1]
   for (i in 1:dim(grp.data)[1]) {
