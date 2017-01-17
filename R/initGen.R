@@ -256,8 +256,7 @@ generate.vars.init <- function(grp.file, cum.depths, df.atts) {
 #' @export
 #' @importFrom ncdf4 ncdim_def
 make.init.csv <- function(grp.file, bgm.file, cum.depths, csv.name) {
-  #def.att.file <- system.file("extdata", "AttributeTemplate.csv", package = "shinyrAtlantis")
-  def.att.file <- '/home/demiurgo/Documents/PhD/Atlantis_Model/tools/shiny-Shane/Fork_git/shinyrAtlantis/inst/extdata/AttributeTemplate.csv'
+  def.att.file <- system.file("extdata", "AttributeTemplate.csv", package = "shinyrAtlantis")
   df.atts <- read.csv(file = def.att.file, header = TRUE, stringsAsFactors = FALSE)
 
   numlayers <- length(cum.depths) - 1 # number of water layers
