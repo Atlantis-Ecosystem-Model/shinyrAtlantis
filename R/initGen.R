@@ -404,12 +404,12 @@ make.init.nc <- function(bgm.file, cum.depths, init.file, horiz.file, nc.file) {
     var.longname <- df.init$long_name[i]
 
     vars[[list.indx]] <- ncvar_def(name = as.character(var.name),
-      units = as.character(var.units), dim = var.dim, prec = "double",
+      units = as.character(var.units), dim = var.dim, prec = "float",
       longname = as.character(var.longname), missval = 1e30)
 
     list.indx <- list.indx + 1
   }
-
+#browser()
   # writing to file will blow up if file already exists so make a copy
   if (file.exists(nc.file)) {
     file.remove(nc.file)
@@ -420,8 +420,8 @@ make.init.nc <- function(bgm.file, cum.depths, init.file, horiz.file, nc.file) {
 
   # add global attributes
   ncatt_put(nc = outnc, varid = 0, attname = 'geometry', attval = bgm.file)
-  ncatt_put(nc = outnc, varid = 0, attname = 'wcnz', attval = numlayers)
-  ncatt_put(nc = outnc, varid = 0, attname = 'sednz', attval = numsed)
+  ncatt_put(nc = outnc, varid = 0, attname = 'wcnz', attval = numlayers, prec = "int")
+  ncatt_put(nc = outnc, varid = 0, attname = 'sednz', attval = numsed, prec = "int")
 
   # add variable attributes (this can take a few minutes)
   for (i in 1:dim(df.init)[1]) {
