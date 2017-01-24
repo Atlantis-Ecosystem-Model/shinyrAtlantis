@@ -28,50 +28,50 @@
 "MicroNut","TRUE",2,"[ z b ]","tracer","mg N m-3","Dissolved Organic Nitrogen",0,1,1,1,1,0,0,"NA","NA","NA","NA","NA","NA","NA","constant","uniform",0,0
 "Oxygen","TRUE",2,"[ z b ]","tracer","mg O2 m-3","Dissolved Oxygen",0,1,1,1,1,0,0,"NA","NA","NA","NA","NA","NA","NA","constant","uniform",6700,6700
 "Si","TRUE",2,"[ z b ]","tracer","mg Si m-3","Dissolved Silica",0,1,1,1,1,0,0,"NA","NA","NA","NA","NA","NA","NA","constant","uniform",16.65,0.9
-"Det_Si","TRUE",2,"[ z b ]","tracer","mg Si m-3","Detrital Silica",0,1,1,1,0,0,1,1,-0.0000289,0.0000001,0.00001,1000000000.0,200000000.00,200000000.00,"constant","uniform",27000,9
+"Det_Si","TRUE",2,"[ z b ]","tracer","mg Si m-3","Detrital Silica",0,1,1,1,0,0,1,1,-0.0000289,0.0000001,0.00001,1000000000,200000000,200000000,"constant","uniform",27000,9
 "Light","TRUE",2,"[ z b ]","tracer","missing","Light intensity on the surface of a cell",0,1,0,0,1,0,0,"NA","NA","NA","NA","NA","NA","NA","constant","uniform",0.000001,0.01
 "Temp","TRUE",2,"[ z b ]","tracer","degrees Celcius","Temperature",0,1,0,0,1,0,0,"NA","NA","NA","NA","NA","NA","NA","constant","uniform",22,28
 "salt","TRUE",2,"[ z b ]","tracer","PSU","Salinity",0,1,1,1,1,0,0,"NA","NA","NA","NA","NA","NA","NA","constant","uniform",33,33
-"Denitrifiction","TRUE",2,"[ z b ]","tracer","missing","Denitrifiction",0,1,0,0,1,0,0,"NA","NA","NA","NA","NA","NA","NA","constant","uniform",0,0
-"Nitrification","TRUE",2,"[ z b ]","tracer","missing","Nitrification",0,1,0,0,1,0,0,"NA","NA","NA","NA","NA","NA","NA","constant","uniform",0,0
+"Denitrifiction","TRUE",2,"[ z b ]","tracer","missing","Denitrifiction (N)",0,1,0,0,1,0,0,"NA","NA","NA","NA","NA","NA","NA","constant","uniform",0,0
+"Nitrification","TRUE",2,"[ z b ]","tracer","missing","Nitrification (N)",0,1,0,0,1,0,0,"NA","NA","NA","NA","NA","NA","NA","constant","uniform",0,0
 "Chl_a","TRUE",2,"[ z b ]","tracer","missing","Chlorophyll",0,1,0,0,1,0,0,"NA","NA","NA","NA","NA","NA","NA","constant","uniform",6.3,9.8
 "Stress","TRUE",2,"[ z b ]","tracer","N m-2","Surface stress",0,0,0,0,1,0,0,"NA","NA","NA","NA","NA","NA","NA","constant","uniform",0,0
 "DiagNGain","TRUE",2,"[ z b ]","tracer","N m-2","Diagnostic - gain in checked group",0,0,0,0,1,0,0,"NA","NA","NA","NA","NA","NA","NA","constant","uniform",0,0
 "DiagNLoss","TRUE",2,"[ z b ]","tracer","N m-2","Diagnostic - loss in checked group",0,0,0,0,1,0,0,"NA","NA","NA","NA","NA","NA","NA","constant","uniform",0,0
 "DiagNFlux","TRUE",2,"[ z b ]","tracer","N m-2","Diagnostic - flux in checked group",0,0,0,0,1,0,0,"NA","NA","NA","NA","NA","NA","NA","constant","uniform",0,0
 "BIRD_N","FALSE",2,"[ z b ]","tracer","mg N m-3","total N",0,1,0,0,1,0,0,"NA","NA","NA","NA","NA","NA","NA","constant","uniform",0,0
-"CARRION_N","FALSE",2,"[ z b ]","tracer","mg N m-3","Nitrogen",0,1,1,1,0,0,1,0,-0.0000347,0,0.00001,1000000000.0,200000000.00,200000000.00,"custom","uniform",0,0
-"CEP_N","FALSE",2,"[ z b ]","tracer","mg N m-3","Nitrogen",0,1,1,0,0,0,1,0,0,0,10,1000000000.0,200000000.00,200000000.00,"custom","uniform",0,0
+"CARRION_N","FALSE",2,"[ z b ]","tracer","mg N m-3","Nitrogen",0,1,1,1,0,0,1,0,-0.0000347,0,0.00001,1000000000,200000000,200000000,"custom","uniform",0,0
+"CEP_N","FALSE",2,"[ z b ]","tracer","mg N m-3","Nitrogen",0,1,1,0,0,0,1,0,0,0,10,1000000000,200000000,200000000,"custom","uniform",0,0
 "CORAL_N","FALSE",1,"[ b ]","epibenthos","mg N m-2","Nitrogen",0,1,"NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","custom","none",0,0
-"DINOFLAG_N","FALSE",2,"[ z b ]","tracer","mg N m-3","Nitrogen",0,1,1,1,0,0,1,1,0,0,0.00001,1000000000.0,200000000.00,200000000.00,"custom","uniform",0,0
+"DINOFLAG_N","FALSE",2,"[ z b ]","tracer","mg N m-3","Nitrogen",0,1,1,1,0,0,1,1,0,0,0.00001,1000000000,200000000,200000000,"custom","uniform",0,0
 "FISH_N","FALSE",2,"[ z b ]","tracer","mg N m-3","total N",0,1,0,0,1,0,0,"NA","NA","NA","NA","NA","NA","NA","constant","uniform",0,0
 "FISH_INVERT_N","FALSE",2,"[ z b ]","tracer","mg N m-3","total N",0,1,0,0,1,0,0,"NA","NA","NA","NA","NA","NA","NA","constant","uniform",0,0
-"LAB_DET_N","FALSE",2,"[ z b ]","tracer","mg N m-3","Nitrogen",0,1,1,1,0,0,1,1,-0.00000347,0,0.00001,1000000000.0,200000000.00,200000000.00,"custom","uniform",0,0
-"LG_INF_N","FALSE",2,"[ z b ]","tracer","mg N m-3","Nitrogen",0,1,0,1,0,0,1,0,0,0,10,1000000000.0,200000000.00,200000000.00,"custom","uniform",0,0
-"LG_PHY_N","FALSE",2,"[ z b ]","tracer","mg N m-3","Nitrogen",0,1,1,1,0,0,1,1,-0.00000289,0,0.00001,1000000000.0,200000000.00,200000000.00,"custom","uniform",0,0
-"LG_ZOO_N","FALSE",2,"[ z b ]","tracer","mg N m-3","Nitrogen",0,1,1,0,0,0,1,1,0,0,0.1,1000000000.0,200000000.00,200000000.00,"custom","uniform",0,0
+"LAB_DET_N","FALSE",2,"[ z b ]","tracer","mg N m-3","Nitrogen",0,1,1,1,0,0,1,1,-0.00000347,0,0.00001,1000000000,200000000,200000000,"custom","uniform",0,0
+"LG_INF_N","FALSE",2,"[ z b ]","tracer","mg N m-3","Nitrogen",0,1,0,1,0,0,1,0,0,0,10,1000000000,200000000,200000000,"custom","uniform",0,0
+"LG_PHY_N","FALSE",2,"[ z b ]","tracer","mg N m-3","Nitrogen",0,1,1,1,0,0,1,1,-0.00000289,0,0.00001,1000000000,200000000,200000000,"custom","uniform",0,0
+"LG_ZOO_N","FALSE",2,"[ z b ]","tracer","mg N m-3","Nitrogen",0,1,1,0,0,0,1,1,0,0,0.1,1000000000,200000000,200000000,"custom","uniform",0,0
 "MAMMAL_N","FALSE",2,"[ z b ]","tracer","mg N m-3","total N",0,1,0,0,1,0,0,"NA","NA","NA","NA","NA","NA","NA","constant","uniform",0,0
 "MANGROVE_N","FALSE",1,"[ b ]","epibenthos","mg N m-2","Nitrogen",0,1,"NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","custom","none",0,0
-"MED_ZOO_N","FALSE",2,"[ z b ]","tracer","mg N m-3","Nitrogen",0,1,1,0,0,0,1,1,0,0,0.001,1000000000.0,200000000.00,200000000.00,"custom","uniform",0,0
-"MICROPHTYBENTHOS_N","FALSE",2,"[ z b ]","tracer","mg N m-3","Nitrogen",0,1,1,1,0,0,1,1,-0.00000289,0,0.00001,1000000000.0,200000000.00,200000000.00,"custom","uniform",0,0
+"MED_ZOO_N","FALSE",2,"[ z b ]","tracer","mg N m-3","Nitrogen",0,1,1,0,0,0,1,1,0,0,0.001,1000000000,200000000,200000000,"custom","uniform",0,0
+"MICROPHTYBENTHOS_N","FALSE",2,"[ z b ]","tracer","mg N m-3","Nitrogen",0,1,1,1,0,0,1,1,-0.00000289,0,0.00001,1000000000,200000000,200000000,"custom","uniform",0,0
 "MOB_EP_OTHER_N","FALSE",1,"[ b ]","epibenthos","mg N m-2","Nitrogen",0,1,"NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","custom","none",0,0
 "PHYTOBEN_N","FALSE",1,"[ b ]","epibenthos","mg N m-2","Nitrogen",0,1,"NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","custom","none",0,0
-"PL_BACT_N","FALSE",2,"[ z b ]","tracer","mg N m-3","Nitrogen",0,1,1,0,0,0,1,1,0,0,0.00001,1000000000.0,200000000.00,200000000.00,"custom","uniform",0,0
-"PWN_N","FALSE",2,"[ z b ]","tracer","mg N m-3","Nitrogen",0,1,1,0,0,0,1,0,0,0,10,1000000000.0,200000000.00,200000000.00,"custom","uniform",0,0
-"REF_DET_N","FALSE",2,"[ z b ]","tracer","mg N m-3","Nitrogen",0,1,1,1,0,0.0000001,1,1,-0.00000231,0,0.00001,1000000000.0,200000000.00,200000000.00,"custom","uniform",0,0
+"PL_BACT_N","FALSE",2,"[ z b ]","tracer","mg N m-3","Nitrogen",0,1,1,0,0,0,1,1,0,0,0.00001,1000000000,200000000,200000000,"custom","uniform",0,0
+"PWN_N","FALSE",2,"[ z b ]","tracer","mg N m-3","Nitrogen",0,1,1,0,0,0,1,0,0,0,10,1000000000,200000000,200000000,"custom","uniform",0,0
+"REF_DET_N","FALSE",2,"[ z b ]","tracer","mg N m-3","Nitrogen",0,1,1,1,0,0.0000001,1,1,-0.00000231,0,0.00001,1000000000,200000000,200000000,"custom","uniform",0,0
 "REPTILE_N","FALSE",2,"[ z b ]","tracer","mg N m-3","total N",0,1,0,0,1,0,0,"NA","NA","NA","NA","NA","NA","NA","custom","uniform",0,0
 "SEAGRASS_N","FALSE",1,"[ b ]","epibenthos","mg N m-2","Nitrogen",0,1,"NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","custom","none",0,0
-"SED_BACT_N","FALSE",2,"[ z b ]","tracer","mg N m-3","Nitrogen",0,1,0,1,0,0,1,1,0,0,0.00001,1000000000.0,200000000.00,200000000.00,"custom","uniform",0,0
+"SED_BACT_N","FALSE",2,"[ z b ]","tracer","mg N m-3","Nitrogen",0,1,0,1,0,0,1,1,0,0,0.00001,1000000000,200000000,200000000,"custom","uniform",0,0
 "SED_EP_FF_N","FALSE",1,"[ b ]","epibenthos","mg N m-2","Nitrogen",0,1,"NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","custom","none",0,0
 "SED_EP_OTHER_N","FALSE",1,"[ b ]","epibenthos","mg N m-2","Nitrogen",0,1,"NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","custom","none",0,0
 "SHARK_N","FALSE",2,"[ z b ]","tracer","mg N m-3","total N",0,1,0,0,1,0,0,"NA","NA","NA","NA","NA","NA","NA","constant","uniform",0,0
-"SM_INF_N","FALSE",2,"[ z b ]","tracer","mg N m-3","Nitrogen",0,1,0,1,0,0,1,0,0,0,0.001,1000000000.0,200000000.00,200000000.00,"custom","uniform",0,0
-"SM_PHY_N","FALSE",2,"[ z b ]","tracer","mg N m-3","Nitrogen",0,1,1,1,0,0,1,1,0,0,0.00001,1000000000.0,200000000.00,200000000.00,"custom","uniform",0,0
-"SM_ZOO_N","FALSE",2,"[ z b ]","tracer","mg N m-3","Nitrogen",0,1,1,0,0,0,1,1,0,0,0.00001,1000000000.0,200000000.00,200000000.00,"custom","uniform",0,0
-"TRICHO_N","FALSE",2,"[ z b ]","tracer","mg N m-3","Nitrogen",0,1,1,1,0,0,1,0,0,0,0.00001,1000000000.0,200000000.00,200000000.00,"custom","uniform",0,0
-"Nums3D","FALSE",2,"[ z b ]","tracer",1,"Numbers of XXX cohort i",0,0,0,0,0,0,1,0,0,0,10,1000000000.0,200000000.00,200000000.00,"custom","surface",0,0
-"ResN3D","FALSE",2,"[ z b ]","tracer","mg N","Individ reserve N for XXX cohort i",0,0,0,0,0,0,1,0,0,0,10,1000000000.0,200000000.00,200000000.00,"constant","uniform",0,0
-"StructN3D","FALSE",2,"[ z b ]","tracer","mg N","Individ structural N for XXX cohort i",0,0,0,0,0,0,1,0,0,0,10,1000000000.0,200000000.00,200000000.00,"constant","uniform",0,0
+"SM_INF_N","FALSE",2,"[ z b ]","tracer","mg N m-3","Nitrogen",0,1,0,1,0,0,1,0,0,0,0.001,1000000000,200000000,200000000,"custom","uniform",0,0
+"SM_PHY_N","FALSE",2,"[ z b ]","tracer","mg N m-3","Nitrogen",0,1,1,1,0,0,1,1,0,0,0.00001,1000000000,200000000,200000000,"custom","uniform",0,0
+"SM_ZOO_N","FALSE",2,"[ z b ]","tracer","mg N m-3","Nitrogen",0,1,1,0,0,0,1,1,0,0,0.00001,1000000000,200000000,200000000,"custom","uniform",0,0
+"TRICHO_N","FALSE",2,"[ z b ]","tracer","mg N m-3","Nitrogen",0,1,1,1,0,0,1,0,0,0,0.00001,1000000000,200000000,200000000,"custom","uniform",0,0
+"Nums3D","FALSE",2,"[ z b ]","tracer",1,"Numbers of XXX cohort i",0,0,0,0,0,0,1,0,0,0,10,1000000000,200000000,200000000,"custom","surface",0,0
+"ResN3D","FALSE",2,"[ z b ]","tracer","mg N","Individ reserve N for XXX cohort i",0,0,0,0,0,0,1,0,0,0,10,1000000000,200000000,200000000,"constant","uniform",0,0
+"StructN3D","FALSE",2,"[ z b ]","tracer","mg N","Individ structural N for XXX cohort i",0,0,0,0,0,0,1,0,0,0,10,1000000000,200000000,200000000,"constant","uniform",0,0
 "Cover","FALSE",1,"[ b ]","epibenthos","%","Percent cover by XXX",0,1,"NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","custom","none",0,0
-"Si3D","FALSE",2,"[ z b ]","tracer","mg Si m-3","XXX Silicon",0,1,1,1,0,0,1,1,-0.00000289,0,0.00001,1000000000.0,200000000.00,200000000.00,"constant","uniform",0,0
+"Si3D","FALSE",2,"[ z b ]","tracer","mg Si m-3","XXX Silicon",0,1,1,1,0,0,1,1,-0.00000289,0,0.00001,1000000000,200000000,200000000,"constant","uniform",0,0
 "Light3D","FALSE",2,"[ z b ]","tracer","PSU","Light Adaptation of XXX",0,0,0,0,1,0,0,"NA","NA","NA","NA","NA","NA","NA","constant","uniform",0,0

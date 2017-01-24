@@ -402,9 +402,8 @@ make.init.nc <- function(bgm.file, cum.depths, init.file, horiz.file, nc.file) {
       var.dim <- list(dim3, dim2, dim1)
     }
     var.longname <- df.init$long_name[i]
-
     vars[[list.indx]] <- ncvar_def(name = as.character(var.name),
-      units = as.character(var.units), dim = var.dim, prec = "float",
+      units = as.character(var.units), dim = var.dim, prec = "double",
       longname = as.character(var.longname), missval = 1e30)
 
     list.indx <- list.indx + 1
