@@ -471,7 +471,8 @@ make.init.nc <- function(bgm.file, cum.depths, init.file, horiz.file, nc.file) {
   ncvar_put(outnc, varid = "volume", vals = ma.volume)
 
   # add depth data
-  ma.depth <- matrix(data = 0, nrow = numlayers+1, ncol = numboxes)
+    ma.depth  <- matrix(data = 0, nrow = numlayers+1, ncol = numboxes)
+    nom.depth <- matrix(data = 0, nrow = numlayers+1, ncol = numboxes) ## nominal depth
   for (i in 1:numboxes) {
     if (box.data$is.island[i]) {
       # no water column volumes just a sediment layer depth
@@ -488,9 +489,13 @@ make.init.nc <- function(bgm.file, cum.depths, init.file, horiz.file, nc.file) {
       }
       # add the incomplete water layer just above the sediment
       ma.depth[1,i] <- box.data$deepest.depth[i]
+      nom.depth[, i] <- ma.depth[, i]
+        if(box.data$total.depth[i] > cum.depths[numlayers + 1]) {
+            nom.depth[1, i] <- nom.depth[1, i] + (box.data$total.depth[i] - cum.depths[numlayers + 1])
+        }
     }
   }
-  ncvar_put(outnc, varid = "nominal_dz", vals = ma.depth)
+  ncvar_put(outnc, varid = "nominal_dz", vals = nom.depth)
   ncvar_put(outnc, varid = "dz", vals = ma.depth)
 
   # add numlayers data (calculated in box.data)
