@@ -401,10 +401,15 @@ make.init.nc <- function(bgm.file, cum.depths, init.file, horiz.file, nc.file) {
     } else {
       var.dim <- list(dim3, dim2, dim1)
     }
+    if(var.name == "nominal_dz"){
+        var.dim <- list(dim3, dim2)
+    }
     var.longname <- df.init$long_name[i]
     vars[[list.indx]] <- ncvar_def(name = as.character(var.name),
-      units = as.character(var.units), dim = var.dim, prec = "double",
-      longname = as.character(var.longname), missval = 1e30)
+      units = as.character(var.units), dim = var.dim,
+      prec = ifelse(var.name == "numlayers","short", "double"),
+      longname = as.character(var.longname),
+      missval = ifelse(var.name == "numlayers",0, 10e30))
 
     list.indx <- list.indx + 1
   }
