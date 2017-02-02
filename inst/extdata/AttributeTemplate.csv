@@ -22,6 +22,7 @@
 "canyon","TRUE",1,"[ b ]","tracer",1,"Percent canyon",0,0,"NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","constant","none",0,0
 "eddy","TRUE",1,"[ b ]","tracer",1,"Eddy strength",0,1,"NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","constant","none",0,1
 "water","TRUE",2,"[ z b ]","tracer",1,"Water",0,0,1,1,1,0,0,"NA","NA","NA","NA","NA","NA","NA","constant ","uniform",0,0
+"Rugosity","TRUE",2,"[ z b ]","tracer",1,"Rugosity",0,0,1,1,1,0,0,"NA","NA","NA","NA","NA","NA","NA","custom","uniform",0,0
 "NH3","TRUE",2,"[ z b ]","tracer","mg N m-3","Ammonia",0,1,1,1,1,0,0,"NA","NA","NA","NA","NA","NA","NA","constant","uniform",0.2,0.55
 "NO3","TRUE",2,"[ z b ]","tracer","mg N m-3","Nitrate",0,1,1,1,1,0,0,"NA","NA","NA","NA","NA","NA","NA","constant","uniform",0,0.1
 "DON","TRUE",2,"[ z b ]","tracer","mg N m-3","Dissolved Organic Nitrogen",0,1,1,1,1,0,0,"NA","NA","NA","NA","NA","NA","NA","constant","uniform",90,90
