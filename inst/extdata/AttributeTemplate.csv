@@ -23,10 +23,11 @@
 "eddy","TRUE",1,"[ b ]","tracer",1,"Eddy strength",0,1,"NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","NA","constant","none",0,1
 "water","TRUE",2,"[ z b ]","tracer",1,"Water",0,0,1,1,1,0,0,"NA","NA","NA","NA","NA","NA","NA","constant ","uniform",0,0
 "Rugosity","TRUE",2,"[ z b ]","tracer",1,"Rugosity",0,0,1,1,1,0,0,"NA","NA","NA","NA","NA","NA","NA","custom","uniform",0,0
+"AragoniteSaturation","TRUE",2,"[ z b ]","tracer",1,"Aragonite Saturation",0,0,1,1,1,0,0,"NA","NA","NA","NA","NA","NA","NA","constant","uniform",0,0
 "NH3","TRUE",2,"[ z b ]","tracer","mg N m-3","Ammonia",0,1,1,1,1,0,0,"NA","NA","NA","NA","NA","NA","NA","constant","uniform",0.2,0.55
 "NO3","TRUE",2,"[ z b ]","tracer","mg N m-3","Nitrate",0,1,1,1,1,0,0,"NA","NA","NA","NA","NA","NA","NA","constant","uniform",0,0.1
 "DON","TRUE",2,"[ z b ]","tracer","mg N m-3","Dissolved Organic Nitrogen",0,1,1,1,1,0,0,"NA","NA","NA","NA","NA","NA","NA","constant","uniform",90,90
-"MicroNut","TRUE",2,"[ z b ]","tracer","mg N m-3","Dissolved Organic Nitrogen",0,1,1,1,1,0,0,"NA","NA","NA","NA","NA","NA","NA","constant","uniform",0,0
+"MicroNut","TRUE",2,"[ z b ]","tracer","mg N m-3","Dissolved Organic Nitrogen",0,1,1,1,1,0,0,"NA","NA","NA","NA","NA","NA","NA","constant","uniform",2.7,2.7
 "Oxygen","TRUE",2,"[ z b ]","tracer","mg O2 m-3","Dissolved Oxygen",0,1,1,1,1,0,0,"NA","NA","NA","NA","NA","NA","NA","constant","uniform",6700,6700
 "Si","TRUE",2,"[ z b ]","tracer","mg Si m-3","Dissolved Silica",0,1,1,1,1,0,0,"NA","NA","NA","NA","NA","NA","NA","constant","uniform",16.65,0.9
 "Det_Si","TRUE",2,"[ z b ]","tracer","mg Si m-3","Detrital Silica",0,1,1,1,0,0,1,1,-0.0000289,0.0000001,0.00001,1000000000,200000000,200000000,"constant","uniform",27000,9

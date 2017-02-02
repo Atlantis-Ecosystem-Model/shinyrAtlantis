@@ -353,7 +353,10 @@ make.init.nc <- function(bgm.file, cum.depths, init.file, horiz.file, nc.file) {
     stringsAsFactors = FALSE)
   df.horiz <- df.grp <- read.csv(file = horiz.file, header = TRUE,
     stringsAsFactors = FALSE)
-
+    ## Transfor in double 0. for the ncfile
+    df.init$b_dens <- as.double(df.init$b_dens)
+    df.init$i_conc <- as.double(df.init$i_conc)
+    df.init$f_conc <- as.double(df.init$f_conc)
   numlayers <- length(cum.depths) - 1 # number of water layers
   # calculate the depths of each water layer
   layer.depth <- rep(0, numlayers)
