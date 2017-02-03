@@ -372,6 +372,7 @@ make.init.nc <- function(bgm.file, cum.depths, init.file, horiz.file, nc.file) {
   b.vals <- 1:numboxes
   z.vals <- 1:(numlayers + 1) # add single sediment layer
   box.data <- map.data$box.data
+  #land.box <- which(box.data$total.depth <= 0)
 
   # create dimensions stored in the NetCDF file
   dim1 <- ncdim_def( # create a time dimension
@@ -503,7 +504,8 @@ make.init.nc <- function(bgm.file, cum.depths, init.file, horiz.file, nc.file) {
 
   # add numlayers data (calculated in box.data)
   ncvar_put(outnc, varid = "numlayers", vals = box.data$numlayers)
-
+  ## information only by layer
+  by.layer <- ifelse(nom.depth >= 1, 1, 0)
   # add data to required variables based on df.atts
   for (idx in 5:dim(df.init)[1]) { # four variables have already been calculated
     if (df.init$dimensions[idx] == 1) {
@@ -517,6 +519,7 @@ make.init.nc <- function(bgm.file, cum.depths, init.file, horiz.file, nc.file) {
       }
       ncvar_put(outnc, varid = df.init$name[idx], vals = var.data)
     } else {
+      #var.data <- matrix(data = 0, nrow = numlayers+1, ncol = numboxes)
       var.data <- matrix(data = 1e30, nrow = numlayers+1, ncol = numboxes)
       hor.data <- rep(df.init$wc.hor.scalar[idx], numboxes) # default values
       # replace default values with custom values if provided
@@ -548,6 +551,8 @@ make.init.nc <- function(bgm.file, cum.depths, init.file, horiz.file, nc.file) {
           }
         }
       }
+
+      var.data <- var.data * by.layer
       ncvar_put(outnc, varid = as.character(df.init$name[idx]), vals = var.data)
     }
   }
