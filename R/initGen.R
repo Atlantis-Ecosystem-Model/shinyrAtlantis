@@ -534,9 +534,9 @@ make.init.nc <- function(bgm.file, cum.depths, init.file, horiz.file, nc.file) {
           # add sediment default value
           var.data[numlayers + 1,i] <- as.double(df.init$sediment[idx])
           # j=1 = surface layer, j=numlayers = just above sediment
-          if (df.init$wc.ver.pattern[idx] == "uniform") {
+        if (df.init$wc.ver.pattern[idx] == "uniform") {
             for (j in 1:box.data$numlayers[i]) {
-              var.data[box.data$numlayers[i] - j + 1,i] <- hor.data[i]
+              var.data[box.data$numlayers[i] - j + 1,i] <- ifelse(hor.data[i] > 0, hor.data[i] / box.data$numlayers[i] , hor.data[i])
             }
           } else if (df.init$wc.ver.pattern[idx] == "bottom") {
             for (j in 1:box.data$numlayers[i]) {
@@ -551,9 +551,8 @@ make.init.nc <- function(bgm.file, cum.depths, init.file, horiz.file, nc.file) {
           }
         }
       }
-
-      var.data <- var.data * by.layer
-      ncvar_put(outnc, varid = as.character(df.init$name[idx]), vals = var.data)
+        var.data <- var.data * by.layer
+        ncvar_put(outnc, varid = as.character(df.init$name[idx]), vals = var.data)
     }
   }
 
