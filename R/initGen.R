@@ -409,11 +409,12 @@ make.init.nc <- function(bgm.file, cum.depths, init.file, horiz.file, nc.file) {
         var.dim <- list(dim3, dim2)
     }
     var.longname <- df.init$long_name[i]
+    var.fillval  <- df.init$fill.value[i]
     vars[[list.indx]] <- ncvar_def(name = as.character(var.name),
       units = as.character(var.units), dim = var.dim,
       prec = ifelse(var.name %in% c("numlayers", "topk"), "short", "double"),
       longname = as.character(var.longname),
-      missval = ifelse(var.name %in% c("topk", "numlayers"), 0, 10e30))
+      missval = var.fillval)
 
     list.indx <- list.indx + 1
   }
