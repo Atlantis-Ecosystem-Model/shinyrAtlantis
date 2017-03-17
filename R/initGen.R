@@ -451,7 +451,6 @@ make.init.nc <- function(bgm.file, cum.depths, init.file, horiz.file, nc.file) {
   nc_close(outnc)
   outnc <- nc_open(nc.file, write=TRUE) # open .nc file
   # create data based on the bgm file: volume, dz, nominal_dz, numlayers
-
   # add volume data (not quite matching Gladstone data but close - projection?)
   ma.volume <- matrix(data = 0, nrow = numlayers+1, ncol = numboxes)
   for (i in 1:numboxes) {
@@ -506,12 +505,12 @@ make.init.nc <- function(bgm.file, cum.depths, init.file, horiz.file, nc.file) {
   # add numlayers data (calculated in box.data)
   ncvar_put(outnc, varid = "numlayers", vals = box.data$numlayers)
   ## information only by layer
-  by.layer <- ifelse(nom.depth >= 1, 1, 0)
+    by.layer <- ifelse(nom.depth >= 1, 1, 0)
+
   # add data to required variables based on df.atts
   for (idx in 5:dim(df.init)[1]) { # four variables have already been calculated
     if (df.init$dimensions[idx] == 1) {
       # add the default value throughout (only for numlayers > 0?)
-
       var.data <- rep(df.init$wc.hor.scalar[idx], numboxes)
       # overwrite default value if custom
       if (df.init$wc.hor.pattern[idx] == "custom") {
