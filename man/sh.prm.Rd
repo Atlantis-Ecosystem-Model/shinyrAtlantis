@@ -4,10 +4,13 @@
 \alias{sh.prm}
 \title{Shiny application for viewing Atlantis biological parameters}
 \usage{
-sh.prm(obj)
+sh.prm(obj, def.grp.file)
 }
 \arguments{
 \item{obj}{R list object generated from \code{\link[shinyrAtlantis]{make.sh.prm.object}}}
+
+\item{def.grp.file}{file}
+
 }
 \value{
 object of class 'shiny.appobj' see \code{\link[shiny]{shinyApp}}

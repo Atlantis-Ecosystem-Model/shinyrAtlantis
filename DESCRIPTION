@@ -13,6 +13,7 @@ Imports: tidyr,
          DT,
          ggplot2,
          ncdf4,
+         tidyr
          stringr,
          grid,
          magrittr

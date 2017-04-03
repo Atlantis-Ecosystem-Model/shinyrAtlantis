@@ -22,6 +22,10 @@
 #' (Definitions) and the values provided in the biological parameters file (Values). 
 #' Use the checkboxes to view the group parameters of interest.
 #' 
+
+#' @param obj R list object generated from \code{make.prm.object}
+#' @param def.grp.file file
+#' @return object of class 'shiny.appobj' see \code{\link[shiny]{shinyApp}}
 #' The \emph{Habitat} tab shows which groups are associated with habitats.
 #' 
 #' The \emph{Distributions} tab shows horizontal and vertical distributions for
@@ -49,9 +53,14 @@
 #' sh.prm(obj)
 #' }
 #' @export
-#' @importFrom ggplot2 xlim element_rect geom_hline position_jitter scale_x_log10 scale_y_log10 geom_bar coord_flip scale_y_continuous
-sh.prm <- function(obj){
-  # obj is a list: numboxes, map_base, box.data, grp.def, grp.att, 
+
+#' @importFrom tidyr gather
+#' @importFrom stats setNames
+#' @importFrom utils read.csv
+#' @import ggplot2
+sh.prm <- function(obj, def.grp.file){
+# obj is a list: numboxes, map_base, box.data, grp.def, grp.att, 
+
   #   gen.prm, grp.hab, grp.dist
   
   # set up variables needed to plot the map 

@@ -19,9 +19,9 @@ When you click the **Knit** button a document will be generated that includes bo
 ```{r}
 library(shinyrAtlantis)
 
-#shinyrAtlantis::SpatialDistributionsExample()
+shinyrAtlantis::SpatialDistributionsExample()
 
 shinyrAtlantis::DisplayParametersExample()
  
-#shinyrAtlantis::DisplayInitializationExample()
+shinyrAtlantis::DisplayInitializationExample()
 ```

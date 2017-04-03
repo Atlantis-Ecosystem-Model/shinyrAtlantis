@@ -20,8 +20,8 @@
 #' 
 #' \code{\link{sh.forcings}}: Displays flow exhanges, salinity, and termperature data used to force an Atlantis run.
 #' 
+#' @importFrom shiny a  
 #'  \code{\link{sh.dist}}: Generates horizontal probability distributions that can be cut-and-pasted into an Atlantis parameter file.
-#' 
 #' @name shinyrAtlantis
 #' @docType package
 NULL
