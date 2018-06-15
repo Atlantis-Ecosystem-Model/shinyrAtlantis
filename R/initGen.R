@@ -347,7 +347,7 @@ make.init.csv <- function(grp.file, bgm.file, cum.depths, csv.name) {
 #' sh.init(init.obj)
 #' }
 #' @export
-make.init.nc <- function(bgm.file, cum.depths, init.file, horiz.file, nc.file) {
+make.init.nc <- function(bgm.file, cum.depths, init.file, horiz.file, nc.file, vert = NULL) {
   # nc file is created using the data stored in the following two csv files
   df.init <- df.grp <- read.csv(file = init.file, header = TRUE,
     stringsAsFactors = FALSE)
@@ -364,7 +364,9 @@ make.init.nc <- function(bgm.file, cum.depths, init.file, horiz.file, nc.file) {
     layer.depth[i] <- cum.depths[i+1] - cum.depths[i]
   }
   numsed <- 1 # default to a single sediment layer
-
+    if(!is.null(vert)){
+        vert <- read.csv(vert)
+    }
   # extract data from the bgm file
   # numlayers, dz, nominal_dz, and volume must be calculated from this file
   map.data <- make.map.data.init(bgm.file, cum.depths)
@@ -377,7 +379,7 @@ make.init.nc <- function(bgm.file, cum.depths, init.file, horiz.file, nc.file) {
   # create dimensions stored in the NetCDF file
   dim1 <- ncdim_def( # create a time dimension
     name = 't',
-    units = 'seconds since 2000-01-01 00:00:00 +10',
+    units = 'seconds since 1950-01-01 00:00:00 +10',
     unlim = TRUE,
     vals = as.double(0.0)
   )
@@ -418,7 +420,6 @@ make.init.nc <- function(bgm.file, cum.depths, init.file, horiz.file, nc.file) {
 
     list.indx <- list.indx + 1
   }
-#browser()
   # writing to file will blow up if file already exists so make a copy
   if (file.exists(nc.file)) {
     file.remove(nc.file)
@@ -434,7 +435,7 @@ make.init.nc <- function(bgm.file, cum.depths, init.file, horiz.file, nc.file) {
 
   # add variable attributes (this can take a few minutes)
   for (i in 1:dim(df.init)[1]) {
-    # add required bmtype
+      ## add required bmtype
     ncatt_put(nc = outnc, varid = df.init$name[i],
       attname = 'bmtype', attval = df.init$bmtype[i])
 
@@ -447,7 +448,6 @@ make.init.nc <- function(bgm.file, cum.depths, init.file, horiz.file, nc.file) {
       }
     }
   }
-
   nc_close(outnc)
   outnc <- nc_open(nc.file, write=TRUE) # open .nc file
   # create data based on the bgm file: volume, dz, nominal_dz, numlayers
@@ -473,8 +473,8 @@ make.init.nc <- function(bgm.file, cum.depths, init.file, horiz.file, nc.file) {
     }
   }
   ncvar_put(outnc, varid = "volume", vals = ma.volume)
-
-  # add depth data
+    ##browser()
+    ## add depth data
     ma.depth  <- matrix(data = 0, nrow = numlayers+1, ncol = numboxes)
     nom.depth <- matrix(data = 0, nrow = numlayers+1, ncol = numboxes) ## nominal depth
   for (i in 1:numboxes) {
@@ -529,25 +529,36 @@ make.init.nc <- function(bgm.file, cum.depths, init.file, horiz.file, nc.file) {
           hor.data[i] <- df.horiz[j,i+1]
         }
       }
+
       for (i in 1:numboxes) {
         if (box.data$numlayers[i] >= 1) { # some full layers present in box
           # add sediment default value
           var.data[numlayers + 1,i] <- as.double(df.init$sediment[idx])
           # j=1 = surface layer, j=numlayers = just above sediment
-        if (df.init$wc.ver.pattern[idx] == "uniform") {
-            for (j in 1:box.data$numlayers[i]) {
-              var.data[box.data$numlayers[i] - j + 1,i] <- hor.data[i]
-            }
-          } else if (df.init$wc.ver.pattern[idx] == "bottom") {
-            for (j in 1:box.data$numlayers[i]) {
-              var.data[box.data$numlayers[i] - j + 1,i] <- 0.0
-            }
-            var.data[1,i] <- hor.data[i]
+            if (df.init$wc.ver.pattern[idx] == "uniform") {
+                for (j in 1:box.data$numlayers[i]) {
+                    var.data[box.data$numlayers[i] - j + 1,i] <- hor.data[i]
+                }
+            } else if (df.init$wc.ver.pattern[idx] == "bottom") {
+                for (j in 1:box.data$numlayers[i]) {
+                    var.data[box.data$numlayers[i] - j + 1,i] <- 0.0
+                }
+                var.data[1,i] <- hor.data[i]
           } else if (df.init$wc.ver.pattern[idx] == "surface") {
-            for (j in 1:box.data$numlayers[i]) {
-              var.data[box.data$numlayers[i] - j + 1,i] <- 0.0
-            }
-            var.data[box.data$numlayers[i],i] <- hor.data[i]
+              for (j in 1:box.data$numlayers[i]) {
+                  var.data[box.data$numlayers[i] - j + 1,i] <- 0.0
+              }
+              var.data[box.data$numlayers[i],i] <- hor.data[i]
+          } else if (df.init$wc.ver.pattern[idx] == "sediment"){
+              for (j in 1:box.data$numlayers[i]) {
+                  var.data[box.data$numlayers[i] - j + 1,i] <- 0.0
+              }
+              var.data[numlayers + 1, i] <- hor.data[i]
+          } else if(df.init$wc.ver.pattern[idx] == "custom"){
+              ver.d <- vert[, which(names(vert) %in%  df.init$name[idx])]
+              for (j in 1:box.data$numlayers[i]) {
+                  var.data[box.data$numlayers[i] - j + 1, i] <- hor.data[i]  * ver.d[j]
+              }
           }
         }
       }
@@ -555,7 +566,6 @@ make.init.nc <- function(bgm.file, cum.depths, init.file, horiz.file, nc.file) {
         ncvar_put(outnc, varid = as.character(df.init$name[idx]), vals = var.data)
     }
   }
-
 
   nc_close(outnc)
 
