@@ -473,7 +473,6 @@ make.init.nc <- function(bgm.file, cum.depths, init.file, horiz.file, nc.file, v
     }
   }
   ncvar_put(outnc, varid = "volume", vals = ma.volume)
-    ##browser()
     ## add depth data
     ma.depth  <- matrix(data = 0, nrow = numlayers+1, ncol = numboxes)
     nom.depth <- matrix(data = 0, nrow = numlayers+1, ncol = numboxes) ## nominal depth
