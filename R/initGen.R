@@ -169,6 +169,7 @@ generate.vars.init <- function(grp.file, cum.depths, df.atts) {
       }
     }
   }
+    browser()
   df.invert <- data.frame(Variable, long_name, att.index,
     stringsAsFactors = FALSE)
 
@@ -279,6 +280,8 @@ make.init.csv <- function(grp.file, bgm.file, cum.depths, csv.name) {
   df.return <- df.atts[df.atts$required, ]
 
   # add group-related variables
+  #browser()
+  #debug(generate.vars.init)
   grp.data <- generate.vars.init(grp.file, cum.depths, df.atts)
   num.vars <- dim(df.return)[1]
   for (i in 1:dim(grp.data)[1]) {
