@@ -1123,7 +1123,6 @@ sh.forcings <- function(input.object){
         }
 
         df.test <- data.frame(layer, x.in, y.in, xend, yend)
-        browser()
         df.test <- df.test %>% mutate(len = sqrt((xend-x.in)*(xend-x.in) +
             (yend-y.in)*(yend-y.in))) %>%
           filter(len > 0)
