@@ -6,11 +6,11 @@ A package to help users of Atlantis investigate the parameters that are spread a
 Usage in R
 ----------
 
-Install dependencies *if they are not already installed*. The complete list of packages used to develop the shinyrAtlantis package are provided below. Remove the package names that are already installed. 
+Install dependencies *if they are not already installed*. The complete list of packages used to develop the shinyrAtlantis package are provided below. Remove the package names that are already installed.
 
 ``` r
-install.packages(c("shiny", 
-                 "dplyr", 
+install.packages(c("shiny",
+                 "dplyr",
                  "DT",
                  "ggplot2",
                  "ncdf4",
@@ -131,9 +131,8 @@ Package development
 
 If you wish to contribute to the development of this package then perform the following steps.
 
-1.  Clone this repo in RStudio, New Project, Version Control, Git, "<https://github.com/shanearichards/shinyrAtlantis.git>"
+1.  Clone this repo in RStudio, New Project, Version Control, Git, "<https://github.com/Atlantis-Ecosystem-Model/shinyrAtlantis.git>"
 2.  Click Tools/Project Options/Build Tools/Generate documentation with roxygen - click all options ON.
 3.  Click Build & Reload in the Build Tab (or hit Ctrl-SHIFT-Enter).
 4.  Make edits, build/reload/test, commit.
 5.  Etc.
-
