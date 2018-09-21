@@ -9,12 +9,8 @@ Usage in R
 Install dependencies *if they are not already installed*. The complete list of packages used to develop the shinyrAtlantis package are provided below. Remove the package names that are already installed.
 
 ``` r
-install.packages(c("shiny",
-                 "dplyr",
-                 "DT",
-                 "ggplot2",
-                 "ncdf4",
-                 "stringr"))
+install.packages(c("shiny", "dplyr", "DT",
+                   "ggplot2", "ncdf4", "stringr"))
 ```
 
 Install the package from Github with devtools.
@@ -24,7 +20,7 @@ Install the package from Github with devtools.
 if (packageVersion("devtools") < 1.6) {
   install.packages("devtools")
 }
-devtools::install_github("shanearichards/shinyrAtlantis")
+devtools::install_github("https://github.com/Atlantis-Ecosystem-Model/shinyrAtlantis")
 ```
 
 Load and attach the package.
@@ -136,3 +132,12 @@ If you wish to contribute to the development of this package then perform the fo
 3.  Click Build & Reload in the Build Tab (or hit Ctrl-SHIFT-Enter).
 4.  Make edits, build/reload/test, commit.
 5.  Etc.
+
+Author
+--------------------
+
+* **Shane A. Richards**
+
+## License
+
+This project is licensed under [GPL3](https://www.gnu.org/licenses/gpl-3.0.en.html)
