@@ -105,6 +105,31 @@ input.object <- make.sh.forcings.object(
 sh.forcings(input.object)
 ```
 
+`make.init.nc`
+-------------------------------
+
+**make.init.nc**: An application for creating an Atlatnis initial condition file.
+
+``` r
+library(shinyrAtlantis)
+
+## Step 1  -  Create your template files
+grp.file   <- "Groups.csv"                                 # this file is not included in the package
+bgm.file   <- "gbr_box_03012012.bgm"                       # this file is not included in the package
+cum.depths <- c(0, 20, 50, 150, 250, 400, 650, 1000, 4300) # this file is not included in the package
+csv.name   <- "GBR_init"                                   # Name of the template file
+make.init.csv(grp.file, bgm.file, cum.depths, csv.name)    # Create the template files
+
+## Step 2  - Populate the template csv files with biological and physical information realted to your Atlantis model
+
+## Step 3  -  Create your NetCDF file from the templates
+nc.file    <- "GBR.nc"               # Name of your initial condition Netcdf file.
+GBR.init   <- "GBR_init.csv"         # template file with overall information
+GBR.init.h <- "GBR_init_horiz.csv"   # template file with Horizontal information
+make.init.nc(bgm.file, cum.depths, GBR.init, GBR.init.h, nc.file)
+
+```
+
 One step launch
 ---------------
 
