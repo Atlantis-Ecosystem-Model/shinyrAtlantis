@@ -1860,24 +1860,23 @@ make.prm.prey <- function(prm.file, Code) {
   dimnames(age.data)[[1]]  <- Code
   dimnames(age.data)[[2]]  <- Code
 
-  for (xxx in Code) { # look for each Code
-      cat("-")
-      #count = 1
-      for (yyy in Code) {
-          txt.find <- paste("p_", as.character(yyy), as.character(xxx), sep = "")
-          j   <- grep(pattern = txt.find, x = prm, value = FALSE) # file row(s)
-          if (length(j) == 1) {
-              #browser()
-              txt  <- gsub(pattern = '[[:space:]]+' ,  '|',  prm[j])
-              tmp  <- unlist(strsplit(txt, split = '|', fixed = TRUE))
-              if(grepl('#', tmp[1])) next
-              vals <- as.numeric(unlist(str_split(string = prm[j[1]+1], pattern = "[\t\n ]+")))
-          #if (count>1) if(length(na.omit(vals)) != on.val) browser()
-          age.data[xxx, yyy, ] <- na.omit(vals)
-          on.val = length(na.omit(vals))
-          #count = 2
+  flag <- gsub(pattern = '[[:space:]]+' ,  '|', prm[grep(pattern = "flag_fine_ontogenetic_diets", x = prm, value = FALSE)])
+  if(as.numeric(unlist(strsplit(flag, split = '|', fixed = TRUE))[2]) == 1){
+      for (xxx in Code) { # look for each Code
+          cat("-")
+          for (yyy in Code) {
+              txt.find <- paste("p_", as.character(yyy), as.character(xxx), sep = "")
+              j   <- grep(pattern = txt.find, x = prm, value = FALSE) # file row(s)
+              if (length(j) == 1) {
+                  txt  <- gsub(pattern = '[[:space:]]+' ,  '|',  prm[j])
+                  tmp  <- unlist(strsplit(txt, split = '|', fixed = TRUE))
+                  if(grepl('#', tmp[1])) next
+                  vals <- as.numeric(unlist(str_split(string = prm[j[1]+1], pattern = "[\t\n ]+")))
+                  if(length(na.omit(vals))) next
+                  age.data[xxx, yyy, ] <- na.omit(vals)
+              }
+          }
       }
-    }
   }
   cat("\n")
 
@@ -2173,7 +2172,6 @@ make.sh.prm.object <- function(bgm.file, grp.file, prm.file) {
   grp.mig <- make.prm.migration(prm.file, Code)
 
   cat("8.  Extracting prey availability (this may take a few minutes)\n")
-  #debug(make.prm.prey)
   prey.data <- make.prm.prey(prm.file, Code)
 
   cat("9.  Extracting clearance information\n")
