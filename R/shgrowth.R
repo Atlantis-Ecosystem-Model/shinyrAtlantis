@@ -602,8 +602,7 @@ GenerateFeedingData <- function(grp.file, prm.file, nc.file) {
     mum = mum, Clearance = Clearance, Require = Require,
     Frac.Spawn = Frac.Spawn, Reserve = NRes, Structural = NStruct,
     WghtTotal = NTotal, Spawn = Spawn)
-  browser()
-  return(list(df.grp = df.grp, df.Group = df.Group, df.prms = df.prms))
+    return(list(df.grp = df.grp, df.Group = df.Group, df.prms = df.prms))
 }
 
 make.Predictions <- function(dfs, xxx) {
