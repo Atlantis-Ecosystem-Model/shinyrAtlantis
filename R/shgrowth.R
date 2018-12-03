@@ -156,7 +156,6 @@ sh.feeding <- function(grp.file, prm.file, nc.file){
 
 GenerateFeedingData <- function(grp.file, prm.file, nc.file) {
   # == Group .csv file
-
   # read in group data from group .csv file
   df.grp <- read.csv(file = grp.file, header = TRUE,
     stringsAsFactors = FALSE)
@@ -226,8 +225,8 @@ GenerateFeedingData <- function(grp.file, prm.file, nc.file) {
   Pr.FSPB <- matrix(data = NA, nrow = numPredators, ncol = maxCohorts)
 
   i <- 0 # predator index
-  for (xxx in df.grp$Code) { # xxx = predator
-    i <- i + 1 # new predator
+    for (xxx in df.grp$Code) { # xxx = predator
+        i <- i + 1 # new predator
 
     # KSPA: Find spawning parameter for xxx
     txt.find <- paste("KSPA_", xxx, sep = "")
@@ -332,9 +331,9 @@ GenerateFeedingData <- function(grp.file, prm.file, nc.file) {
         # get parameter value (1 after nums)
         p.val <- as.numeric(unlist(str_split(prm[j],"[\t ]+"))[2])
         df.grp$NumCohortsPrm[i] <- p.val
-        # Clearance data is on the next row
-        C.vals <- na.omit(as.numeric(unlist(strsplit(prm[j+1], "[^0-9.]+"))))
-        Rate.C[i, 1:length(C.vals)] <- C.vals
+                                        # Clearance data is on the next row
+          C.vals <- na.omit(as.numeric(unlist(strsplit(prm[j+1], "[[:space:]]+"))))
+          Rate.C[i, 1:length(C.vals)] <- C.vals
       }
     }
 
@@ -379,7 +378,6 @@ GenerateFeedingData <- function(grp.file, prm.file, nc.file) {
         df.grp$KB[i] <- p.val
       }
     }
-
     # Find maximum growth rates for xxx
     txt.find <- paste("mum_", xxx, sep = "")
     j <- grep(pattern = txt.find, x = prm, value = FALSE) # file row(s)
@@ -396,8 +394,8 @@ GenerateFeedingData <- function(grp.file, prm.file, nc.file) {
       j <- jnew # use this list of rows as they are valid
       if (length(j) == 1) { # a single row is found so valid
         # Clearance data is on the next row
-        mum.vals <- na.omit(as.numeric(unlist(strsplit(prm[j+1],
-          "[^0-9.]+"))))
+          #mum.vals <- na.omit(as.numeric(unlist(strsplit(prm[j+1], "[^0-9.]+"))))
+          mum.vals <- na.omit(as.numeric(unlist(strsplit(prm[j+1], "[[:space:]]+"))))
         Rate.mum[i, 1:length(mum.vals)] <- mum.vals
       }
     }
