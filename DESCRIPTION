@@ -1,15 +1,17 @@
 Package: shinyrAtlantis
 Title: Make Atlantis Shiny
-Version: 0.0.2.9000
-Authors@R: c(person("Michael D.", "Sumner", email = "mdsumner@gmail.com", role = c("aut", "cre")), 
-          person("Shane A.", "Richards", email = "Shane.Richards@csiro.au", role = c("aut"), 
+Version: 0.0.3.0000
+Authors@R: c(person("Michael D.", "Sumner", email = "mdsumner@gmail.com", role = c("aut")),
+	   person("Javier", "Porobic", email = "javier.porobicgarate@csiro.au", role = c("aut", "cre", "ctb")),
+          person("Shane A.", "Richards", email = "shane.richards@csiro.au", role = c("aut"),
           comment = "majority author of the R code"))
+Maintainer: JAvier Porobic <javier.porobicgarate@csiro.au>
 Description: Shiny apps for Atlantis.
-Depends:    
+Depends:
     R (>= 3.1.3),
     shiny
 Imports: tidyr,
-         dplyr, 
+         dplyr,
          DT,
          ggplot2,
          ncdf4,
@@ -18,7 +20,8 @@ Imports: tidyr,
          magrittr
 License: GPL-3
 LazyData: true
-RoxygenNote: 5.0.1
+RoxygenNote: 6.1.1
+Encoding: UTF-8
 Suggests: knitr,
     rmarkdown
 VignetteBuilder: knitr

@@ -20,7 +20,7 @@ Install the package from Github with devtools.
 if (packageVersion("devtools") < 1.6) {
   install.packages("devtools")
 }
-devtools::install_github("https://github.com/Atlantis-Ecosystem-Model/shinyrAtlantis")
+devtools::install_github("Atlantis-Ecosystem-Model/shinyrAtlantis")
 ```
 
 Load and attach the package.
