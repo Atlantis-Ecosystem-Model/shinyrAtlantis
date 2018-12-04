@@ -67,6 +67,7 @@ REPTILE_N,FALSE,2,[ z b ],tracer,mg N m-3,total N,0,1,0,0,1,0,0,0,NA,NA,NA,NA,NA
 SEAGRASS_N,FALSE,1,[ b ],epibenthos,mg N m-2,Nitrogen,0,1,NA,NA,NA,NA,NA,0,NA,NA,NA,NA,NA,NA,NA,custom,none,0,0
 ICE_BACT_N,FALSE,2,[ icenz b ],tracer,mg N m-3,Nitrogen,0,1,0,1,0,0,1,100,1,0,0,0.00001,1000000000,200000000,200000000,custom,uniform,0,0
 SED_BACT_N,FALSE,2,[ z b ],tracer,mg N m-3,Nitrogen,0,1,0,1,0,0,1,100,1,0,0,0.00001,1000000000,200000000,200000000,custom,uniform,0,0
+TURF_N,FALSE,1,[ b ],epibenthos,mg N m-2,Nitrogen,0,1,NA,NA,NA,NA,NA,0,NA,NA,NA,NA,NA,NA,NA,custom,none,0,0
 SED_EP_FF_N,FALSE,1,[ b ],epibenthos,mg N m-2,Nitrogen,0,1,NA,NA,NA,NA,NA,0,NA,NA,NA,NA,NA,NA,NA,custom,none,0,0
 SED_EP_OTHER_N,FALSE,1,[ b ],epibenthos,mg N m-2,Nitrogen,0,1,NA,NA,NA,NA,NA,0,NA,NA,NA,NA,NA,NA,NA,custom,none,0,0
 SHARK_N,FALSE,2,[ z b ],tracer,mg N m-3,total N,0,1,0,0,1,0,0,0,NA,NA,NA,NA,NA,NA,NA,constant,uniform,0,0

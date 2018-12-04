@@ -122,53 +122,55 @@ generate.vars.init <- function(grp.file, cum.depths, df.atts) {
     "MED_PHY", "LG_PHY")
   df.grp <- df.grp %>% mutate(needsLight = GroupType %in% light.adpn.grps)
 
-  # create data frame for invert biological variables (ignores multiple stocks)
-  Variable  <- NULL # variable name
-  long_name <- NULL # long name
-  att.index <- NULL # corresponding row of df.atts
-  for (grp in 1:length(df.grp$Name)) {
-    if (!df.grp$needsNums[grp]) {
-      if (!df.grp$multiN[grp]) { # single group
-        Variable  <- c(Variable, paste(df.grp$Name[grp], "_N", sep = ""))
-        indx <- which(df.atts$name==paste(df.grp$GroupType[grp], "_N", sep = ""))
-        long_name <- c(long_name, paste(df.grp$Name[grp],
-          df.atts$long_name[indx], sep = " "))
-        att.index <- c(att.index, indx)
-      } else { # multiple groups
-        for (j in 1:df.grp$NumCohorts[grp]) {
-          Variable <- c(Variable, paste(df.grp$Name[grp], "_N", as.character(j),
-            sep = ""))
-          indx <- which(df.atts$name==paste(df.grp$GroupType[grp], "_N",
-            sep = ""))
-          long_name <- c(long_name, paste(df.grp$Name[grp], "cohort",
-            as.character(j), df.atts$long_name[indx], sep = " "))
-          att.index <- c(att.index, indx)
+    ## Donnuts model
+    ## create data frame for invert biological variables (ignores multiple stocks)
+    Variable  <- NULL # variable name
+    long_name <- NULL # long name
+    att.index <- NULL # corresponding row of df.atts
+    for (grp in 1:length(df.grp$Name)) {
+        ##        if(grp == 46)browser()
+        if (!df.grp$needsNums[grp]) {
+            if (!df.grp$multiN[grp]) { # single group
+                Variable  <- c(Variable, paste(df.grp$Name[grp], "_N", sep = ""))
+                indx <- which(df.atts$name==paste(df.grp$GroupType[grp], "_N", sep = ""))
+                long_name <- c(long_name, paste(df.grp$Name[grp],
+                                                df.atts$long_name[indx], sep = " "))
+                att.index <- c(att.index, indx)
+            } else { # multiple groups
+                for (j in 1:df.grp$NumCohorts[grp]) {
+                    Variable <- c(Variable, paste(df.grp$Name[grp], "_N", as.character(j),
+                                                  sep = ""))
+                    indx <- which(df.atts$name==paste(df.grp$GroupType[grp], "_N",
+                                                      sep = ""))
+                    long_name <- c(long_name, paste(df.grp$Name[grp], "cohort",
+                                                    as.character(j), df.atts$long_name[indx], sep = " "))
+                    att.index <- c(att.index, indx)
+                }
+            }
+            if (df.grp$IsCover[grp]) { # single cover group
+                Variable <- c(Variable, paste(df.grp$Name[grp], "_Cover", sep = ""))
+                indx <- which(df.atts$name == "Cover")
+                long_name <- c(long_name, paste("Percent cover by",
+                                                df.grp$Name[grp], sep = " "))
+                att.index <- c(att.index, indx)
+            }
+            if (df.grp$IsSiliconDep[grp]) { # single silicon group
+                Variable <- c(Variable, paste(df.grp$Name[grp], "_S", sep = ""))
+                indx <- which(df.atts$name == "Si3D")
+                long_name <- c(long_name, paste(df.grp$Name[grp],
+                                                "Silicon", sep = " "))
+                att.index <- c(att.index, indx)
+            }
+            if (df.grp$needsLight[grp]) { # single light adaptation group
+                Variable <- c(Variable, paste("Light_Adaptn_", df.grp$Code[grp],
+                                              sep = ""))
+                indx <- which(df.atts$name == "Light3D")
+                long_name <- c(long_name, paste("Light adaption of",
+                                                df.grp$Name[grp], sep = " "))
+                att.index <- c(att.index, indx)
+            }
         }
-      }
-      if (df.grp$IsCover[grp]) { # single cover group
-        Variable <- c(Variable, paste(df.grp$Name[grp], "_Cover", sep = ""))
-        indx <- which(df.atts$name == "Cover")
-        long_name <- c(long_name, paste("Percent cover by",
-          df.grp$Name[grp], sep = " "))
-        att.index <- c(att.index, indx)
-      }
-      if (df.grp$IsSiliconDep[grp]) { # single silicon group
-        Variable <- c(Variable, paste(df.grp$Name[grp], "_S", sep = ""))
-        indx <- which(df.atts$name == "Si3D")
-        long_name <- c(long_name, paste(df.grp$Name[grp],
-          "Silicon", sep = " "))
-        att.index <- c(att.index, indx)
-      }
-      if (df.grp$needsLight[grp]) { # single light adaptation group
-        Variable <- c(Variable, paste("Light_Adaptn_", df.grp$Code[grp],
-          sep = ""))
-        indx <- which(df.atts$name == "Light3D")
-        long_name <- c(long_name, paste("Light adaption of",
-          df.grp$Name[grp], sep = " "))
-        att.index <- c(att.index, indx)
-      }
     }
-  }
 
   df.invert <- data.frame(Variable, long_name, att.index,
     stringsAsFactors = FALSE)
@@ -257,8 +259,8 @@ generate.vars.init <- function(grp.file, cum.depths, df.atts) {
 #' @export
 #' @importFrom ncdf4 ncdim_def
 make.init.csv <- function(grp.file, bgm.file, cum.depths, csv.name) {
-  def.att.file <- system.file("extdata", "AttributeTemplate.csv", package = "shinyrAtlantis")
-  df.atts <- read.csv(file = def.att.file, header = TRUE, stringsAsFactors = FALSE)
+    def.att.file <- system.file("extdata", "AttributeTemplate.csv", package = "shinyrAtlantis")
+    df.atts <- read.csv(file = def.att.file, header = TRUE, stringsAsFactors = FALSE)
 
   numlayers <- length(cum.depths) - 1 # number of water layers
   # calculate the depths of each water layer
@@ -279,7 +281,8 @@ make.init.csv <- function(grp.file, bgm.file, cum.depths, csv.name) {
   # create a list of required variables
   df.return <- df.atts[df.atts$required, ]
 
-  # add group-related variables
+  ## add group-related variables
+#  debug(generate.vars.init)
   grp.data <- generate.vars.init(grp.file, cum.depths, df.atts)
   num.vars <- dim(df.return)[1]
   for (i in 1:dim(grp.data)[1]) {
