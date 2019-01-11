@@ -128,8 +128,7 @@ generate.vars.init <- function(grp.file, cum.depths, df.atts) {
     long_name <- NULL # long name
     att.index <- NULL # corresponding row of df.atts
     for (grp in 1:length(df.grp$Name)) {
-        ##        if(grp == 46)browser()
-        if (!df.grp$needsNums[grp]) {
+            if (!df.grp$needsNums[grp]) {
             if (!df.grp$multiN[grp]) { # single group
                 Variable  <- c(Variable, paste(df.grp$Name[grp], "_N", sep = ""))
                 indx <- which(df.atts$name==paste(df.grp$GroupType[grp], "_N", sep = ""))
@@ -527,9 +526,10 @@ make.init.nc <- function(bgm.file, cum.depths, init.file, horiz.file, nc.file, v
       hor.data <- rep(df.init$wc.hor.scalar[idx], numboxes) # default values
       # replace default values with custom values if provided
       if (df.init$wc.hor.pattern[idx] == "custom") {
-        j <- which(df.horiz$Variable == df.init$name[idx])
-        for (i in 1:numboxes) {
-          hor.data[i] <- df.horiz[j,i+1]
+          j <- which(df.horiz$Variable == df.init$name[idx])
+          if(length(j) == 0) stop(cat('\nYou set the horizontal distribution of ',  df.init$name[idx], ' as "custom" but you did not provide information in the Horizontal distribution csv file\n'))
+          for (i in 1:numboxes) {
+            hor.data[i] <- df.horiz[j,i+1]
         }
       }
 
@@ -558,7 +558,9 @@ make.init.nc <- function(bgm.file, cum.depths, init.file, horiz.file, nc.file, v
               }
               var.data[numlayers + 1, i] <- hor.data[i]
           } else if(df.init$wc.ver.pattern[idx] == "custom"){
-              ver.d <- vert[, which(names(vert) %in%  df.init$name[idx])]
+              pos.v <- which(names(vert) %in%  df.init$name[idx])
+              if(length(pos.v) == 0) stop(cat('\n You set the vertical distribution of ',  df.init$name[idx], ' as "custom" but you did not provide information in the Vertical distribution csv file \n'))
+              ver.d <- vert[, pos.v]
               for (j in 1:box.data$numlayers[i]) {
                   var.data[box.data$numlayers[i] - j + 1, i] <- hor.data[i]  * ver.d[j]
               }
