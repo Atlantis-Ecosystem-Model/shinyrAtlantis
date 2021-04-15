@@ -549,8 +549,8 @@ GenerateFeedingData <- function(grp.file, prm.file, nc.file) {
   W <- N.Struct + N.Res # Total nitrogen weight
   i <- 0
   # calculate required available biomass for each of the four groups
-  for (xxx in df.grp$Name) { # look for each Code (Predator)
-    i <- i + 1 # xxx index
+    for (xxx in df.grp$Name) { # look for each Code (Predator)
+        i <- i + 1 # xxx index
     # Live Prey
     # for (j in 1:(df.grp$NumCohorts[i]-1)) {
     for (j in 1:df.grp$NumCohorts[i]) { # cohort
@@ -571,7 +571,7 @@ GenerateFeedingData <- function(grp.file, prm.file, nc.file) {
       Cohort.G   <- c(Cohort.G, j) # cohort
       mum        <- c(mum, G) # maximum growth rate [mg N d-1]
       Clearance  <- c(Clearance, C) # clearance rate [m3 d-1]
-
+      #browser()
       if (j < df.grp$NumCohorts[i]) {
         dW  <- W[i,j+1] - W[i,j]
       } else {
@@ -585,6 +585,9 @@ GenerateFeedingData <- function(grp.file, prm.file, nc.file) {
       spwn <- max(0.0, FSP*(WIdeal - KSPA/FSP) - LowWghtCost) # mean reserve loss per spawner
       Spawn <- c(Spawn, spwn)
 
+      #dw <- c(dw, dW)
+      #fp <- c(fp,FSPB)
+      #thau <- c(thau,tau)
       # calculate daily growth requirement with spawning fraction
       Require <- c(Require, (dW + FSPB*spwn)/tau) # required daily growth [mg N d-1]
 
@@ -595,7 +598,6 @@ GenerateFeedingData <- function(grp.file, prm.file, nc.file) {
       NTotal     <- c(NTotal, W[i,j]) # stuctural nitrogen [mg N]
     }
   }
-
   df.Group <- data.frame(Predator = Predator.G, Cohort = Cohort.G,
     mum = mum, Clearance = Clearance, Require = Require,
     Frac.Spawn = Frac.Spawn, Reserve = NRes, Structural = NStruct,

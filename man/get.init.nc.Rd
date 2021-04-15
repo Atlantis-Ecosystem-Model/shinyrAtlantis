@@ -23,8 +23,8 @@ Incorrect output may be produced if the number of boxes equals the number of tim
 \examples{
 \dontrun{
 nc.file <- "~/Atlantis/RunFiles/SEAP/params/initSEAPaquacult_pH.nc"
-output.file <- "oldData.csv" # where to write the data
+output.file <- "oldData.csv" ## where to write the data
 
-get.init.nc(nc.file, output.file) # extract data from the NetCDF file
+get.init.nc(nc.file, output.file) ## extract data from the NetCDF file
 }
 }

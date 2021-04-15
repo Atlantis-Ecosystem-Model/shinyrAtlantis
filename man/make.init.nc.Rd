@@ -36,16 +36,16 @@ cum.depths <- c(0,5,10,20,50,100,200,3000)
 csv.name   <- "GBRtemplate"
 make.init.csv(grp.file, bgm.file, cum.depths, csv.name)
 
-# copy GBRtemplate_init.csv to GBR_init.csv
-# copy GBRtemplate_horiz.csv to GBR_horiz.csv
-# edit files GBR_init.csv and GBR_horiz.csv by entering initial conditions
+## copy GBRtemplate_init.csv to GBR_init.csv
+## copy GBRtemplate_horiz.csv to GBR_horiz.csv
+## edit files GBR_init.csv and GBR_horiz.csv by entering initial conditions
 
 init.file  <- "GBR_init.csv"
 horiz.file <- "GBR_horiz.csv"
 nc.file    <- "GBRtemplate.nc"
 make.init.nc(bgm.file, cum.depths, init.file, horiz.file, nc.file)
 
-# view the initial conditions file
+## view the initial conditions file
 init.obj <- make.sh.init.object(bgm.file, nc.file)
 sh.init(init.obj)
 }
