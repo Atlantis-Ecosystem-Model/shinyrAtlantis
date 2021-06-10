@@ -1,0 +1,30 @@
+url: https://Atlantis-Ecosystem-Model.github.io/shinyrAtlantis/
+
+reference:
+- title: "Package"
+  desc: ""
+- contents:
+  - shinyrAtlantis
+- title: "Shiny apps"
+  desc: "Main shiny apps to display Atlantis input data"
+- contents:
+  - sh.prm
+  - sh.init
+  - sh.forcings
+  - sh.dist
+  - sh.feeding
+- title: "Intermediate get/make functions"
+  desc: "Functions used genarate list objects for use in shiny apps"
+- contents:
+  - get.init.nc
+  - make.init.nc
+  - make.sh.dist.object
+  - make.sh.forcings.object
+  - make.sh.init.object
+  - make.sh.prm.object
+- title: "Examples"
+  desc: "Shiny examples based on Antarctica model"
+- contents:
+  - SpatialDistributionsExample
+  - DisplayParametersExample
+  - DisplayInitializationExample
