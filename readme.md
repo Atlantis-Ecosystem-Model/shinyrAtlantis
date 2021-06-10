@@ -1,7 +1,7 @@
 shinyrAtlantis
 --------------
 
-[![deploy to github pages](https://https://github.com/Atlantis-Ecosystem-Model/shinyrAtlantis/actions/workflows/pkgdown.yml/badge.svg)](https://https://github.com/Atlantis-Ecosystem-Model/shinyrAtlantis/actions/workflows/pkgdown.yml)
+[![deploy to github pages](https://github.com/Atlantis-Ecosystem-Model/shinyrAtlantis/actions/workflows/pkgdown.yml/badge.svg)](https://github.com/Atlantis-Ecosystem-Model/shinyrAtlantis/actions/workflows/pkgdown.yml)
 
 A package to help users of Atlantis investigate the parameters that are spread across multiple files (.csv, .nc) when constructing their ecosystem model.
 
