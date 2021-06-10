@@ -4,8 +4,13 @@
 \alias{make.sh.forcings.object}
 \title{Function that generates an object used by sh.forcings}
 \usage{
-make.sh.forcings.object(bgm.file, exchange.file, cum.depth,
-  temperature.file = NULL, salinity.file = NULL)
+make.sh.forcings.object(
+  bgm.file,
+  exchange.file,
+  cum.depth,
+  temperature.file = NULL,
+  salinity.file = NULL
+)
 }
 \arguments{
 \item{bgm.file}{Box geometry model (.bgm) file used by Atlantis that defines box boundaries and depths.}
