@@ -3,7 +3,6 @@
 \docType{package}
 \name{shinyrAtlantis}
 \alias{shinyrAtlantis}
-\alias{shinyrAtlantis-package}
 \title{A package for visualising Atlantis input data}
 \description{
 A set of shiny applications for visualising and generating Atlantis parameterisation files.
