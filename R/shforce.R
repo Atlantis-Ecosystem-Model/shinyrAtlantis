@@ -1307,6 +1307,7 @@ sh.forcings <- function(input.object){
 
       # -- Temperature -- Plot (Spatial)
       output$plotTemp <- renderPlot({
+        #  browser()
         # calculate the time index of the data matrices
         t <- round((input$NI.Temp - input.object$t[1]) / dt, digits = 0) + 1
 
@@ -1331,21 +1332,24 @@ sh.forcings <- function(input.object){
             as.integer(df$dest.plot.layer[df$dest.plot.layer < 1])
 
           df.plot <- dplyr::left_join(input.object$map.vertices, df, by = "boxid")
-
+          df.plot$dest.plot.layer  <- paste0( 'Layer - ',df.plot$dest.plot.layer)
           gg <- ggplot(data = df.plot,
             aes(x = x, y = y, group = boxid, fill = temperature)) +
             geom_polygon(colour = "grey25", size = 0.25, na.rm = TRUE) +
             scale_fill_gradient(low = "lightblue1", high = "#de2d26", na.value="wheat1") +
             labs(fill = "Celcius") +
             facet_wrap( ~ dest.plot.layer, ncol = 3) +
-            theme_bw() + xlab("") + ylab("") +
+            theme_bw(base_size = 18) + xlab("") + ylab("") +
             theme(plot.background = element_blank()) +
             scale_y_continuous(breaks=NULL) + scale_x_continuous(breaks=NULL) +
             coord_cartesian(xlim = rangesTemp$x, ylim = rangesTemp$y)
           if (input$CI.BoxIDTemp) { # add box id
             gg <- gg + geom_text(data = input.object$box.data, mapping = aes(x = x.in, y = y.in, label = boxid), size = 2.5, inherit.aes = FALSE)
           }
+#          browser()
+#          png('/home/por07g/Documents/Projects/Salish_Sea/Documents/Report/spatial_temp.png',  width = 1200, heigh = 900)
           gg
+#          dev.off()
         } else {
           df <- data.frame(x = 0, y = 0)
           ggplot(data = df, aes(x = x, y = y)) +
@@ -1417,25 +1421,29 @@ sh.forcings <- function(input.object){
 
           plot.cols <- c(colorRampPalette(c("#fcbba1", "#99000d"))( numlayers ),"black")
 
-          ggplot(data = df,
-            aes(x = time, y = temperature, color = dest.plot.layer)) +
-            geom_line(na.rm = TRUE) +
-            geom_point(na.rm = TRUE) +
-            scale_color_manual(values=plot.cols) +
-            ylab("Temperature (Celcius)") + xlab("Time (days)") +
-            labs(color = "Plot layer") +
-            theme_bw()
+          p <- ggplot(data = df,
+                      aes(x = time, y = temperature, color = dest.plot.layer)) +
+              geom_line(na.rm = TRUE) +
+              geom_point(na.rm = TRUE) +
+              scale_color_manual(values=plot.cols) +
+              ylab("Temperature (Celcius)") + xlab("Time (days)") +
+              labs(color = "Plot layer") +
+              theme_bw(base_size = 18)
         } else {
-          df <- data.frame(x = 0, y = 0)
-          ggplot(data = df, aes(x = x, y = y)) +
-            ggtitle("No temperature data provided") +
-            theme_bw() + xlab("") + ylab("") +
-            theme(
-              plot.background = element_blank(),
-              plot.title=element_text(colour="red")
-            ) +
-            scale_y_continuous(breaks=NULL) + scale_x_continuous(breaks=NULL)
+            df <- data.frame(x = 0, y = 0)
+            p <- ggplot(data = df, aes(x = x, y = y)) +
+                ggtitle("No temperature data provided") +
+                theme_bw() + xlab("") + ylab("") +
+                theme(
+                    plot.background = element_blank(),
+                  plot.#TODO: itle=element_text(colour="red")
+                ) +
+                scale_y_continuous(breaks=NULL) + scale_x_continuous(breaks=NULL)
         }
+        ## browser()
+        ## png('/home/por07g/Documents/Projects/Salish_Sea/Documents/Report/temporal_temp.png',  width = 1200, heigh = 900)
+        ## p
+        ## dev.off()
       })
 
       # -- Temperature -- Table (Time-series)
@@ -1495,6 +1503,7 @@ sh.forcings <- function(input.object){
           as.integer(df$dest.plot.layer[df$dest.plot.layer < 1])
 
         df.plot <- dplyr::left_join(input.object$map.vertices, df, by = "boxid")
+        df.plot$dest.plot.layer  <- paste0( 'Layer - ',df.plot$dest.plot.layer)
 
         gg <- ggplot(data = df.plot,
           aes(x = x, y = y, group = boxid, fill = salinity)) +
@@ -1502,14 +1511,19 @@ sh.forcings <- function(input.object){
           scale_fill_gradient(low = "lightblue1", high = "#de2d26", na.value="wheat1") +
           labs(fill = "g/kg") +
           facet_wrap( ~ dest.plot.layer, ncol = 3) +
-          theme_bw() + xlab("") + ylab("") +
+          theme_bw(base_size = 18) + xlab("") + ylab("") +
           theme(plot.background = element_blank()) +
           scale_y_continuous(breaks=NULL) + scale_x_continuous(breaks=NULL) +
           coord_cartesian(xlim = rangesSalt$x, ylim = rangesSalt$y)
         if (input$CI.BoxIDSalt) { # add box id
           gg <- gg + geom_text(data = input.object$box.data, mapping = aes(x = x.in, y = y.in, label = boxid), size = 2.5, inherit.aes = FALSE)
         }
+
+        #browser()
+        #png('/home/por07g/Documents/Projects/Salish_Sea/Documents/Report/spatial_salt.png',  width = 1200, heigh = 900)
         gg
+        #dev.off()
+
       })
 
       # -- Salinity -- Table (Spatial)
@@ -1568,17 +1582,17 @@ sh.forcings <- function(input.object){
 
           plot.cols <- c(colorRampPalette(c("#fcbba1", "#99000d"))( numlayers ),"black")
 
-          ggplot(data = df,
+          gg <- ggplot(data = df,
             aes(x = time, y = salinity, color = dest.plot.layer)) +
             geom_line(na.rm = TRUE) +
             geom_point(na.rm = TRUE) +
             scale_color_manual(values=plot.cols) +
             ylab("Salinity (g/kg)") + xlab("Time (days)") +
             labs(color = "Plot layer") +
-            theme_bw()
+            theme_bw(base_size = 18)
         } else {
           df <- data.frame(x = 0, y = 0)
-          ggplot(data = df, aes(x = x, y = y)) +
+          gg <- ggplot(data = df, aes(x = x, y = y)) +
             ggtitle("No salinity data provided") +
             theme_bw() + xlab("") + ylab("") +
             theme(
@@ -1587,6 +1601,10 @@ sh.forcings <- function(input.object){
             ) +
             scale_y_continuous(breaks=NULL) + scale_x_continuous(breaks=NULL)
         }
+        #browser()
+        #png('/home/por07g/Documents/Projects/Salish_Sea/Documents/Report/temporal_salt.png',  width = 1200, heigh = 900)
+        gg
+        #dev.off()
       })
 
       # -- Salinity -- Table (Time-series)

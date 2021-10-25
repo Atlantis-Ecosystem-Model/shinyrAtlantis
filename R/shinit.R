@@ -592,16 +592,21 @@ sh.init <- function(input.object){
           vals = data.2D
         )
         df.plot <- left_join(input.object$df.map, df.plot, by = "boxid")
-        ggplot(data = df.plot,
-          aes(x = x, y = y, group = boxid, fill = vals)) +
-          geom_polygon(colour = "black", size = 0.25) +
-          scale_fill_gradient(low="#fee6ce", high="#d94801",
-            na.value="black", guide=guide_legend()) +
-          labs(fill = "value") +
-          theme_bw() + xlab("") + ylab("") +
-          theme(plot.background = element_blank()) +
-          coord_cartesian(xlim = rangesSpecies2$x, ylim = rangesSpecies2$y) +
-          scale_y_continuous(breaks=NULL) + scale_x_continuous(breaks=NULL)
+        gp <- ggplot(data = df.plot,
+                     aes(x = x, y = y, group = boxid, fill = vals)) +
+            geom_polygon(colour = "black", size = 0.25) +
+            scale_fill_gradient(low="#fee6ce", high="#d94801",
+                                na.value="black", guide=guide_legend()) +
+            labs(fill = "mg N m-2") +
+            theme_bw(base_size = 18) + xlab("") + ylab("") +
+            theme(plot.background = element_blank()) +
+            coord_cartesian(xlim = rangesSpecies2$x, ylim = rangesSpecies2$y) +
+            scale_y_continuous(breaks=NULL) + scale_x_continuous(breaks=NULL)
+        ## browser()
+
+        ## png('/home/por07g/Documents/Projects/Salish_Sea/Documents/Report/biotic2d_crab.png',  width = 800, height = 800)
+        gp
+        ## dev.off()
       })
 
       # display 2D biotic data in table form
@@ -649,19 +654,33 @@ sh.init <- function(input.object){
             df.plot <- rbind(df.plot, df.level)
           }
         }
+        #scale_fill_gradient(low="#fee6ce", high="#d94801",
+        #na.value="black", guide=guide_legend())
         df.plot <- left_join(input.object$df.map, df.plot, by = "boxid")
+        df.plot$depth <- ifelse(df.plot$depth ==  25, 1,
+                          ifelse(df.plot$depth ==  50, 2,
+                         ifelse(df.plot$depth ==  100, 3,
+                         ifelse(df.plot$depth ==  250, 4,
+                         ifelse(df.plot$depth ==  400, 5,
+                         ifelse(df.plot$depth ==  700, 7, 'sediment'))))))
 
-        ggplot(data = df.plot,
-          aes(x = x, y = y, group = boxid, fill = vals)) +
-          geom_polygon(colour = "black", size = 0.25) +
-          scale_fill_gradient(low="#fee6ce", high="#d94801",
-            na.value="black", guide=guide_legend()) +
-          labs(fill = "value") +
-          facet_wrap( ~ depth, ncol = 2) +
-          theme_bw() + xlab("") + ylab("") +
-          theme(plot.background = element_blank()) +
-          coord_cartesian(xlim = rangesSpecies3$x, ylim = rangesSpecies3$y) +
-          scale_y_continuous(breaks=NULL) + scale_x_continuous(breaks=NULL)
+        df.plot$depth <- paste('Layer - ', df.plot$depth)
+        gp <- ggplot(data = df.plot,
+                     aes(x = x, y = y, group = boxid, fill = vals)) +
+            geom_polygon(colour = "grey25", size = 0.25, na.rm = TRUE) +
+            scale_fill_gradient(low="#fee6ce", high="#d94801",
+                                na.value="black") +
+            labs(fill = "Numbers") +
+            facet_wrap( ~ depth, ncol = 3) +
+            theme_bw(base_size = 18) + xlab("") + ylab("") +
+            theme(plot.background = element_blank()) +
+            coord_cartesian(xlim = rangesSpecies3$x, ylim = rangesSpecies3$y) +
+            scale_y_continuous(breaks=NULL) + scale_x_continuous(breaks=NULL)
+
+     #  browser()
+     #   png('/home/por07g/Documents/Projects/Salish_Sea/Documents/Report/biotic3d_HSeals.png',  width = 1200, height = 900)
+        gp
+     #   dev.off()
       })
 
       # display 3D biotic data in table form

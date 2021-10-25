@@ -4,8 +4,7 @@
 \alias{make.init.nc}
 \title{Function that generates a NetCDF file of initial conditions}
 \usage{
-make.init.nc(bgm.file, cum.depths, init.file, horiz.file, nc.file,
-  vert = NULL)
+make.init.nc(bgm.file, cum.depths, init.file, horiz.file, nc.file, vert = NULL)
 }
 \arguments{
 \item{bgm.file}{Box geometry model (.bgm) file used by Atlantis that defines box boundaries and depths.}

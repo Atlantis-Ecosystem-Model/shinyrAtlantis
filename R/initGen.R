@@ -281,7 +281,6 @@ make.init.csv <- function(grp.file, bgm.file, cum.depths, csv.name) {
     df.return <- df.atts[df.atts$required, ]
 
 #### add group-related variables
-    debug(generate.vars.init)
     grp.data <- generate.vars.init(grp.file, cum.depths, df.atts)
     num.vars <- dim(df.return)[1]
     for (i in 1:dim(grp.data)[1]) {
@@ -510,9 +509,7 @@ make.init.nc <- function(bgm.file, cum.depths, init.file, horiz.file, nc.file, v
 
     ## add data to required variables based on df.atts
     for (idx in 5:dim(df.init)[1]) { ## four variables have already been calculated
-        #if(idx == 44) browser()
         if (df.init$dimensions[idx] == 1) {
-#### if(df.init$name[idx] == 'sedbiodepth') browser()
             ## add the default value throughout (only for numlayers > 0?)
             var.data <- rep(df.init$wc.hor.scalar[idx], numboxes)
             ## overwrite default value if custom
