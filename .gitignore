@@ -4,3 +4,6 @@
 inst/extdata/test.nc
 inst/doc
 *.Rproj
+
+# ignore folders
+docs
