@@ -129,6 +129,7 @@ generate.vars.init <- function(grp.file, cum.depths, df.atts) {
     att.index <- NULL ## corresponding row of df.atts
     for (grp in 1:length(df.grp$Name)) {
         if (!df.grp$needsNums[grp]) {
+         #   if(count  == 8) browser()
             if (!df.grp$multiN[grp]) { ## single group
                 Variable  <- c(Variable, paste(df.grp$Name[grp], "_N", sep = ""))
                 indx <- which(df.atts$name==paste(df.grp$GroupType[grp], "_N", sep = ""))
@@ -170,7 +171,6 @@ generate.vars.init <- function(grp.file, cum.depths, df.atts) {
             }
         }
     }
-
     df.invert <- data.frame(Variable, long_name, att.index,
                             stringsAsFactors = FALSE)
 
@@ -324,7 +324,7 @@ make.init.csv <- function(grp.file, bgm.file, cum.depths, csv.name) {
 ##' @param init.file csv file containing all variable names and their attributes. Also includes how the values are distributed in space and the vertical.
 ##' @param horiz.file csv file containing box-defined values if customised flag is set for the horizontal distribution in \code{init.file}.
 ##' @param nc.file Name of the NetCDF file generated which contains the initial conditions. This file can be used as input to Atlantis.
-##'
+##' @param vert Name and location of the csv file containing the functional groups' vertical distribution
 ##' @return Null (always). Produces a NetCDF file with the name \code{nc.file}.
 ##'
 ##' @examples

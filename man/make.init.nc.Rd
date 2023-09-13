@@ -16,6 +16,8 @@ make.init.nc(bgm.file, cum.depths, init.file, horiz.file, nc.file, vert = NULL)
 \item{horiz.file}{csv file containing box-defined values if customised flag is set for the horizontal distribution in \code{init.file}.}
 
 \item{nc.file}{Name of the NetCDF file generated which contains the initial conditions. This file can be used as input to Atlantis.}
+
+\item{vert}{Name and location of the csv file containing the functional groups' vertical distribution}
 }
 \value{
 Null (always). Produces a NetCDF file with the name \code{nc.file}.
