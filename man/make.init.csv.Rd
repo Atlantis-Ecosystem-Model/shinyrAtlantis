@@ -4,7 +4,7 @@
 \alias{make.init.csv}
 \title{Function that generates two csv initial condition templates}
 \usage{
-make.init.csv(grp.file, bgm.file, cum.depths, csv.name)
+make.init.csv(grp.file, bgm.file, cum.depths, csv.name, ice_model = FALSE)
 }
 \arguments{
 \item{grp.file}{Atlantis group (.bgm) file that defines groups.}
@@ -14,6 +14,8 @@ make.init.csv(grp.file, bgm.file, cum.depths, csv.name)
 \item{cum.depths}{vector of cumulative depths (starting with zero).}
 
 \item{csv.name}{String that is used to identify the two output csv files.}
+
+\item{ice_model}{Boolean string. Is the model using Fe and Ice dependent species?}
 }
 \value{
 Null (always). Produces two csv files with the names \code{[csv.name]_init.csv} and \code{[csv.name]_horiz.csv}.

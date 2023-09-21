@@ -4,7 +4,15 @@
 \alias{make.init.nc}
 \title{Function that generates a NetCDF file of initial conditions}
 \usage{
-make.init.nc(bgm.file, cum.depths, init.file, horiz.file, nc.file, vert = NULL)
+make.init.nc(
+  bgm.file,
+  cum.depths,
+  init.file,
+  horiz.file,
+  nc.file,
+  vert = NULL,
+  ice_model = FALSE
+)
 }
 \arguments{
 \item{bgm.file}{Box geometry model (.bgm) file used by Atlantis that defines box boundaries and depths.}
@@ -18,6 +26,8 @@ make.init.nc(bgm.file, cum.depths, init.file, horiz.file, nc.file, vert = NULL)
 \item{nc.file}{Name of the NetCDF file generated which contains the initial conditions. This file can be used as input to Atlantis.}
 
 \item{vert}{Name and location of the csv file containing the functional groups' vertical distribution}
+
+\item{ice_model}{Boolean string. Is the model using Fe and Ice dependent species?}
 }
 \value{
 Null (always). Produces a NetCDF file with the name \code{nc.file}.

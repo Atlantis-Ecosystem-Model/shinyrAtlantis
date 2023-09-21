@@ -3,6 +3,7 @@ volume,TRUE,2,[ z b ],phys,m3,Volume,0,1,NA,NA,NA,NA,NA,0,NA,NA,NA,NA,NA,NA,NA,c
 nominal_dz,TRUE,2,[ z b ],phys,m,Thickness,0,0,NA,NA,NA,NA,NA,0,NA,NA,NA,NA,NA,NA,NA,calculated,calculated,1,1
 dz,TRUE,2,[ z b ],phys,m,Thickness,0,0,NA,NA,NA,NA,NA,0,NA,NA,NA,NA,NA,NA,NA,calculated,calculated,1,1
 numlayers,TRUE,1,[ b ],phys,1,Number of layers,0,0,NA,NA,NA,NA,NA,0,NA,NA,NA,NA,NA,NA,NA,calculated,none,0,1
+ice_dz,TRUE,2,[ icenz b ],phys,1,Thickness,0,0,NA,NA,NA,NA,NA,0,NA,NA,NA,NA,NA,NA,NA,custom,calculated,0,0
 hdsource,TRUE,2,[ z b ],phys,1,Hydrodynamic sources,0,0,NA,NA,NA,NA,NA,0,NA,NA,NA,NA,NA,NA,NA,constant,uniform,0,0
 hdsink,TRUE,2,[ z b ],phys,1,Hydrodynamic sinks,0,0,NA,NA,NA,NA,NA,0,NA,NA,NA,NA,NA,NA,NA,constant,uniform,0,0
 eflux,TRUE,2,[ z b ],phys,1,Hydrodynamic net exchanges,0,0,NA,NA,NA,NA,NA,0,NA,NA,NA,NA,NA,NA,NA,constant,uniform,0,0
@@ -32,6 +33,7 @@ Oxygen,TRUE,2,[ z b ],tracer,mg O2 m-3,Dissolved Oxygen,0,1,1,1,1,0,0,8000,NA,NA
 Si,TRUE,2,[ z b ],tracer,mg Si m-3,Dissolved Silica,0,1,1,1,1,0,0,14,NA,NA,NA,NA,NA,NA,NA,constant,uniform,16.65,0.9
 Det_Si,TRUE,2,[ z b ],tracer,mg Si m-3,Detrital Silica,0,1,1,1,0,0,1,1,1,-2.89E-05,1E-07,1E-05,1000000000,200000000,200000000,constant,uniform,27000,9
 Light,TRUE,2,[ z b ],tracer,missing,Light intensity on the surface of a cell,0,1,0,0,1,0,0,0,NA,NA,NA,NA,NA,NA,NA,constant,uniform,1E-06,0.01
+DayLight,TRUE,2,[ z b ],tracer,missing,Light intensity on the surface of a cell,0,1,0,0,1,0,0,0,NA,NA,NA,NA,NA,NA,NA,constant,uniform,1E-06,0.01
 Temp,TRUE,2,[ z b ],tracer,degrees Celcius,Temperature,0,1,0,0,1,0,0,15,NA,NA,NA,NA,NA,NA,NA,constant,uniform,22,28
 salt,TRUE,2,[ z b ],tracer,PSU,Salinity,0,1,1,1,1,0,0,35,NA,NA,NA,NA,NA,NA,NA,constant,uniform,33,33
 Denitrifiction,TRUE,2,[ z b ],tracer,missing,Denitrifiction (N),0,1,0,0,1,0,0,0,NA,NA,NA,NA,NA,NA,NA,constant,uniform,0,0
@@ -46,7 +48,10 @@ CARRION_N,FALSE,2,[ z b ],tracer,mg N m-3,Nitrogen,0,1,1,1,0,0,1,0,0,-3.47E-05,0
 CEP_N,FALSE,2,[ z b ],tracer,mg N m-3,Nitrogen,0,1,1,0,0,0,1,0,0,0,0,10,1000000000,200000000,200000000,custom,uniform,0,0
 CORAL_N,FALSE,1,[ b ],epibenthos,mg N m-2,Nitrogen,0,1,NA,NA,NA,NA,NA,0,NA,NA,NA,NA,NA,NA,NA,custom,none,0,0
 ICE_DIATOMS_N,FALSE,2,[ icenz b ],tracer,mg N m-3,Nitrogen,0,1,1,1,0,0,1,0,1,0,0,1E-05,1000000000,200000000,200000000,custom,uniform,0,0
+ICE_DIATOMS_S,FALSE,2,[ icenz b ],tracer,mg Si m-3,Silicon,0,1,1,1,0,0,1,0,1,0,0,1E-05,1000000000,200000000,200000000,custom,uniform,0,0
+ICE_DIATOMS_F,FALSE,2,[ icenz b ],tracer,mg Fe m-3,Iron,0,1,1,1,0,0,1,0,1,0,0,1E-05,1000000000,200000000,200000000,custom,uniform,0,0
 ICE_MIXOTROPHS_N,FALSE,2,[ icenz b ],tracer,mg N m-3,Nitrogen,0,1,1,1,0,0,1,0,1,0,0,1E-05,1000000000,200000000,200000000,custom,uniform,0,0
+ICE_MIXOTROPHS_F,FALSE,2,[ icenz b ],tracer,mg Fe m-3,Iron,0,1,1,1,0,0,1,0,1,0,0,1E-05,1000000000,200000000,200000000,custom,uniform,0,0
 DINOFLAG_N,FALSE,2,[ z b ],tracer,mg N m-3,Nitrogen,0,1,1,1,0,0,1,0,1,0,0,1E-05,1000000000,200000000,200000000,custom,uniform,0,0
 FISH_N,FALSE,2,[ z b ],tracer,mg N m-3,total N,0,1,0,0,1,0,0,0,NA,NA,NA,NA,NA,NA,NA,constant,uniform,0,0
 FISH_INVERT_N,FALSE,2,[ z b ],tracer,mg N m-3,total N,0,1,0,0,1,0,0,0,NA,NA,NA,NA,NA,NA,NA,constant,uniform,0,0
@@ -80,5 +85,7 @@ Nums3D,FALSE,2,[ z b ],tracer,1,Numbers of XXX cohort i,0,0,0,0,0,0,1,0,0,0,0,10
 ResN3D,FALSE,2,[ z b ],tracer,mg N,Individ reserve N for XXX cohort i,0,0,0,0,0,0,1,0,0,0,0,10,1000000000,200000000,200000000,constant,uniform,0,0
 StructN3D,FALSE,2,[ z b ],tracer,mg N,Individ structural N for XXX cohort i,0,0,0,0,0,0,1,0,0,0,0,10,1000000000,200000000,200000000,constant,uniform,0,0
 Cover,FALSE,1,[ b ],epibenthos,%,Percent cover by XXX,0,1,NA,NA,NA,NA,NA,0,NA,NA,NA,NA,NA,NA,NA,custom,none,0,0
-Si3D,FALSE,2,[ z b ],tracer,mg Si m-3,XXX Silicon,0,1,1,1,0,0,1,0,1,-2.89E-06,0,1E-05,1000000000,200000000,200000000,constant,uniform,0,0
+Si3D,FALSE,2,[ z b ],tracer,mg Si m-3,XXX Silicon,0,1,1,1,0,0,1,0,1,-2.89E-06,0,1E-05,1000000000,200000000,200000000,custom,uniform,0,0
 Light3D,FALSE,2,[ z b ],tracer,PSU,Light Adaptation of XXX,0,0,0,0,1,0,0,0,NA,NA,NA,NA,NA,NA,NA,constant,uniform,0,0
+Fe3D,FALSE,2,[ icenz b ],tracer,mg Fe m-3,XXX Iron,0,1,1,1,0,0,1,0,1,-2.89E-06,0,1E-05,1000000000,200000000,200000000,custom,uniform,0,0
+Si2D,FALSE,2,[ icenz b ],tracer,mg Si m-3,XXX Silicon,0,1,1,1,0,0,1,0,1,-2.89E-06,0,1E-05,1000000000,200000000,200000000,custom,uniform,0,0

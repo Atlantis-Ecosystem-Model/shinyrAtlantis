@@ -16,6 +16,7 @@
 #' nc.file  <- "INIT_VMPA_Jan2015.nc"
 #' sh.init(grp.file, prm.file, nc.file)
 #' }
+#' @import stats
 #' @export
 sh.feeding <- function(grp.file, prm.file, nc.file){
 
