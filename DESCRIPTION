@@ -1,11 +1,11 @@
 Package: shinyrAtlantis
 Title: Make Atlantis Shiny
-Version: 0.0.3.0000
+Version: 0.0.4.0000
 Authors@R: c(person("Michael D.", "Sumner", email = "mdsumner@gmail.com", role = c("aut")),
 	   person("Javier", "Porobic", email = "javier.porobicgarate@csiro.au", role = c("aut", "cre", "ctb")),
           person("Shane A.", "Richards", email = "shane.richards@csiro.au", role = c("aut"),
           comment = "majority author of the R code"))
-Maintainer: JAvier Porobic <javier.porobicgarate@csiro.au>
+Maintainer: Javier Porobic <javier.porobicgarate@csiro.au>
 Description: Shiny apps for Atlantis.
 URL: https://github.com/Atlantis-Ecosystem-Model/shinyrAtlantis
 Depends:
@@ -18,7 +18,8 @@ Imports: tidyr,
          ncdf4,
          stringr,
          grid,
-         magrittr
+         magrittr,
+	 stats
 License: GPL-3
 LazyData: true
 RoxygenNote: 7.1.2
