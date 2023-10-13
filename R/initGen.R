@@ -87,8 +87,8 @@ make.map.data.init <- function(bgm.file, cum.depths){
 ## ==============================================================================
 ## generate.vars.init
 ## ==============================================================================
-generate.vars.init <- function(grp.file, cum.depths, df.atts) {
-    ## read in group data from group csv file
+generate.vars.init <- function(grp.file, cum.depths, df.atts, ice_model) {
+     ## read in group data from group csv file
     df.grp <- read.csv(file = grp.file, header = TRUE, stringsAsFactors = FALSE)
     ## make sure GroupType column title exists
     col.titles <- names(df.grp)
@@ -122,10 +122,15 @@ generate.vars.init <- function(grp.file, cum.depths, df.atts) {
                          "MED_PHY", "LG_PHY")
     df.grp <- df.grp %>% mutate(needsLight = GroupType %in% light.adpn.grps)
 
-    ## set up a flag for groups that need Fe limited groups (Ice groups)
-    fe.dpndt.grps <-  c('ICE_DIATOMS', 'ICE_MIXOTROPHS', 'ICE_ZOOBIOTA')
-    df.grp <- df.grp %>% mutate(needsFe = GroupType %in% fe.dpndt.grps)
+    ## set up a flag for groups that need live in the ice
+    ice.grp <-  c('ICE_DIATOMS', 'ICE_MIXOTROPHS', 'ICE_ZOOBIOTA')
+    df.grp <- df.grp %>% mutate(live_ice = GroupType %in% ice.grp)
 
+    ## set up a flag for groups that Fe producer groups
+    if(ice_model) {
+        fe.grp <- c('SM_PHY', 'LG_PHY', "DINOFLAG", 'FISH', 'MAMMAL')
+        df.grp <- df.grp %>% mutate(needsFe = GroupType %in% fe.grp )
+    }
 
 #### Donnuts model
 #### create data frame for invert biological variables (ignores multiple stocks)
@@ -135,7 +140,6 @@ generate.vars.init <- function(grp.file, cum.depths, df.atts) {
     count = 1
     for (grp in 1:length(df.grp$Name)) {
         if (!df.grp$needsNums[grp]) {
-            #if(count  == 7) browser()
             if (!df.grp$multiN[grp]) { ## single group
                 Variable  <- c(Variable, paste(df.grp$Name[grp], "_N", sep = ""))
                 indx <- which(df.atts$name==paste(df.grp$GroupType[grp], "_N", sep = ""))
@@ -162,7 +166,7 @@ generate.vars.init <- function(grp.file, cum.depths, df.atts) {
             }
             if (df.grp$IsSiliconDep[grp]) { ## single silicon group
                 Variable <- c(Variable, paste(df.grp$Name[grp], "_S", sep = ""))
-                Siname <- ifelse(df.grp$needsFe[grp], "Si2D", "Si3D")
+                Siname <- ifelse(df.grp$live_ice[grp], "Si2D", "Si3D")
                 indx <- which(df.atts$name == Siname)
                 long_name <- c(long_name, paste(df.grp$Name[grp],
                                                 "Silicon", sep = " "))
@@ -176,7 +180,14 @@ generate.vars.init <- function(grp.file, cum.depths, df.atts) {
                                                 df.grp$Name[grp], sep = " "))
                 att.index <- c(att.index, indx)
             }
-            if (df.grp$needsFe[grp]) { ## Fe dependent groups
+            if (df.grp$live_ice[grp]) { ## Ice dependent groups
+                Variable <- c(Variable, paste(df.grp$Name[grp], "_F", sep = ""))
+                indx <- which(df.atts$name == "Fe3D_ice")
+                long_name <- c(long_name, paste(df.grp$Name[grp],
+                                                "Iron", sep = " "))
+                att.index <- c(att.index, indx)
+            }
+            if (ice_model & df.grp$needsFe[grp]) { ## Fe dependent groups
                 Variable <- c(Variable, paste(df.grp$Name[grp], "_F", sep = ""))
                 indx <- which(df.atts$name == "Fe3D")
                 long_name <- c(long_name, paste(df.grp$Name[grp],
@@ -200,6 +211,15 @@ generate.vars.init <- function(grp.file, cum.depths, df.atts) {
             long_name <- c(long_name, paste(df.grp$Name[grp],
                                             df.atts$long_name[indx], sep = " "))
             att.index <- c(att.index, indx)
+
+            if (ice_model & df.grp$needsFe[grp]) { ## Fe dependent groups
+                Variable <- c(Variable, paste(df.grp$Name[grp], "_F", sep = ""))
+                indx <- which(df.atts$name == "Fe3D")
+                long_name <- c(long_name, paste(df.grp$Name[grp],
+                                                "Iron", sep = " "))
+                att.index <- c(att.index, indx)
+            }
+
             for (j in 1:df.grp$NumCohorts[grp]) {
                 Variable <- c(Variable, paste(df.grp$Name[grp], as.character(j),
                                               "_Nums", sep = ""))
@@ -274,8 +294,8 @@ generate.vars.init <- function(grp.file, cum.depths, df.atts) {
 ##' @importFrom ncdf4 ncdim_def
 make.init.csv <- function(grp.file, bgm.file, cum.depths, csv.name, ice_model = FALSE) {
 
-    #def.att.file <- system.file("extdata", "AttributeTemplate.csv", package = "shinyrAtlantis")
-    def.att.file <- "/home/por07g/Documents/Code_Tools/shiny-Shane/Fork_git/shinyrAtlantis/inst/extdata/AttributeTemplate.csv"
+    def.att.file <- system.file("extdata", "AttributeTemplate.csv", package = "shinyrAtlantis")
+    #def.att.file <- "/home/por07g/Documents/Code_Tools/shiny-Shane/Fork_git/shinyrAtlantis/inst/extdata/AttributeTemplate.csv"
     df.atts <- read.csv(file = def.att.file, header = TRUE, stringsAsFactors = FALSE)
 
     numlayers <- length(cum.depths) - 1 ## number of water layers
@@ -296,12 +316,12 @@ make.init.csv <- function(grp.file, bgm.file, cum.depths, csv.name, ice_model = 
 
     ## create a list of required variables
     if(ice_model){
-        df.atts$required[which(df.atts$name  == 'ice_dz')] <- TRUE
+        df.atts$required[which(df.atts$name  %in% c('ice_dz', "SED"))] <- TRUE
         }
     df.return <- df.atts[df.atts$required, ]
 
 #### add group-related variables
-    grp.data <- generate.vars.init(grp.file, cum.depths, df.atts)
+    grp.data <- generate.vars.init(grp.file, cum.depths, df.atts, ice_model)
     num.vars <- dim(df.return)[1]
     for (i in 1:dim(grp.data)[1]) {
         num.vars <- num.vars + 1
@@ -440,8 +460,11 @@ make.init.nc <- function(bgm.file, cum.depths, init.file, horiz.file, nc.file, v
             var.dim <- list(dim3, dim2)
         }
         if(var.dimnames  == '[ icenz b ]'){
-            var.dim <- list(dim4,  dim2, dim1)
-            }
+            var.dim <- list(dim4, dim2, dim1)
+        }
+        if(var.dimnames  == '[ icenz ]'){
+            var.dim <- list(dim4, dim2)
+        }
         var.longname <- df.init$long_name[i]
         var.fillval  <- df.init$fill.value[i]
         vars[[list.indx]] <- ncvar_def(name = as.character(var.name),
@@ -473,7 +496,8 @@ make.init.nc <- function(bgm.file, cum.depths, init.file, horiz.file, nc.file, v
                   attname = 'bmtype', attval = df.init$bmtype[i])
 
         ## add the non-NA elements taken from df.atts
-        for (j in 8:21) { ## columns of df.atts with attributes
+#        browser()
+        for (j in 8:23) { ## columns of df.atts with attributes
             if (!is.na(df.init[i,j])) {
                 ncatt_put(nc = outnc, varid = df.init$name[i],
                           attname = names(df.init)[j],
@@ -481,7 +505,7 @@ make.init.nc <- function(bgm.file, cum.depths, init.file, horiz.file, nc.file, v
             }
         }
     }
- #   browser()
+  #  browser()
     nc_close(outnc)
     outnc <- nc_open(nc.file, write=TRUE) ## open .nc file
     ## create data based on the bgm file: volume, dz, nominal_dz, numlayers
@@ -542,8 +566,8 @@ make.init.nc <- function(bgm.file, cum.depths, init.file, horiz.file, nc.file, v
 
     ## add data to required variables based on df.atts
     for (idx in 5:dim(df.init)[1]) { ## four variables have already been calculated
-       # if(idx == 47) browser()
-        if (df.init$dimensions[idx] == 1 || df.init$dimnames[idx] == "[ icenz b ]") {
+        #if(idx == 5) browser()
+        if (df.init$dimensions[idx] == 1 || df.init$dimnames[idx] %in% c( "[ icenz b ]", "[ icenz ]")) {
             ## add the default value throughout (only for numlayers > 0?)
             var.data <- rep(df.init$wc.hor.scalar[idx], numboxes)
             ## overwrite default value if custom
