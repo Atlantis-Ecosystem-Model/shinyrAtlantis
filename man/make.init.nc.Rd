@@ -23,9 +23,9 @@ make.init.nc(
 
 \item{horiz.file}{csv file containing box-defined values if customised flag is set for the horizontal distribution in \code{init.file}.}
 
-\item{nc.file}{Name of the NetCDF file generated which contains the initial conditions. This file can be used as input to Atlantis.}
+\item{nc.file}{name of the NetCDF file generated which contains the initial conditions. This file can be used as input to Atlantis.}
 
-\item{vert}{Name and location of the csv file containing the functional groups' vertical distribution}
+\item{vert}{name and location of the csv file containing the functional groups' vertical distribution}
 
 \item{ice_model}{Boolean string. Is the model using Fe and Ice dependent species?}
 }

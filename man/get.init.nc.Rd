@@ -7,9 +7,9 @@
 get.init.nc(nc.file, output.file)
 }
 \arguments{
-\item{nc.file}{Name of the NetCDF file containing the initial conditions.}
+\item{nc.file}{name of the NetCDF file containing the initial conditions.}
 
-\item{output.file}{Name of the csv file where data is written.}
+\item{output.file}{name of the csv file where data is written.}
 }
 \value{
 Null (always). Produces a csv file with the name \code{ouput.file}.
