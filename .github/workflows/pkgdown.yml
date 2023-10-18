@@ -24,6 +24,7 @@ jobs:
         run: |
           Rscript -e "install.packages('remotes')"
           Rscript -e "remotes::install_deps(dependencies = TRUE)"
+          Rscript -e "install.packages('pkgdown')"
 
       - name: Build and deploy
         run: |
