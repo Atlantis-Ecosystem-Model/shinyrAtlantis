@@ -40,6 +40,11 @@ jobs:
         run: |
           remotes::install_deps(dependencies = TRUE, type="binary")
         shell: Rscript {0}
+        
+        - name: Install R
+        run: |
+          sudo apt-get update
+          sudo apt-get install r-base
 
       - name: Install pkgdown
         run: |
