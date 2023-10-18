@@ -22,8 +22,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          install.packages('remotes')
-          remotes::install_deps(dependencies = TRUE)
+          Rscript -e "install.packages('remotes')"
+          Rscript -e "remotes::install_deps(dependencies = TRUE)"
 
       - name: Build and deploy
         run: |
