@@ -90,47 +90,46 @@ make.map.data.init <- function(bgm.file, cum.depths){
 generate.vars.init <- function(grp.file, cum.depths, df.atts, ice_model) {
      ## read in group data from group csv file
     df.grp <- read.csv(file = grp.file, header = TRUE, stringsAsFactors = FALSE)
-    ## make sure GroupType column title exists
-    col.titles <- names(df.grp)
-    col.InvertType <- which(col.titles == "InvertType")
+    ## make sure grouptype column title exists
+    col.titles <- tolower(names(df.grp))
+    names(df.grp) <- col.titles
+    col.InvertType <- which(col.titles == "inverttype")
     if (!length(col.InvertType) == 0) {
-        names(df.grp)[col.InvertType] <- "GroupType"
+        names(df.grp)[col.InvertType] <- "grouptype"
     }
-    df.grp$GroupType <- as.character(df.grp$GroupType)
+    df.grp$grouptype <- as.character(df.grp$grouptype)
     ## find epibenthos groups
     epi.grps.def <- c("SED_EP_FF", "SED_EP_OTHER", "EP_OTHER", "MOB_EP_OTHER",
                       "MICROPHTYBENTHOS", "PHYTOBEN", "SEAGRASS", "CORAL", 'LG_INF', 'SM_INF')
-    epi.grps <- df.grp$Name[df.grp$GroupType %in% epi.grps.def]
-    df.grp <- df.grp %>% mutate(isEpiGrp = GroupType %in% epi.grps.def)
+    epi.grps <- df.grp$name[df.grp$grouptype %in% epi.grps.def]
+    df.grp <- df.grp %>% mutate(isEpiGrp = grouptype %in% epi.grps.def)
 
     ## find cover groups. These groups need _cover in boxTracers
-    cover.grps <- df.grp$Name[df.grp$IsCover == 1]
+    cover.grps <- df.grp$name[df.grp$iscover == 1]
 
     ## set up flags for groups that need multiple N values (e.g. _N1, _N2, ...)
     df.grp <- df.grp %>% mutate(multiN =
-                                    (IsCover == 1       & (NumCohorts > 1)) |
-                                    (GroupType == "PWN" & (NumCohorts > 1)) |
-                                    (GroupType == "CEP" & (NumCohorts > 1)))
+                                    (iscover == 1       & (numcohorts > 1)) |
+                                    (grouptype == "PWN" & (numcohorts > 1)) |
+                                    (grouptype == "CEP" & (numcohorts > 1)))
 
     ## groups with nums, structural and reserve N values
     sr.grps <- c("FISH", "BIRD", "SHARK", "MAMMAL", "REPTILE", "FISH_INVERT")
     ## set up flags for groups that need _Nums, _ResN, _StructN
-    df.grp <- df.grp %>% mutate(needsNums = GroupType %in% sr.grps)
+    df.grp <- df.grp %>% mutate(needsNums = grouptype %in% sr.grps)
 
     ## set up a flag for groups that need light adaptation
     light.adpn.grps <- c("DINOFLAG", "MICROPHTYBENTHOS", "SM_PHY",
                          "MED_PHY", "LG_PHY")
-    df.grp <- df.grp %>% mutate(needsLight = GroupType %in% light.adpn.grps)
+    df.grp <- df.grp %>% mutate(needsLight = grouptype %in% light.adpn.grps)
 
     ## set up a flag for groups that need live in the ice
     ice.grp <-  c('ICE_DIATOMS', 'ICE_MIXOTROPHS', 'ICE_ZOOBIOTA')
-    df.grp <- df.grp %>% mutate(live_ice = GroupType %in% ice.grp)
+    df.grp <- df.grp %>% mutate(live_ice = grouptype %in% ice.grp)
 
     ## set up a flag for groups that Fe producer groups
-    if(ice_model) {
-        fe.grp <- c('SM_PHY', 'LG_PHY', "DINOFLAG", 'FISH', 'MAMMAL')
-        df.grp <- df.grp %>% mutate(needsFe = GroupType %in% fe.grp )
-    }
+    fe.grp <- c('SM_PHY', 'LG_PHY', "DINOFLAG", 'FISH', 'MAMMAL')
+    df.grp <- df.grp %>% mutate(needsFe = grouptype %in% fe.grp )
 
 #### Donnuts model
 #### create data frame for invert biological variables (ignores multiple stocks)
@@ -138,37 +137,37 @@ generate.vars.init <- function(grp.file, cum.depths, df.atts, ice_model) {
     long_name <- NULL ## long name
     att.index <- NULL ## corresponding row of df.atts
     count = 1
-    for (grp in 1:length(df.grp$Name)) {
+    for (grp in 1:length(df.grp$name)) {
         if (!df.grp$needsNums[grp]) {
             if (!df.grp$multiN[grp]) { ## single group
-                Variable  <- c(Variable, paste(df.grp$Name[grp], "_N", sep = ""))
-                indx <- which(df.atts$name==paste(df.grp$GroupType[grp], "_N", sep = ""))
-                long_name <- c(long_name, paste(df.grp$Name[grp],
+                Variable  <- c(Variable, paste(df.grp$name[grp], "_N", sep = ""))
+                indx <- which(df.atts$name==paste(df.grp$grouptype[grp], "_N", sep = ""))
+                long_name <- c(long_name, paste(df.grp$name[grp],
                                                 df.atts$long_name[indx], sep = " "))
                 att.index <- c(att.index, indx)
             } else { ## multiple groups
-                for (j in 1:df.grp$NumCohorts[grp]) {
-                    Variable <- c(Variable, paste(df.grp$Name[grp], "_N", as.character(j),
+                for (j in 1:df.grp$numcohorts[grp]) {
+                    Variable <- c(Variable, paste(df.grp$name[grp], "_N", as.character(j),
                                                   sep = ""))
-                    indx <- which(df.atts$name==paste(df.grp$GroupType[grp], "_N",
+                    indx <- which(df.atts$name==paste(df.grp$grouptype[grp], "_N",
                                                       sep = ""))
-                    long_name <- c(long_name, paste(df.grp$Name[grp], "cohort",
+                    long_name <- c(long_name, paste(df.grp$name[grp], "cohort",
                                                     as.character(j), df.atts$long_name[indx], sep = " "))
                     att.index <- c(att.index, indx)
                 }
             }
-            if (df.grp$IsCover[grp]) { ## single cover group
-                Variable <- c(Variable, paste(df.grp$Name[grp], "_Cover", sep = ""))
+            if (df.grp$iscover[grp]) { ## single cover group
+                Variable <- c(Variable, paste(df.grp$name[grp], "_Cover", sep = ""))
                 indx <- which(df.atts$name == "Cover")
                 long_name <- c(long_name, paste("Percent cover by",
-                                                df.grp$Name[grp], sep = " "))
+                                                df.grp$name[grp], sep = " "))
                 att.index <- c(att.index, indx)
             }
-            if (df.grp$IsSiliconDep[grp]) { ## single silicon group
-                Variable <- c(Variable, paste(df.grp$Name[grp], "_S", sep = ""))
+            if (df.grp$issilicondep[grp]) { ## single silicon group
+                Variable <- c(Variable, paste(df.grp$name[grp], "_S", sep = ""))
                 Siname <- ifelse(df.grp$live_ice[grp], "Si2D", "Si3D")
                 indx <- which(df.atts$name == Siname)
-                long_name <- c(long_name, paste(df.grp$Name[grp],
+                long_name <- c(long_name, paste(df.grp$name[grp],
                                                 "Silicon", sep = " "))
                 att.index <- c(att.index, indx)
             }
@@ -177,20 +176,20 @@ generate.vars.init <- function(grp.file, cum.depths, df.atts, ice_model) {
                                               sep = ""))
                 indx <- which(df.atts$name == "Light3D")
                 long_name <- c(long_name, paste("Light adaption of",
-                                                df.grp$Name[grp], sep = " "))
+                                                df.grp$name[grp], sep = " "))
                 att.index <- c(att.index, indx)
             }
             if (df.grp$live_ice[grp]) { ## Ice dependent groups
-                Variable <- c(Variable, paste(df.grp$Name[grp], "_F", sep = ""))
+                Variable <- c(Variable, paste(df.grp$name[grp], "_F", sep = ""))
                 indx <- which(df.atts$name == "Fe3D_ice")
-                long_name <- c(long_name, paste(df.grp$Name[grp],
+                long_name <- c(long_name, paste(df.grp$name[grp],
                                                 "Iron", sep = " "))
                 att.index <- c(att.index, indx)
             }
             if (ice_model & df.grp$needsFe[grp]) { ## Fe dependent groups
-                Variable <- c(Variable, paste(df.grp$Name[grp], "_F", sep = ""))
+                Variable <- c(Variable, paste(df.grp$name[grp], "_F", sep = ""))
                 indx <- which(df.atts$name == "Fe3D")
-                long_name <- c(long_name, paste(df.grp$Name[grp],
+                long_name <- c(long_name, paste(df.grp$name[grp],
                                                 "Iron", sep = " "))
                 att.index <- c(att.index, indx)
             }
@@ -204,44 +203,44 @@ generate.vars.init <- function(grp.file, cum.depths, df.atts, ice_model) {
     Variable  <- NULL ## variable name
     long_name <- NULL ## Long name
     att.index <- NULL ## corresponding row of df.atts
-    for (grp in 1:length(df.grp$Name)) {
+    for (grp in 1:length(df.grp$name)) {
         if (df.grp$needsNums[grp]) {
-            Variable <- c(Variable, paste(df.grp$Name[grp], "_N", sep = ""))
-            indx <- which(df.atts$name==paste(df.grp$GroupType[grp], "_N", sep = ""))
-            long_name <- c(long_name, paste(df.grp$Name[grp],
+            Variable <- c(Variable, paste(df.grp$name[grp], "_N", sep = ""))
+            indx <- which(df.atts$name==paste(df.grp$grouptype[grp], "_N", sep = ""))
+            long_name <- c(long_name, paste(df.grp$name[grp],
                                             df.atts$long_name[indx], sep = " "))
             att.index <- c(att.index, indx)
 
             if (ice_model & df.grp$needsFe[grp]) { ## Fe dependent groups
-                Variable <- c(Variable, paste(df.grp$Name[grp], "_F", sep = ""))
+                Variable <- c(Variable, paste(df.grp$name[grp], "_F", sep = ""))
                 indx <- which(df.atts$name == "Fe3D")
-                long_name <- c(long_name, paste(df.grp$Name[grp],
+                long_name <- c(long_name, paste(df.grp$name[grp],
                                                 "Iron", sep = " "))
                 att.index <- c(att.index, indx)
             }
 
-            for (j in 1:df.grp$NumCohorts[grp]) {
-                Variable <- c(Variable, paste(df.grp$Name[grp], as.character(j),
+            for (j in 1:df.grp$numcohorts[grp]) {
+                Variable <- c(Variable, paste(df.grp$name[grp], as.character(j),
                                               "_Nums", sep = ""))
                 indx <- which(df.atts$name=="Nums3D")
-                long_name <- c(long_name, paste("Numbers of", df.grp$Name[grp], "cohort",
+                long_name <- c(long_name, paste("Numbers of", df.grp$name[grp], "cohort",
                                                 as.character(j), sep = " "))
                 att.index <- c(att.index, indx)
             }
-            for (j in 1:df.grp$NumCohorts[grp]) {
-                Variable <- c(Variable, paste(df.grp$Name[grp], as.character(j),
+            for (j in 1:df.grp$numcohorts[grp]) {
+                Variable <- c(Variable, paste(df.grp$name[grp], as.character(j),
                                               "_StructN", sep = ""))
                 indx <- which(df.atts$name=="StructN3D")
                 long_name <- c(long_name, paste("Individual structural N for",
-                                                df.grp$Name[grp], "cohort", as.character(j), sep = " "))
+                                                df.grp$name[grp], "cohort", as.character(j), sep = " "))
                 att.index <- c(att.index, indx)
             }
-            for (j in 1:df.grp$NumCohorts[grp]) {
-                Variable <- c(Variable, paste(df.grp$Name[grp], as.character(j),
+            for (j in 1:df.grp$numcohorts[grp]) {
+                Variable <- c(Variable, paste(df.grp$name[grp], as.character(j),
                                               "_ResN", sep = ""))
                 indx <- which(df.atts$name=="ResN3D")
                 long_name <- c(long_name, paste("Individual reserve N for",
-                                                df.grp$Name[grp], "cohort", as.character(j), sep = " "))
+                                                df.grp$name[grp], "cohort", as.character(j), sep = " "))
                 att.index <- c(att.index, indx)
             }
         }
@@ -363,8 +362,8 @@ make.init.csv <- function(grp.file, bgm.file, cum.depths, csv.name, ice_model = 
 ##' @param cum.depths Vector of cumulative depths (starting with value zero).
 ##' @param init.file csv file containing all variable names and their attributes. Also includes how the values are distributed in space and the vertical.
 ##' @param horiz.file csv file containing box-defined values if customised flag is set for the horizontal distribution in \code{init.file}.
-##' @param nc.file Name of the NetCDF file generated which contains the initial conditions. This file can be used as input to Atlantis.
-##' @param vert Name and location of the csv file containing the functional groups' vertical distribution
+##' @param nc.file name of the NetCDF file generated which contains the initial conditions. This file can be used as input to Atlantis.
+##' @param vert name and location of the csv file containing the functional groups' vertical distribution
 ##' @param ice_model Boolean string. Is the model using Fe and Ice dependent species?
 ##' @return Null (always). Produces a NetCDF file with the name \code{nc.file}.
 ##'
@@ -645,8 +644,8 @@ make.init.nc <- function(bgm.file, cum.depths, init.file, horiz.file, nc.file, v
 ##' This function is useful when collecting data from Atlantis models in order to parameterise new Atlantis models.
 ##' Incorrect output may be produced if the number of boxes equals the number of time steps or water layers.
 ##'
-##' @param nc.file Name of the NetCDF file containing the initial conditions.
-##' @param output.file Name of the csv file where data is written.
+##' @param nc.file name of the NetCDF file containing the initial conditions.
+##' @param output.file name of the csv file where data is written.
 ##'
 ##' @return Null (always). Produces a csv file with the name \code{ouput.file}.
 ##'
