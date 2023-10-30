@@ -172,7 +172,7 @@ generate.vars.init <- function(grp.file, cum.depths, df.atts, ice_model) {
                 att.index <- c(att.index, indx)
             }
             if (df.grp$needsLight[grp]) { ## single light adaptation group
-                Variable <- c(Variable, paste("Light_Adaptn_", df.grp$Code[grp],
+                Variable <- c(Variable, paste("Light_Adaptn_", df.grp$code[grp],
                                               sep = ""))
                 indx <- which(df.atts$name == "Light3D")
                 long_name <- c(long_name, paste("Light adaption of",
