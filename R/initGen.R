@@ -120,7 +120,7 @@ generate.vars.init <- function(grp.file, cum.depths, df.atts, ice_model) {
 
     ## set up a flag for groups that need light adaptation
     light.adpn.grps <- c("DINOFLAG", "MICROPHTYBENTHOS", "SM_PHY",
-                         "MED_PHY", "LG_PHY")
+                         "MED_PHY", "LG_PHY", "ICE_DIATOMS", "ICE_MIXOTROPHS")
     df.grp <- df.grp %>% mutate(needsLight = grouptype %in% light.adpn.grps)
 
     ## set up a flag for groups that need live in the ice
@@ -128,7 +128,7 @@ generate.vars.init <- function(grp.file, cum.depths, df.atts, ice_model) {
     df.grp <- df.grp %>% mutate(live_ice = grouptype %in% ice.grp)
 
     ## set up a flag for groups that Fe producer groups
-    fe.grp <- c('SM_PHY', 'LG_PHY', "DINOFLAG", 'FISH', 'MAMMAL')
+    fe.grp <- c('SM_PHY', 'LG_PHY', "DINOFLAG", 'FISH', 'MAMMAL', 'ICE_DIATOMS', 'ICE_MIXOTROPHS')
     df.grp <- df.grp %>% mutate(needsFe = grouptype %in% fe.grp )
 
 #### Donnuts model
