@@ -128,7 +128,7 @@ generate.vars.init <- function(grp.file, cum.depths, df.atts, ice_model) {
     df.grp <- df.grp %>% mutate(live_ice = grouptype %in% ice.grp)
 
     ## set up a flag for groups that Fe producer groups
-    fe.grp <- c('SM_PHY', 'LG_PHY', "DINOFLAG", 'FISH', 'MAMMAL', 'ICE_DIATOMS', 'ICE_MIXOTROPHS')
+    fe.grp <- c('SM_PHY', 'LG_PHY', "DINOFLAG", 'FISH', 'MAMMAL')
     df.grp <- df.grp %>% mutate(needsFe = grouptype %in% fe.grp )
 
 #### Donnuts model
