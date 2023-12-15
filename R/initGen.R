@@ -121,6 +121,7 @@ generate.vars.init <- function(grp.file, cum.depths, df.atts, ice_model) {
     ## set up a flag for groups that need light adaptation
     light.adpn.grps <- c("DINOFLAG", "MICROPHTYBENTHOS", "SM_PHY",
                          "MED_PHY", "LG_PHY", "ICE_DIATOMS", "ICE_MIXOTROPHS")
+
     df.grp <- df.grp %>% mutate(needsLight = grouptype %in% light.adpn.grps)
 
     ## set up a flag for groups that need live in the ice
