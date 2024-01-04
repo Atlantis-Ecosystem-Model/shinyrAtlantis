@@ -18,7 +18,6 @@ install.packages(c("shiny", "dplyr", "DT",
 Install the package from Github with devtools.
 
 ``` r
-
 if (packageVersion("devtools") < 1.6) {
   install.packages("devtools")
 }
@@ -34,7 +33,7 @@ library(shinyrAtlantis)
 
 Some example Atlantis files are provided in the package so that the shiny applications can be explored straight away. Note that some of the example Atlantis files are incomplete. The shiny application allows exploration of most incomplete Atlantis files. See the examples presented below for how to use the shiny applications. Also see the documentation provided by typing `?shinyrAtlantis`.
 
-The code assumes that in the group.csv file the header of the column that contains the group type is labeled **GroupType** (it is also commonly labelled InvertType, which is missleading and will cause my code to crash).
+The code assumes that in the group.csv file the header of the column that contains the group type is labelled **GroupType** (it is also commonly labelled InvertType, which is misleading and will cause my code to crash).
 
 **Additional functionality to the shiny applications provided in this package, and new shiny applications, are currently under development.**
 
@@ -55,7 +54,7 @@ sh.dist(obj)
 `sh.prm`
 -----------------------
 
-**sh.prm**: A shiny application for exploring the data in the bioloy parameter file. Code is located in file `shprm.R`.
+**sh.prm**: A shiny application for exploring the data in the biology parameter file. Code is located in file `shprm.R`.
 
 ``` r
 library(shinyrAtlantis)
@@ -110,7 +109,7 @@ sh.forcings(input.object)
 `make.init.nc`
 -------------------------------
 
-**make.init.nc**: An application for creating an Atlatnis initial condition file.
+**make.init.nc**: An application for creating an Atlantis initial condition file.
 
 ``` r
 library(shinyrAtlantis)
