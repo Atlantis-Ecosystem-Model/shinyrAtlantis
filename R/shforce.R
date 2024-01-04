@@ -648,7 +648,8 @@ sh.forcings <- function(input.object){
         df$links[df$layer >= df$numlayers] <- NA
 
         df.plot <- dplyr::left_join(input.object$map.vertices, df, by = "boxid")
-        df.unconnected <- df.plot %>% filter(links == 0)
+        df.unconnected <- df.plot %>% dplyr::filter(is.na(links))
+
 
         gg <- ggplot(data = df.plot,
           aes(x = x, y = y, group = boxid, fill = links)) +
@@ -714,7 +715,7 @@ sh.forcings <- function(input.object){
         df$dest.plot.layer[df$dest.plot.layer < 1] <-
           numlayers + df$dest.plot.layer[df$dest.plot.layer < 1]
         df$links[df$layer >= df$numlayers] <- NA
-        df <- df %>% filter(!is.na(links))
+        df <- df %>% dplyr::filter(!is.na(links))
         df <- df[c(1,2,3,5,4)] # reorder columns
 
         DT::datatable(df, rownames = FALSE,
@@ -768,7 +769,7 @@ sh.forcings <- function(input.object){
         df.plot <- dplyr::left_join(input.object$map.vertices, df, by = "boxid")
         df.plot$boxid <- factor(df.plot$boxid)
 
-        df.focal <- filter(df.plot,
+        df.focal <- dplyr::filter(df.plot,
             boxid == focal.box & dest.plot.layer == focal.plot.layer) %>%
           select(boxid, dest.plot.layer, x, y)
 
@@ -878,9 +879,12 @@ sh.forcings <- function(input.object){
         df.plot <- dplyr::left_join(input.object$map.vertices, df, by = "boxid")
         df.plot$boxid <- factor(df.plot$boxid)
 
-        df.focal <- filter(df.plot,
-          boxid == focal.box & dest.plot.layer == focal.plot.layer) %>%
-          select(boxid, dest.plot.layer, x, y)
+        df.focal <- dplyr::filter(
+          df.plot,
+          boxid == focal.box, 
+          dest.plot.layer == focal.plot.layer
+        ) %>%
+          dplyr::select(boxid, dest.plot.layer, x, y)
 
         gg <- ggplot(data = df.plot,
           aes(x = x, y = y, group = boxid, fill = exch)) +
@@ -948,7 +952,7 @@ sh.forcings <- function(input.object){
           numlayers + df$dest.plot.layer[df$dest.plot.layer < 1]
         df$exch[df$dest.plot.layer > df$numlayers] <- NA
 
-        DT::datatable(filter(df, exch != 0), rownames = FALSE,
+        DT::datatable(dplyr::filter(df, exch != 0), rownames = FALSE,
           colnames = c('box', 'water layers', 'layer (Atlantis)', 'layer (plotting)', 'volume exchanged (m^3)'))
       })
 
@@ -1125,7 +1129,7 @@ sh.forcings <- function(input.object){
         df.test <- data.frame(layer, x.in, y.in, xend, yend)
         df.test <- df.test %>% mutate(len = sqrt((xend-x.in)*(xend-x.in) +
             (yend-y.in)*(yend-y.in))) %>%
-          filter(len > 0)
+          dplyr::filter(len > 0)
 
         boxid <- rep(0:(numboxes-1), numlayers)
         layer <- sort(rep(1:numlayers, numboxes))
@@ -1297,7 +1301,7 @@ sh.forcings <- function(input.object){
         df$dest.plot.layer[df$dest.plot.layer < 1] <-
           numlayers + df$dest.plot.layer[df$dest.plot.layer < 1]
         df$vert[df$layer >= df$numlayers] <- NA
-        df <- df %>% filter(!is.na(vert))
+        df <- df %>% dplyr::filter(!is.na(vert))
         df <- df[c(1,2,3,4,6,5)] # reorder columns
 
         DT::datatable(df, rownames = FALSE,
