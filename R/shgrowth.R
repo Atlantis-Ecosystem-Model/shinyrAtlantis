@@ -17,6 +17,8 @@
 #' sh.init(grp.file, prm.file, nc.file)
 #' }
 #' @import stats
+#' @importFrom utils read.csv write.csv
+#' @importFrom grDevices colorRampPalette
 #' @export
 sh.feeding <- function(grp.file, prm.file, nc.file){
 

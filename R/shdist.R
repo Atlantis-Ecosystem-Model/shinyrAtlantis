@@ -15,6 +15,7 @@
 #'
 #' @return Object of class 'shiny.appobj' see \code{\link[shiny]{shinyApp}}.
 #' @importFrom dplyr mutate
+#' @import shiny
 #' @importFrom stringr str_split
 #' @importFrom ggplot2 ggplot aes coord_cartesian element_blank geom_polygon geom_text labs scale_fill_gradient scale_fill_manual scale_x_continuous scale_y_continuous theme theme_bw  xlab ylab ggtitle
 #' @examples

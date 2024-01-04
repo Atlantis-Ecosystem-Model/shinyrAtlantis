@@ -32,6 +32,7 @@
 #' @export
 #' @importFrom ggplot2 guide_legend ylim
 #' @importFrom ncdf4 nc_open nc_close ncvar_get
+#' @importFrom stringr `str_sub<-`
 sh.init <- function(input.object){
   # set up layer indices when plotting 3D values
   depth.layers <- matrix(NA, nrow = input.object$numlevels,
